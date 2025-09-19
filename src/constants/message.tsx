@@ -6,7 +6,9 @@ export const UTILS_MESSAGES = {
   LIMIT_MUST_BE_GREATER_THAN_OR_EQUAL_ZERO: 'Limit phải là một số lớn hơn hoặc bằng 0.',
   PERMISSION_DENIED: 'Quyền truy cập API bị từ chối.',
   IMAGE_ID_IS_REQUIRED: 'ID hình ảnh là bắt buộc',
-  IMAGE_ID_IS_INVALID: 'ID hình ảnh không hợp lệ.'
+  IMAGE_ID_IS_INVALID: 'ID hình ảnh không hợp lệ.',
+  ACCESS_TOKEN_AND_REFRESH_TOKEN_IS_REQUIRED: 'Không nhận được access token hoặc refresh token.',
+  SET_ACCESS_TOKEN_AND_REFRESH_TOKEN_SUCCESS: 'Đặt access token và refresh token thành công,'
 } as const
 
 export const USERS_MESSAGES = {

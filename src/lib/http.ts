@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { LOGIN_API_ENDPOINT } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
-import { normalizePath } from '@/lib/utils'
+import {
+  setAccessTokenExpiresAtToLS,
+  setAccessTokenToLS,
+  setRefreshTokenExpiresAtToLS,
+  setRefreshTokenToLS
+} from '@/lib/storage'
+import { jwtDecode, normalizePath } from '@/lib/utils'
+import { SuccessResponse, TokensResponse } from '@/types/utils.types'
+
+export const isClient = () => typeof window !== 'undefined'
 
 const ENTITY_ERROR_STATUS_CODE = 422
 
@@ -85,6 +95,18 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     }
   }
 
+  // Xử lý khi request thành công
+  if (isClient()) {
+    if ([LOGIN_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
+      const { accessToken, refreshToken } = (payload as SuccessResponse<TokensResponse>).data
+      const decodedAccessToken = jwtDecode(accessToken)
+      const decodedRefreshToken = jwtDecode(refreshToken)
+      setAccessTokenToLS(accessToken)
+      setRefreshTokenToLS(refreshToken)
+      setAccessTokenExpiresAtToLS(new Date(decodedAccessToken.exp * 1000).toISOString())
+      setRefreshTokenExpiresAtToLS(new Date(decodedRefreshToken.exp * 1000).toISOString())
+    }
+  }
   return data
 }
 

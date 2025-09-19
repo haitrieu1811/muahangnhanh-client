@@ -28,8 +28,10 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
   const loginMutation = useMutation({
     mutationKey: ['login'],
     mutationFn: usersApis.login,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      const { accessToken, refreshToken } = data.payload.data
       toast.success(data.payload.message)
+      await usersApis.setTokens({ accessToken, refreshToken })
     },
     onError: (error) => {
       handleErrorsFromServer(error, form.setError)
