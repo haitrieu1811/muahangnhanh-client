@@ -35,13 +35,14 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     onSuccess: async (data) => {
       const { accessToken, refreshToken } = data.payload.data
       toast.success(data.payload.message)
+      await usersApis.setTokens({ accessToken, refreshToken })
+      // Chuyển hướng sau khi đăng nhập thành công theo role
       const decodedAccessToken = jwtDecode(accessToken)
       if (decodedAccessToken.userRole === UserRole.Admin) {
         router.push(PATH.ADMIN)
       } else {
         router.push(PATH.HOME)
       }
-      await usersApis.setTokens({ accessToken, refreshToken })
     },
     onError: (error) => {
       handleErrorsFromServer(error, form.setError)
