@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { UTILS_MESSAGE } from '@/constants/message'
+import { UTILS_MESSAGES } from '@/constants/message'
 
 const envSchema = z.object({
   NEXT_PUBLIC_BASE_URL: z.string(),
@@ -13,7 +13,7 @@ const envSafeParse = envSchema.safeParse({
 })
 
 if (!envSafeParse.success) {
-  throw new Error(UTILS_MESSAGE.ENV_ERROR)
+  throw new Error(UTILS_MESSAGES.ENV_ERROR)
 }
 
 export const ENV_CONFIG = envSafeParse.data
