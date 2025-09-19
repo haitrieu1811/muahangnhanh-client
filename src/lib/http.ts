@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LOGIN_API_ENDPOINT } from '@/apis/users.apis'
+import { LOGIN_API_ENDPOINT, LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
 import {
+  clearAuthLS,
   setAccessTokenExpiresAtToLS,
   setAccessTokenToLS,
   setRefreshTokenExpiresAtToLS,
@@ -95,7 +96,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     }
   }
 
-  // Xử lý khi request thành công
+  // Xử lý khi request thành công (ở client)
   if (isClient()) {
     if ([LOGIN_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
       const { accessToken, refreshToken } = (payload as SuccessResponse<TokensResponse>).data
@@ -105,6 +106,8 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
       setRefreshTokenToLS(refreshToken)
       setAccessTokenExpiresAtToLS(new Date(decodedAccessToken.exp * 1000).toISOString())
       setRefreshTokenExpiresAtToLS(new Date(decodedRefreshToken.exp * 1000).toISOString())
+    } else if (normalizePath(LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT) === normalizePath(path)) {
+      clearAuthLS()
     }
   }
   return data

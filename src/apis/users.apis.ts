@@ -4,6 +4,7 @@ import { LoginResponse } from '@/types/users,types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_API_ENDPOINT = '/users/login'
+export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
 
 const usersApis = {
   login(body: LoginSchema) {
@@ -21,6 +22,22 @@ const usersApis = {
         baseUrl: ''
       }
     )
+  },
+
+  logoutFromNextClientToNextServer() {
+    return http.post<OnlyMessageResponse>(
+      LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
+      {},
+      {
+        baseUrl: ''
+      }
+    )
+  },
+
+  logoutFromNextServerToServer(refreshToken: string) {
+    return http.post<OnlyMessageResponse>('/users/logout', {
+      refreshToken
+    })
   }
 } as const
 
