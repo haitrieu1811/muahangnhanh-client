@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -12,11 +13,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
-import { cn, handleErrorsFromServer } from '@/lib/utils'
+import { cn, handleErrorsFromServer, jwtDecode } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
+  const router = useRouter()
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginRules),
     defaultValues: {
@@ -31,6 +35,12 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     onSuccess: async (data) => {
       const { accessToken, refreshToken } = data.payload.data
       toast.success(data.payload.message)
+      const decodedAccessToken = jwtDecode(accessToken)
+      if (decodedAccessToken.userRole === UserRole.Admin) {
+        router.push(PATH.ADMIN)
+      } else {
+        router.push(PATH.HOME)
+      }
       await usersApis.setTokens({ accessToken, refreshToken })
     },
     onError: (error) => {
