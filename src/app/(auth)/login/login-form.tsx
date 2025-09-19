@@ -1,15 +1,19 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import usersApis from '@/apis/users.apis'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import PATH from '@/constants/path'
-import { cn } from '@/lib/utils'
+import { cn, handleErrorsFromServer } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
@@ -21,8 +25,19 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     }
   })
 
+  const loginMutation = useMutation({
+    mutationKey: ['login'],
+    mutationFn: usersApis.login,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+    },
+    onError: (error) => {
+      handleErrorsFromServer(error, form.setError)
+    }
+  })
+
   const handleSubmit = form.handleSubmit((data) => {
-    console.log(data)
+    loginMutation.mutate(data)
   })
 
   return (
@@ -68,7 +83,8 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
                       </FormItem>
                     )}
                   />
-                  <Button type='submit' className='w-full'>
+                  <Button type='submit' disabled={loginMutation.isPending} className='w-full'>
+                    {loginMutation.isPending && <Loader2 className='animate-spin' />}
                     Đăng nhập
                   </Button>
                 </div>

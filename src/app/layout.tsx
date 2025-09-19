@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+import { Toaster } from '@/components/ui/sonner'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import './globals.css'
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${fontSans.className} antialiased`}>
         <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        <Toaster richColors />
       </body>
     </html>
   )
