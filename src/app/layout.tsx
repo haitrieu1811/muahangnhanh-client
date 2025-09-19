@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import './globals.css'
 
 const fontSans = Inter({
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${fontSans.className} antialiased`}>{children}</body>
+      <body className={`${fontSans.className} antialiased`}>
+        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      </body>
     </html>
   )
 }
