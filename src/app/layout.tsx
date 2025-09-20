@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
+import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
 
 const fontSans = Inter({
@@ -20,11 +21,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={`${fontSans.className} antialiased`}>
         <TanstackQueryProvider>
-          {children}
-          <Toaster richColors position='bottom-center' />
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+            {children}
+            <Toaster richColors position='bottom-center' />
+          </ThemeProvider>
         </TanstackQueryProvider>
       </body>
     </html>
