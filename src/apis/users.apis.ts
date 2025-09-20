@@ -1,6 +1,6 @@
 import http from '@/lib/http'
 import { LoginSchema } from '@/rules/users.rules'
-import { LoginResponse } from '@/types/users,types'
+import { GetMeResponse, LoginResponse } from '@/types/users,types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_API_ENDPOINT = '/users/login'
@@ -37,6 +37,14 @@ const usersApis = {
   logoutFromNextServerToServer(refreshToken: string) {
     return http.post<OnlyMessageResponse>('/users/logout', {
       refreshToken
+    })
+  },
+
+  getMe(accessToken: string) {
+    return http.get<GetMeResponse>('/users/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
     })
   }
 } as const

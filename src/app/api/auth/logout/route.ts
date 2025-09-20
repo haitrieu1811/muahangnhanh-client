@@ -35,8 +35,7 @@ export async function POST() {
     response.cookies.delete('refreshToken')
 
     return response
-  } catch (error) {
-    console.log(error)
+  } catch {
     return Response.json(
       {
         message: 'Lỗi không xác định.'

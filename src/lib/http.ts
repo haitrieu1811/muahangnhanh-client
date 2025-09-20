@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { redirect } from 'next/navigation'
+
 import { LOGIN_API_ENDPOINT, LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
+import PATH from '@/constants/path'
 import {
   clearAuthLS,
+  getAccessTokenFromLS,
   setAccessTokenExpiresAtToLS,
   setAccessTokenToLS,
   setRefreshTokenExpiresAtToLS,
@@ -15,12 +19,17 @@ import { SuccessResponse, TokensResponse } from '@/types/utils.types'
 export const isClient = () => typeof window !== 'undefined'
 
 const ENTITY_ERROR_STATUS_CODE = 422
+const UNAUTHORIZED_ERROR_STATUS_CODE = 401
 
 type EntityErrorPayload = {
   message: string
   errors: {
     [key: string]: string
   }
+}
+
+type UnauthorizedErrorPayload = {
+  message: string
 }
 
 type CustomOptions = Omit<RequestInit, 'method'> & {
@@ -49,6 +58,27 @@ export class EntityError extends HttpError {
   }
 }
 
+export class UnauthorizedError extends HttpError {
+  status: typeof UNAUTHORIZED_ERROR_STATUS_CODE
+  payload: UnauthorizedErrorPayload
+
+  constructor({
+    status,
+    payload
+  }: {
+    status: typeof UNAUTHORIZED_ERROR_STATUS_CODE
+    payload: UnauthorizedErrorPayload
+  }) {
+    super({
+      status,
+      payload,
+      message: 'Unauthorized Error'
+    })
+    this.status = status
+    this.payload = payload
+  }
+}
+
 const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', options?: CustomOptions) => {
   /**
    * Nếu không truyền giá trị `options.baseUrl` thì sẽ gọi API đến server backend
@@ -63,6 +93,12 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     [key: string]: string
   } = {
     'Content-Type': 'application/json'
+  }
+
+  const accessToken = getAccessTokenFromLS()
+
+  if (accessToken) {
+    baseHeaders.Authorization = `Bearer ${accessToken}`
   }
 
   const res = await fetch(fullUrl, {
@@ -85,10 +121,36 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     // Lỗi 422 (lỗi form)
     if (res.status === ENTITY_ERROR_STATUS_CODE) {
       throw new EntityError({
-        status: ENTITY_ERROR_STATUS_CODE,
+        status: res.status,
         payload: payload as EntityErrorPayload
       })
-    } else {
+    }
+    // Lỗi 401 (lỗi liên quan đến token - thiếu, hết hạn hoặc không tồn tại)
+    else if (res.status === UNAUTHORIZED_ERROR_STATUS_CODE) {
+      // Xử lý ở client
+      if (isClient()) {
+        try {
+          await fetch('/api/auth/logout', {
+            method: 'POST'
+          })
+          clearAuthLS()
+          location.href = PATH.LOGIN
+        } catch {}
+      }
+      // Xử lý ở Next server
+      else {
+        const accessToken = (
+          options?.headers as {
+            Authorization: string
+          }
+        )?.Authorization?.split(' ')[1]
+        if (accessToken) {
+          redirect(`${PATH.LOGOUT}?accessToken=${accessToken}`)
+        }
+      }
+    }
+    // Các lỗi khác
+    else {
       throw new HttpError({
         status: res.status,
         payload

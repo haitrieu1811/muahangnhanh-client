@@ -34,7 +34,6 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     mutationFn: usersApis.login,
     onSuccess: async (data) => {
       const { accessToken, refreshToken } = data.payload.data
-      toast.success(data.payload.message)
       await usersApis.setTokens({ accessToken, refreshToken })
       // Chuyển hướng sau khi đăng nhập thành công theo role
       const decodedAccessToken = jwtDecode(accessToken)
@@ -43,6 +42,8 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
       } else {
         router.push(PATH.HOME)
       }
+      toast.success(data.payload.message)
+      router.refresh()
     },
     onError: (error) => {
       handleErrorsFromServer(error, form.setError)

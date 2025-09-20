@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Trang cá nhận - phải đăng nhập mới vào được
+  // Trang cá nhân - phải đăng nhập mới vào được
   if (privatePaths.map((item) => normalizePath(item)).includes(normalizePath(pathname))) {
     if (!accessToken) {
       return NextResponse.redirect(new URL(PATH.LOGIN, request.url))

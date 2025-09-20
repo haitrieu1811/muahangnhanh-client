@@ -1,7 +1,7 @@
 import { UserStatus, UserVerifyStatus } from '@/constants/enum'
 import { SuccessResponse, TokensResponse } from '@/types/utils.types'
 
-type LoggedUser = {
+type User = {
   _id: string
   email: string
   fullName: string
@@ -15,6 +15,10 @@ type LoggedUser = {
 
 export type LoginResponse = SuccessResponse<
   TokensResponse & {
-    user: LoggedUser
+    user: User
   }
 >
+
+export type GetMeResponse = SuccessResponse<{
+  user: User
+}>
