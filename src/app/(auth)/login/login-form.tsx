@@ -6,9 +6,9 @@ import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
+import InputPassword from '@/components/input-password'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -42,7 +42,6 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
       } else {
         router.push(PATH.HOME)
       }
-      toast.success(data.payload.message)
       router.refresh()
     },
     onError: (error) => {
@@ -91,7 +90,7 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
                           </a>
                         </div>
                         <FormControl>
-                          <Input type='password' {...field} />
+                          <InputPassword {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

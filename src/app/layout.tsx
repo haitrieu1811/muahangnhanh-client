@@ -22,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${fontSans.className} antialiased`}>
-        <TanstackQueryProvider>{children}</TanstackQueryProvider>
-        <Toaster richColors />
+        <TanstackQueryProvider>
+          {children}
+          <Toaster richColors position='bottom-center' />
+        </TanstackQueryProvider>
       </body>
     </html>
   )
