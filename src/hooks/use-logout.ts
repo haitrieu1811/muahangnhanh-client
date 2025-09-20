@@ -14,9 +14,9 @@ export default function useLogout() {
     mutationKey: ['logout-from-next-client-to-next-server'],
     mutationFn: usersApis.logoutFromNextClientToNextServer,
     onSuccess: () => {
+      clearAuthLS()
       router.push(PATH.LOGIN)
       router.refresh()
-      clearAuthLS()
     }
   })
 

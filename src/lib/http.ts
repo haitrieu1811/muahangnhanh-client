@@ -15,10 +15,11 @@ import {
   setAccessTokenExpiresAtToLS,
   setAccessTokenToLS,
   setRefreshTokenExpiresAtToLS,
-  setRefreshTokenToLS
+  setRefreshTokenToLS,
+  setUserToLS
 } from '@/lib/storage'
 import { jwtDecode, normalizePath } from '@/lib/utils'
-import { SuccessResponse, TokensResponse } from '@/types/utils.types'
+import { LoginResponse } from '@/types/users.types'
 
 export const isClient = () => typeof window !== 'undefined'
 
@@ -165,13 +166,14 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   // Xử lý khi request thành công (ở client)
   if (isClient()) {
     if ([LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
-      const { accessToken, refreshToken } = (payload as SuccessResponse<TokensResponse>).data
+      const { accessToken, refreshToken, user } = (payload as LoginResponse).data
       const decodedAccessToken = jwtDecode(accessToken)
       const decodedRefreshToken = jwtDecode(refreshToken)
       setAccessTokenToLS(accessToken)
       setRefreshTokenToLS(refreshToken)
       setAccessTokenExpiresAtToLS(new Date(decodedAccessToken.exp * 1000).toISOString())
       setRefreshTokenExpiresAtToLS(new Date(decodedRefreshToken.exp * 1000).toISOString())
+      setUserToLS(user)
     } else if (normalizePath(LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT) === normalizePath(path)) {
       clearAuthLS()
     }

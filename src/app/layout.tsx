@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
+import AppProvider from '@/providers/app.provider'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
@@ -25,8 +26,10 @@ export default function RootLayout({
       <body className={`${fontSans.className} antialiased`}>
         <TanstackQueryProvider>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-            {children}
-            <Toaster richColors position='bottom-center' />
+            <AppProvider>
+              {children}
+              <Toaster richColors position='bottom-center' />
+            </AppProvider>
           </ThemeProvider>
         </TanstackQueryProvider>
       </body>

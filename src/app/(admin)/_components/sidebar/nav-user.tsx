@@ -1,8 +1,10 @@
 'use client'
 
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react'
+import { BadgeCheck, ChevronsUpDown, LogOut, Sparkles } from 'lucide-react'
+import Link from 'next/link'
+import React from 'react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Avatar from '@/components/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,17 +15,16 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
+import useIsClient from '@/hooks/use-is-client'
 
-export default function NavUser({
-  user
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export default function NavUser() {
+  const isClient = useIsClient()
   const { isMobile } = useSidebar()
+  const { user: loggedUser } = useAppContext()
+
+  if (!loggedUser || !isClient) return null
 
   return (
     <SidebarMenu>
@@ -34,14 +35,13 @@ export default function NavUser({
               size='lg'
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-              </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{user.name}</span>
-                <span className='truncate text-xs'>{user.email}</span>
-              </div>
+              <React.Fragment>
+                <Avatar imageUrl={loggedUser.avatar} fullName={loggedUser.fullName} />
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-medium'>{loggedUser.fullName}</span>
+                  <span className='truncate text-xs'>{loggedUser.email}</span>
+                </div>
+              </React.Fragment>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -53,13 +53,10 @@ export default function NavUser({
           >
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-                </Avatar>
+                <Avatar imageUrl={loggedUser.avatar} fullName={loggedUser.fullName} />
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>{user.name}</span>
-                  <span className='truncate text-xs'>{user.email}</span>
+                  <span className='truncate font-medium'>{loggedUser?.fullName}</span>
+                  <span className='truncate text-xs'>{loggedUser.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -72,23 +69,17 @@ export default function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
+              <DropdownMenuItem asChild>
+                <Link href={PATH.ADMIN_ME}>
+                  <BadgeCheck />
+                  Tài khoản
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              Đăng xuất
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

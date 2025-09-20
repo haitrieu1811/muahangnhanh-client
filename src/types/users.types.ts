@@ -2,7 +2,7 @@ import { UserRole, UserStatus, UserVerifyStatus } from '@/constants/enum'
 import { RegisterSchema } from '@/rules/users.rules'
 import { SuccessResponse, TokensResponse } from '@/types/utils.types'
 
-type User = {
+export type User = {
   _id: string
   email: string
   fullName: string

@@ -1,6 +1,6 @@
 import http from '@/lib/http'
 import { LoginSchema } from '@/rules/users.rules'
-import { GetMeResponse, LoginResponse, RegisterReqBody, RegisterResponse } from '@/types/users,types'
+import { GetMeResponse, LoginResponse, RegisterReqBody, RegisterResponse } from '@/types/users.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_API_ENDPOINT = '/users/login'
