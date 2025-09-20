@@ -18,11 +18,13 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/c
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
+import useLogout from '@/hooks/use-logout'
 
 export default function NavUser() {
   const isClient = useIsClient()
   const { isMobile } = useSidebar()
   const { user: loggedUser } = useAppContext()
+  const { handleLogout } = useLogout()
 
   if (!loggedUser || !isClient) return null
 
@@ -77,7 +79,7 @@ export default function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Đăng xuất
             </DropdownMenuItem>
