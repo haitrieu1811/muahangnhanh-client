@@ -15,11 +15,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
 import { cn, handleErrorsFromServer } from '@/lib/utils'
 import { registerRules, RegisterSchema } from '@/rules/users.rules'
 
 export default function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
+
+  const { setIsAuthenticated, setUser } = useAppContext()
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerRules),
@@ -35,9 +38,11 @@ export default function RegisterForm({ className, ...props }: React.ComponentPro
     mutationFn: usersApis.register,
     onSuccess: async (data) => {
       // Đăng nhập ngay sau khi đăng ký thành công
-      const { accessToken, refreshToken } = data.payload.data
+      const { accessToken, refreshToken, user } = data.payload.data
       await usersApis.setTokens({ accessToken, refreshToken })
       router.push(PATH.HOME)
+      setIsAuthenticated(true)
+      setUser(user)
       router.refresh()
     },
     onError: (error) => {

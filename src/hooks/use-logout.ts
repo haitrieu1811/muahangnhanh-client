@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation'
 
 import usersApis from '@/apis/users.apis'
 import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
 import { clearAuthLS } from '@/lib/storage'
 
 export default function useLogout() {
   const router = useRouter()
+
+  const { setIsAuthenticated, setUser } = useAppContext()
 
   const logoutFromNextClientToNextServer = useMutation({
     mutationKey: ['logout-from-next-client-to-next-server'],
@@ -16,6 +19,8 @@ export default function useLogout() {
     onSuccess: () => {
       clearAuthLS()
       router.push(PATH.LOGIN)
+      setIsAuthenticated(false)
+      setUser(null)
       router.refresh()
     }
   })

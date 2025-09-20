@@ -15,11 +15,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
 import { cn, handleErrorsFromServer, jwtDecode } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
+
+  const { setIsAuthenticated, setUser } = useAppContext()
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginRules),
@@ -33,7 +36,7 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     mutationKey: ['login'],
     mutationFn: usersApis.login,
     onSuccess: async (data) => {
-      const { accessToken, refreshToken } = data.payload.data
+      const { accessToken, refreshToken, user } = data.payload.data
       await usersApis.setTokens({ accessToken, refreshToken })
       // Chuyển hướng sau khi đăng nhập thành công theo role
       const decodedAccessToken = jwtDecode(accessToken)
@@ -42,6 +45,8 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
       } else {
         router.push(PATH.HOME)
       }
+      setIsAuthenticated(true)
+      setUser(user)
       router.refresh()
     },
     onError: (error) => {
