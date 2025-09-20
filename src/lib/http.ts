@@ -2,7 +2,11 @@
 
 import { redirect } from 'next/navigation'
 
-import { LOGIN_API_ENDPOINT, LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT } from '@/apis/users.apis'
+import {
+  LOGIN_API_ENDPOINT,
+  LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
+  REGISTER_API_ENDPOINT
+} from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
 import PATH from '@/constants/path'
 import {
@@ -160,7 +164,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
 
   // Xử lý khi request thành công (ở client)
   if (isClient()) {
-    if ([LOGIN_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
+    if ([LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
       const { accessToken, refreshToken } = (payload as SuccessResponse<TokensResponse>).data
       const decodedAccessToken = jwtDecode(accessToken)
       const decodedRefreshToken = jwtDecode(refreshToken)

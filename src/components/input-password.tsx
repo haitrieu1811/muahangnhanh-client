@@ -19,6 +19,7 @@ export default function InputPassword({ className, ...props }: React.ComponentPr
       <Input type={type} className={cn('pr-10', className)} {...props} />
       <button
         type='button'
+        tabIndex={-1}
         className='absolute inset-y-0 right-0 w-10 flex justify-center items-center'
         onClick={handleToggleType}
       >

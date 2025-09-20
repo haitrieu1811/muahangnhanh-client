@@ -1,4 +1,5 @@
-import { UserStatus, UserVerifyStatus } from '@/constants/enum'
+import { UserRole, UserStatus, UserVerifyStatus } from '@/constants/enum'
+import { RegisterSchema } from '@/rules/users.rules'
 import { SuccessResponse, TokensResponse } from '@/types/utils.types'
 
 type User = {
@@ -19,6 +20,12 @@ export type LoginResponse = SuccessResponse<
   }
 >
 
+export type RegisterResponse = LoginResponse
+
 export type GetMeResponse = SuccessResponse<{
   user: User
 }>
+
+export type RegisterReqBody = RegisterSchema & {
+  role: UserRole
+}
