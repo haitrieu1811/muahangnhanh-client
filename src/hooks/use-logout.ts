@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import usersApis from '@/apis/users.apis'
 import PATH from '@/constants/path'
+import { clearAuthLS } from '@/lib/storage'
 
 export default function useLogout() {
   const router = useRouter()
@@ -15,6 +16,7 @@ export default function useLogout() {
     onSuccess: () => {
       router.push(PATH.LOGIN)
       router.refresh()
+      clearAuthLS()
     }
   })
 
