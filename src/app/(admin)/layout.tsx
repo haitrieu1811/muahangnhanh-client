@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className='flex h-16 shrink-0 items-center justify-between gap-10 border-b px-4'>
+        <header className='flex h-16 shrink-0 items-center justify-between gap-10 border-b px-4 sticky top-0 inset-x-0 z-10 bg-background'>
           <div className='flex items-center gap-2'>
             <SidebarTrigger className='-ml-1' />
             <Separator orientation='vertical' className='mr-2 data-[orientation=vertical]:h-4' />
@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <ModeToggle />
         </header>
-        <main>{children}</main>
+        <main className='py-10 px-14'>{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )

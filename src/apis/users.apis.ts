@@ -51,6 +51,10 @@ const usersApis = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  updateMe(body: { fullName: string; avatar: string }) {
+    return http.put<GetMeResponse>('/users/me', body)
   }
 } as const
 

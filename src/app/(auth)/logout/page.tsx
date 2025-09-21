@@ -3,9 +3,9 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
-import PATH from '@/constants/path'
 import useLogout from '@/hooks/use-logout'
 import { getAccessTokenFromLS } from '@/lib/storage'
+import PATH from '@/constants/path'
 
 export default function LogoutPage() {
   const router = useRouter()

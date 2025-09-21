@@ -6,7 +6,11 @@ import { EMAIL_REGEX } from '@/constants/regex'
 export const userRules = z.object({
   email: z.string().regex(EMAIL_REGEX, USERS_MESSAGES.EMAIL_IS_INVALID),
   password: z.string().min(8, USERS_MESSAGES.PASSWORD_LENGTH_INVALID).max(32, USERS_MESSAGES.PASSWORD_LENGTH_INVALID),
-  confirmPassword: z.string().min(1, USERS_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED)
+  confirmPassword: z.string().min(1, USERS_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED),
+  fullName: z
+    .string()
+    .min(1, USERS_MESSAGES.FULLNAME_LENGTH_IS_INVALID)
+    .max(50, USERS_MESSAGES.FULLNAME_LENGTH_IS_INVALID)
 })
 
 export const loginRules = userRules
@@ -33,5 +37,10 @@ export const registerRules = userRules
     }
   })
 
+export const updateMeRules = userRules.pick({
+  fullName: true
+})
+
 export type LoginSchema = z.infer<typeof loginRules>
 export type RegisterSchema = z.infer<typeof registerRules>
+export type UpdateMeSchema = z.infer<typeof updateMeRules>
