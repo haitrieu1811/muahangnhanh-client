@@ -6,7 +6,8 @@ const PATH = {
   LOGOUT: '/logout',
 
   ADMIN: '/admin',
-  ADMIN_ME: '/admin/me'
+  ADMIN_ME: '/admin/me',
+  ADMIN_IMAGES: '/admin/images'
 } as const
 
 export default PATH

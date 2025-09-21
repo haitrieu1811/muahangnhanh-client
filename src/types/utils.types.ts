@@ -27,3 +27,27 @@ export type TokenPayload = {
   iat: number
   exp: number
 }
+
+export type ImageType = {
+  _id: string
+  url: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type PaginationType = {
+  page: number
+  skip: number
+  totalRows: number
+  totalPages: number
+}
+
+export type GetImagesResponse = SuccessResponse<{
+  images: ImageType[]
+  pagination: PaginationType
+}>
+
+export type PaginationReqQuery = {
+  page?: number
+  limit?: number
+}

@@ -2,8 +2,8 @@
 
 import { BadgeCheck, ChevronsUpDown, LogOut, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +18,6 @@ import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
 import useLogout from '@/hooks/use-logout'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default function NavUser() {
   const isClient = useIsClient()
@@ -37,7 +36,7 @@ export default function NavUser() {
               size='lg'
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className='rounded-lg'>
+              <Avatar>
                 <AvatarImage src={loggedUser.avatar} alt={loggedUser.fullName} />
                 <AvatarFallback>
                   {loggedUser.fullName[0].toUpperCase()}
@@ -59,7 +58,7 @@ export default function NavUser() {
           >
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='rounded-lg'>
+                <Avatar>
                   <AvatarImage src={loggedUser.avatar} alt={loggedUser.fullName} />
                   <AvatarFallback>
                     {loggedUser.fullName[0].toUpperCase()}

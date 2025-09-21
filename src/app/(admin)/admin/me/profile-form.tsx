@@ -69,7 +69,7 @@ export default function ProfileForm({ user }: { user: User }) {
       <form className='grid gap-8' onSubmit={handleSubmit}>
         <div className='grid gap-2'>
           <Label>Ảnh đại diện</Label>
-          <Avatar className='size-40 rounded-lg'>
+          <Avatar className='size-40'>
             <AvatarImage src={avatarPreview ?? user.avatar} alt={user.fullName} className='object-cover' />
             <AvatarFallback>
               {user.fullName[0].toUpperCase()}

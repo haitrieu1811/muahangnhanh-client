@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 import AppSidebar from '@/app/(admin)/_components/sidebar'
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import PATH from '@/constants/path'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,7 +27,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>Building Your Application</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link href={PATH.ADMIN}>Trang chủ</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
                 <BreadcrumbItem>

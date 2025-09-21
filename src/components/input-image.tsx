@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
+'use client'
+
 import { CloudUpload } from 'lucide-react'
 import React from 'react'
 
