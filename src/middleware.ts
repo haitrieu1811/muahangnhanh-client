@@ -5,7 +5,7 @@ import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
 import { jwtDecode, normalizePath } from '@/lib/utils'
 
-const adminPaths = [PATH.ADMIN, PATH.ADMIN_ME, PATH.ADMIN_IMAGES]
+const adminPaths = [PATH.ADMIN, PATH.ADMIN_ME, PATH.ADMIN_IMAGES, PATH.ADMIN_PRODUCTS, PATH.ADMIN_PRODUCTS_NEW]
 const authPaths = [PATH.LOGIN, PATH.REGISTER]
 const privatePaths = ['/me']
 

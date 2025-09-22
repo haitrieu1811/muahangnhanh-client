@@ -53,3 +53,7 @@ export const dateDistance = (date: string) => {
     .replace('about', '')
     .replace('less than', 'hơn')
 }
+
+export const formatCurrency = (currency: number) => {
+  return new Intl.NumberFormat('de-DE').format(currency)
+}

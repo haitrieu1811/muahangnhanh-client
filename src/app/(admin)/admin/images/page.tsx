@@ -4,6 +4,7 @@ import mediasApis from '@/apis/medias.apis'
 import UploadImages from '@/app/(admin)/_components/upload-images'
 import ImagesList from '@/app/(admin)/admin/images/images-list'
 import { ImageType } from '@/types/utils.types'
+import PageTitle from '@/app/(admin)/_components/page-title'
 
 export default async function AdminImagesPage({
   searchParams
@@ -37,9 +38,7 @@ export default async function AdminImagesPage({
   return (
     <div className='space-y-10'>
       <div className='flex justify-between items-center space-x-10'>
-        <h1 className='font-semibold tracking-tight text-3xl flex items-center space-x-2'>
-          <span>Thư viện ảnh</span> <span className='text-base text-muted-foreground'>({totalRows})</span>
-        </h1>
+        <PageTitle title='Thư viện ảnh' subTitle={totalRows.toString()} />
         <UploadImages />
       </div>
       <ImagesList images={images} totalPages={totalPages} />

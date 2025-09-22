@@ -199,6 +199,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
       clearAuthLS()
     }
   }
+
   return data
 }
 

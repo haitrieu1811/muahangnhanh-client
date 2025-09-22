@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Be_Vietnam_Pro } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
@@ -7,9 +7,8 @@ import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
 
-const fontSans = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+const fontSans = Inter({
+  subsets: ['vietnamese']
 })
 
 export const metadata: Metadata = {
