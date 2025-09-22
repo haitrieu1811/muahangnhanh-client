@@ -1,7 +1,11 @@
 import http from '@/lib/http'
-import { GetImagesResponse, OnlyMessageResponse, PaginationReqQuery } from '@/types/utils.types'
+import { GetImagesResponse, OnlyMessageResponse, PaginationReqQuery, UploadImagesResponse } from '@/types/utils.types'
 
 const mediasApis = {
+  uploadImages(body: FormData) {
+    return http.post<UploadImagesResponse>('/medias/upload-images', body)
+  },
+
   getImages({ query, accessToken }: { query?: PaginationReqQuery; accessToken: string }) {
     return http.get<GetImagesResponse>(`/medias/images?page=${query?.page}`, {
       headers: {

@@ -40,7 +40,7 @@ export const dateDistance = (date: string) => {
   return formatDistance(date, new Date(), { addSuffix: true })
     .replace('a few seconds ago', 'vài giây trước')
     .replace('seconds ago', 'giây trước')
-    .replace('a minute ago', '1 phút trước')
+    .replace('1 minute ago', '1 phút trước')
     .replace('minutes ago', 'phút trước')
     .replace('an hour ago', '1 giờ trước')
     .replace('hours ago', 'giờ trước')
@@ -50,4 +50,6 @@ export const dateDistance = (date: string) => {
     .replace('months ago', 'tháng trước')
     .replace('a year ago', '1 năm trước')
     .replace('years ago', 'năm trước')
+    .replace('about', '')
+    .replace('less than', 'hơn')
 }

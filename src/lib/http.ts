@@ -92,16 +92,23 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   const baseUrl = options?.baseUrl === undefined ? ENV_CONFIG.NEXT_PUBLIC_SERVER_BASE_URL : options.baseUrl
   const fullUrl = `${baseUrl}/${normalizePath(path)}`
 
-  const body = options?.body ? JSON.stringify(options.body) : undefined
+  let body: FormData | string | undefined = undefined
+  if (options?.body instanceof FormData) {
+    body = options.body
+  } else if (options?.body) {
+    body = JSON.stringify(options.body)
+  }
 
   const baseHeaders: {
     [key: string]: string
-  } = {
-    'Content-Type': 'application/json'
-  }
+  } =
+    body instanceof FormData
+      ? {}
+      : {
+          'Content-Type': 'application/json'
+        }
 
   const accessToken = getAccessTokenFromLS()
-
   if (accessToken) {
     baseHeaders.Authorization = `Bearer ${accessToken}`
   }

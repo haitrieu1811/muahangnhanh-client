@@ -52,9 +52,7 @@ export default function ImagesList({ images, totalPages }: { images: ImageType[]
                     </Button>
                   </div>
                 </div>
-                <div>
-                  <div className='text-sm'>{dateDistance(image.createdAt)}</div>
-                </div>
+                <div className='text-sm'>{dateDistance(image.createdAt)}</div>
               </div>
             </div>
           ))}

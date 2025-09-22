@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Mona_Sans } from 'next/font/google'
+import { Be_Vietnam_Pro } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
@@ -7,8 +7,9 @@ import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
 
-const fontSans = Mona_Sans({
-  subsets: ['vietnamese']
+const fontSans = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
 export const metadata: Metadata = {

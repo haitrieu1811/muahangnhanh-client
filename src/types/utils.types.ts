@@ -1,4 +1,4 @@
-import { UserRole, UserStatus, UserVerifyStatus } from '@/constants/enum'
+import { MediaType, UserRole, UserStatus, UserVerifyStatus } from '@/constants/enum'
 
 export type SuccessResponse<Data> = {
   message: string
@@ -51,3 +51,12 @@ export type PaginationReqQuery = {
   page?: number
   limit?: number
 }
+
+export type UploadImagesResponse = SuccessResponse<{
+  medias: {
+    _id: string
+    name: string
+    type: MediaType
+    url: string
+  }[]
+}>

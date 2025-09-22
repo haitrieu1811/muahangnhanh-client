@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import mediasApis from '@/apis/medias.apis'
 import ImagesList from '@/app/(admin)/admin/images/images-list'
 import { ImageType } from '@/types/utils.types'
+import AddImagesButton from '@/app/(admin)/admin/images/add-images-button'
 
 export default async function AdminImagesPage({
   searchParams
@@ -19,6 +20,7 @@ export default async function AdminImagesPage({
 
   let images: ImageType[] = []
   let totalPages = 1
+  let totalRows = 0
 
   try {
     const res = await mediasApis.getImages({
@@ -29,11 +31,17 @@ export default async function AdminImagesPage({
     })
     images = res.payload.data.images
     totalPages = res.payload.data.pagination.totalPages
+    totalRows = res.payload.data.pagination.totalRows
   } catch {}
 
   return (
-    <div>
-      <h1 className='font-semibold tracking-tight text-3xl mb-10'>Thư viện ảnh</h1>
+    <div className='space-y-10'>
+      <div className='flex justify-between items-center space-x-10'>
+        <h1 className='font-semibold tracking-tight text-3xl flex items-center space-x-2'>
+          <span>Thư viện ảnh</span> <span className='text-base text-muted-foreground'>({totalRows})</span>
+        </h1>
+        <AddImagesButton />
+      </div>
       <ImagesList images={images} totalPages={totalPages} />
     </div>
   )
