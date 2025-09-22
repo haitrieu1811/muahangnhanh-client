@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
-import InputImage from '@/components/input-image'
+import SelectImages from '@/app/(admin)/_components/select-images'
+import UploadImages from '@/app/(admin)/_components/upload-images'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -21,11 +22,21 @@ import { User } from '@/types/users.types'
 export default function ProfileForm({ user }: { user: User }) {
   const queryClient = useQueryClient()
 
+  const [avatar, setAvatar] = React.useState<{
+    url: string
+    _id: string
+  } | null>(null)
+
+  React.useEffect(() => {
+    if (user.avatar && user.avatarId) {
+      setAvatar({
+        _id: user.avatarId,
+        url: user.avatar
+      })
+    }
+  }, [user])
+
   const { setUser } = useAppContext()
-
-  const [avatarFile, setAvatarFile] = React.useState<File | null>(null)
-
-  const avatarPreview = React.useMemo(() => (avatarFile ? URL.createObjectURL(avatarFile) : null), [avatarFile])
 
   const form = useForm<UpdateMeSchema>({
     resolver: zodResolver(updateMeRules),
@@ -46,20 +57,14 @@ export default function ProfileForm({ user }: { user: User }) {
     }
   })
 
-  const handleChangeAvatarFile = (files?: File[]) => {
-    if (!files) return
-    setAvatarFile(files[0])
-  }
-
   const handleCancel = () => {
-    setAvatarFile(null)
     form.reset()
   }
 
   const handleSubmit = form.handleSubmit((data) => {
     const body = {
       fullName: data.fullName,
-      avatar: user.avatarId
+      avatar: avatar?._id ? avatar._id : undefined
     }
     updateMeMutation.mutate(body)
   })
@@ -69,15 +74,21 @@ export default function ProfileForm({ user }: { user: User }) {
       <form className='grid gap-8' onSubmit={handleSubmit}>
         <div className='grid gap-2'>
           <Label>Ảnh đại diện</Label>
-          <Avatar className='size-40'>
-            <AvatarImage src={avatarPreview ?? user.avatar} alt={user.fullName} className='object-cover' />
+          <Avatar className='size-20'>
+            <AvatarImage src={avatar?.url} alt={user.fullName} className='object-cover' />
             <AvatarFallback>
               {user.fullName[0].toUpperCase()}
               {user.fullName[1].toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <InputImage onChange={(files) => handleChangeAvatarFile(files)} />
+          <div className='flex space-x-2'>
+            <UploadImages />
+            <SelectImages
+              onSubmit={(images) => {
+                const { _id, url } = images[0]
+                setAvatar({ _id, url })
+              }}
+            />
           </div>
         </div>
         <div className='grid grid-cols-12 gap-8'>

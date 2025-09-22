@@ -7,7 +7,7 @@ export type User = {
   email: string
   fullName: string
   avatar: string
-  avatarId: string
+  avatarId: string | null
   status: UserStatus
   verifyStatus: UserVerifyStatus
   createdAt: string

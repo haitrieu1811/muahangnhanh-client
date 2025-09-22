@@ -5,7 +5,8 @@ import { redirect } from 'next/navigation'
 import {
   LOGIN_API_ENDPOINT,
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
-  REGISTER_API_ENDPOINT
+  REGISTER_API_ENDPOINT,
+  UPDATE_ME_API_ENDPOINT
 } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
 import PATH from '@/constants/path'
@@ -19,7 +20,7 @@ import {
   setUserToLS
 } from '@/lib/storage'
 import { jwtDecode, normalizePath } from '@/lib/utils'
-import { LoginResponse } from '@/types/users.types'
+import { GetMeResponse, LoginResponse } from '@/types/users.types'
 
 export const isClient = () => typeof window !== 'undefined'
 
@@ -84,6 +85,11 @@ export class UnauthorizedError extends HttpError {
   }
 }
 
+export type HttpResponse<Payload = any> = {
+  status: number
+  payload: Payload
+}
+
 const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', options?: CustomOptions) => {
   /**
    * Nếu không truyền giá trị `options.baseUrl` thì sẽ gọi API đến server backend
@@ -123,7 +129,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   })
 
   const payload: Response = await res.json()
-  const data = {
+  const data: HttpResponse<Response> = {
     status: res.status,
     payload
   }
@@ -172,6 +178,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
 
   // Xử lý khi request thành công (ở client)
   if (isClient()) {
+    // Đăng nhập - Đăng ký
     if ([LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
       const { accessToken, refreshToken, user } = (payload as LoginResponse).data
       const decodedAccessToken = jwtDecode(accessToken)
@@ -181,7 +188,14 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
       setAccessTokenExpiresAtToLS(new Date(decodedAccessToken.exp * 1000).toISOString())
       setRefreshTokenExpiresAtToLS(new Date(decodedRefreshToken.exp * 1000).toISOString())
       setUserToLS(user)
-    } else if (normalizePath(LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT) === normalizePath(path)) {
+    }
+    // Cập nhật tài khoản
+    else if (normalizePath(UPDATE_ME_API_ENDPOINT) === normalizePath(path) && method === 'PUT') {
+      const { user } = (payload as GetMeResponse).data
+      setUserToLS(user)
+    }
+    // Đăng xuất
+    else if (normalizePath(LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT) === normalizePath(path)) {
       clearAuthLS()
     }
   }

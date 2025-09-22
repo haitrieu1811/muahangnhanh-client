@@ -5,6 +5,7 @@ import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_API_ENDPOINT = '/users/login'
 export const REGISTER_API_ENDPOINT = '/users/register'
+export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
 
 const usersApis = {
@@ -53,8 +54,8 @@ const usersApis = {
     })
   },
 
-  updateMe(body: { fullName: string; avatar: string }) {
-    return http.put<GetMeResponse>('/users/me', body)
+  updateMe(body: { fullName: string; avatar?: string }) {
+    return http.put<GetMeResponse>(UPDATE_ME_API_ENDPOINT, body)
   }
 } as const
 

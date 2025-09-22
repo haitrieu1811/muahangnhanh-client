@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers'
 
 import mediasApis from '@/apis/medias.apis'
+import UploadImages from '@/app/(admin)/_components/upload-images'
 import ImagesList from '@/app/(admin)/admin/images/images-list'
 import { ImageType } from '@/types/utils.types'
-import AddImagesButton from '@/app/(admin)/admin/images/add-images-button'
 
 export default async function AdminImagesPage({
   searchParams
@@ -23,7 +23,7 @@ export default async function AdminImagesPage({
   let totalRows = 0
 
   try {
-    const res = await mediasApis.getImages({
+    const res = await mediasApis.getImagesFromNextServerToServer({
       accessToken,
       query: {
         page: currentPage
@@ -40,7 +40,7 @@ export default async function AdminImagesPage({
         <h1 className='font-semibold tracking-tight text-3xl flex items-center space-x-2'>
           <span>Thư viện ảnh</span> <span className='text-base text-muted-foreground'>({totalRows})</span>
         </h1>
-        <AddImagesButton />
+        <UploadImages />
       </div>
       <ImagesList images={images} totalPages={totalPages} />
     </div>

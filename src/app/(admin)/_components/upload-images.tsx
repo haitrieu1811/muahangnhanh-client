@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client'
@@ -13,8 +14,14 @@ import { toast } from 'sonner'
 import mediasApis from '@/apis/medias.apis'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { HttpResponse } from '@/lib/http'
+import { UploadImagesResponse } from '@/types/utils.types'
 
-export default function AddImagesButton() {
+type UploadImagesProps = {
+  onSuccess?: (data: HttpResponse<UploadImagesResponse>) => void
+}
+
+export default function UploadImages({ onSuccess }: UploadImagesProps) {
   const router = useRouter()
 
   const [files, setFiles] = React.useState<File[]>([])
@@ -55,9 +62,7 @@ export default function AddImagesButton() {
       toast.success(data.payload.message)
       handleCancel()
       router.refresh()
-    },
-    onError: (error) => {
-      console.log(error)
+      onSuccess && onSuccess(data)
     }
   })
 
@@ -72,7 +77,7 @@ export default function AddImagesButton() {
 
   return (
     <React.Fragment>
-      <Button variant='outline' onClick={() => setIsOpenDialog(true)}>
+      <Button type='button' variant='outline' onClick={() => setIsOpenDialog(true)}>
         <PlusCircle />
         Thêm ảnh mới
       </Button>
@@ -92,6 +97,7 @@ export default function AddImagesButton() {
 
           {files.length === 0 && (
             <button
+              type='button'
               className='bg-muted rounded-md flex flex-col justify-center items-center p-10 space-y-2'
               onClick={handleStart}
             >
@@ -120,12 +126,17 @@ export default function AddImagesButton() {
                       className='w-full aspect-video rounded-md'
                     />
                     <div className='absolute bottom-0 inset-x-0 p-2 bg-muted-foreground/50 flex justify-end space-x-1 opacity-0 group-hover:opacity-100 duration-100 rounded-b-md'>
-                      <Button asChild size='icon' variant='secondary'>
+                      <Button type='button' asChild size='icon' variant='secondary'>
                         <Link href={previewImage} target='_blank'>
                           <Eye />
                         </Link>
                       </Button>
-                      <Button size='icon' variant='secondary' onClick={() => handleDeletePreviewImage(previewImage)}>
+                      <Button
+                        type='button'
+                        size='icon'
+                        variant='secondary'
+                        onClick={() => handleDeletePreviewImage(previewImage)}
+                      >
                         <Trash />
                       </Button>
                     </div>
@@ -144,10 +155,10 @@ export default function AddImagesButton() {
           )}
           {files.length > 0 && (
             <DialogFooter>
-              <Button variant='outline' onClick={handleCancel}>
+              <Button type='button' variant='outline' onClick={handleCancel}>
                 Hủy bỏ
               </Button>
-              <Button disabled={uploadImagesMutation.isPending} onClick={handleUploadImages}>
+              <Button type='button' disabled={uploadImagesMutation.isPending} onClick={handleUploadImages}>
                 {uploadImagesMutation.isPending && <Loader2 className='animate-spin' />}
                 Tải {files.length} ảnh lên
               </Button>

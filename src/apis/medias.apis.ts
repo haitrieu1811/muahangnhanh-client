@@ -6,12 +6,16 @@ const mediasApis = {
     return http.post<UploadImagesResponse>('/medias/upload-images', body)
   },
 
-  getImages({ query, accessToken }: { query?: PaginationReqQuery; accessToken: string }) {
+  getImagesFromNextServerToServer({ query, accessToken }: { query?: PaginationReqQuery; accessToken: string }) {
     return http.get<GetImagesResponse>(`/medias/images?page=${query?.page}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  getImagesFromNextClientToServer(query?: PaginationReqQuery) {
+    return http.get<GetImagesResponse>(`/medias/images?page=${query?.page}&limit=${query?.limit}`)
   },
 
   deleteImage(imageId: string) {
