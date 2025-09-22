@@ -41,6 +41,29 @@ export const updateMeRules = userRules.pick({
   fullName: true
 })
 
+export const changePasswordRules = userRules
+  .pick({
+    password: true,
+    confirmPassword: true
+  })
+  .extend({
+    oldPassword: z
+      .string()
+      .min(8, USERS_MESSAGES.PASSWORD_LENGTH_INVALID)
+      .max(32, USERS_MESSAGES.PASSWORD_LENGTH_INVALID)
+  })
+  .strict()
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        message: USERS_MESSAGES.CONFIRM_PASSWORD_IS_NOT_MATCH,
+        code: 'custom',
+        path: ['confirmPassword']
+      })
+    }
+  })
+
 export type LoginSchema = z.infer<typeof loginRules>
 export type RegisterSchema = z.infer<typeof registerRules>
 export type UpdateMeSchema = z.infer<typeof updateMeRules>
+export type ChangePasswordSchema = z.infer<typeof changePasswordRules>

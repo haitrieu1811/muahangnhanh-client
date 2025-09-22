@@ -1,6 +1,12 @@
 import http from '@/lib/http'
 import { LoginSchema } from '@/rules/users.rules'
-import { GetMeResponse, LoginResponse, RegisterReqBody, RegisterResponse } from '@/types/users.types'
+import {
+  ChangePasswordReqBody,
+  GetMeResponse,
+  LoginResponse,
+  RegisterReqBody,
+  RegisterResponse
+} from '@/types/users.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_API_ENDPOINT = '/users/login'
@@ -56,6 +62,10 @@ const usersApis = {
 
   updateMe(body: { fullName: string; avatar?: string }) {
     return http.put<GetMeResponse>(UPDATE_ME_API_ENDPOINT, body)
+  },
+
+  changePassword(body: ChangePasswordReqBody) {
+    return http.post<GetMeResponse>('/users/change-password', body)
   }
 } as const
 

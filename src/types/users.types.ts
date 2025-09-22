@@ -29,3 +29,19 @@ export type GetMeResponse = SuccessResponse<{
 export type RegisterReqBody = RegisterSchema & {
   role: UserRole
 }
+
+export type ChangePasswordReqBody = {
+  oldPassword: string
+  password: string
+  confirmPassword: string
+}
+
+export type ChangePasswordResponse = SuccessResponse<{
+  user: {
+    _id: string
+    email: string
+    fullName: string
+    createdAt: string
+    updatedAt: string
+  }
+}>

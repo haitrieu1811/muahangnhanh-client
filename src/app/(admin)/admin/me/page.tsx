@@ -2,8 +2,9 @@ import { cookies } from 'next/headers'
 
 import usersApis from '@/apis/users.apis'
 import ProfileForm from '@/app/(admin)/admin/me/profile-form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { User } from '@/types/users.types'
+import ChangePasswordForm from '@/app/(admin)/admin/me/change-password-form'
 
 export default async function AdminMePage() {
   const cookieStore = await cookies()
@@ -27,6 +28,15 @@ export default async function AdminMePage() {
         </CardHeader>
         <CardContent>
           <ProfileForm user={user} />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Đổi mật khẩu</CardTitle>
+          <CardDescription>Tuyệt đối không cung cấp mật khẩu cho bất kỳ ai</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChangePasswordForm />
         </CardContent>
       </Card>
     </div>
