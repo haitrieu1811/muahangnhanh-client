@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers'
 
 import usersApis from '@/apis/users.apis'
+import PageTitle from '@/app/(admin)/_components/page-title'
+import ChangePasswordForm from '@/app/(admin)/admin/me/change-password-form'
 import ProfileForm from '@/app/(admin)/admin/me/profile-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { User } from '@/types/users.types'
-import ChangePasswordForm from '@/app/(admin)/admin/me/change-password-form'
 
 export default async function AdminMePage() {
   const cookieStore = await cookies()
@@ -21,7 +22,7 @@ export default async function AdminMePage() {
 
   return (
     <div className='space-y-8'>
-      <h2 className='text-2xl font-semibold tracking-tight'>{user.fullName}</h2>
+      <PageTitle title={user.fullName} />
       <Card>
         <CardHeader>
           <CardTitle>Thông tin</CardTitle>

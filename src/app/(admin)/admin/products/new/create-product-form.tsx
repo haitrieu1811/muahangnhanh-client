@@ -13,17 +13,18 @@ import { toast } from 'sonner'
 import productsApis from '@/apis/products.apis'
 import SelectImages, { ImageStateType } from '@/app/(admin)/_components/select-images'
 import UploadImages from '@/app/(admin)/_components/upload-images'
+import RichTextEditor from '@/components/rich-text-editor'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Textarea } from '@/components/ui/textarea'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { ProductStatus } from '@/constants/enum'
 import { createProductRules, CreateProductSchema } from '@/rules/products.rules'
 import { CreateProductReqBody, ProductType } from '@/types/products.types'
+import PATH from '@/constants/path'
 
 export default function CreateProductForm({ product }: { product?: ProductType }) {
   const router = useRouter()
@@ -48,9 +49,8 @@ export default function CreateProductForm({ product }: { product?: ProductType }
     mutationFn: productsApis.createProduct,
     onSuccess: (data) => {
       toast.success(data.payload.message)
-      form.reset()
-      setThumbnail(null)
-      setPhotos([])
+      router.push(PATH.ADMIN_PRODUCTS)
+      router.refresh()
     }
   })
 
@@ -112,45 +112,9 @@ export default function CreateProductForm({ product }: { product?: ProductType }
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit}>
-        <div className='grid grid-cols-12 gap-4'>
-          {/* Danh mục - trạng thái */}
-          <div className='col-span-3'>
-            <Card>
-              <CardHeader>
-                <CardTitle>Danh mục - Trạng thái</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control}
-                  name='status'
-                  render={({ field }) => (
-                    <FormItem className='space-y-3'>
-                      <FormLabel>Trạng thái</FormLabel>
-                      <FormControl>
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className='flex flex-col'>
-                          <FormItem className='flex items-center gap-3'>
-                            <FormControl>
-                              <RadioGroupItem value={ProductStatus.Active.toString()} />
-                            </FormControl>
-                            <FormLabel className='font-normal'>Hoạt động</FormLabel>
-                          </FormItem>
-                          <FormItem className='flex items-center gap-3'>
-                            <FormControl>
-                              <RadioGroupItem value={ProductStatus.Inactive.toString()} />
-                            </FormControl>
-                            <FormLabel className='font-normal'>Tạm dừng</FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-          </div>
+        <div className='grid grid-cols-12 gap-8'>
           {/* Thông tin chung - giá tiền */}
-          <div className='col-span-6 grid gap-4'>
+          <div className='col-span-8 grid gap-8'>
             <Card>
               <CardHeader>
                 <CardTitle>Thông tin chung</CardTitle>
@@ -178,7 +142,7 @@ export default function CreateProductForm({ product }: { product?: ProductType }
                     <FormItem>
                       <FormLabel>Mô tả</FormLabel>
                       <FormControl>
-                        <Textarea {...field} />
+                        <RichTextEditor content={field.value} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -222,8 +186,9 @@ export default function CreateProductForm({ product }: { product?: ProductType }
               </CardContent>
             </Card>
           </div>
-          {/* Hình ảnh */}
-          <div className='col-span-3'>
+          {/* Hình ảnh - Danh mục - Trạng thái */}
+          <div className='col-span-4 space-y-8'>
+            {/* Hình ảnh */}
             <Card>
               <CardHeader>
                 <CardTitle>Hình ảnh</CardTitle>
@@ -305,6 +270,40 @@ export default function CreateProductForm({ product }: { product?: ProductType }
                     <SelectImages multiple onSubmit={handleMergePhotos} />
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+            {/* Danh mục - Trạng thái */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Danh mục - Trạng thái</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name='status'
+                  render={({ field }) => (
+                    <FormItem className='space-y-3'>
+                      <FormLabel>Trạng thái</FormLabel>
+                      <FormControl>
+                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className='flex flex-col'>
+                          <FormItem className='flex items-center gap-3'>
+                            <FormControl>
+                              <RadioGroupItem value={ProductStatus.Active.toString()} />
+                            </FormControl>
+                            <FormLabel className='font-normal'>Hoạt động</FormLabel>
+                          </FormItem>
+                          <FormItem className='flex items-center gap-3'>
+                            <FormControl>
+                              <RadioGroupItem value={ProductStatus.Inactive.toString()} />
+                            </FormControl>
+                            <FormLabel className='font-normal'>Tạm dừng</FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
           </div>
