@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
@@ -29,6 +30,7 @@ export default function RootLayout({
             <AppProvider>
               {children}
               <Toaster richColors position='bottom-center' />
+              <NextTopLoader showSpinner={false} shadow={false} />
             </AppProvider>
           </ThemeProvider>
         </TanstackQueryProvider>

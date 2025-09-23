@@ -1,4 +1,5 @@
 import { ProductStatus } from '@/constants/enum'
+import { CreateProductSchema } from '@/rules/products.rules'
 import { PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
 
 export type ProductType = {
@@ -45,4 +46,17 @@ export type GetProductsResponse = SuccessResponse<{
 
 export type GetProductsReqQuery = PaginationReqQuery & {
   name?: string
+}
+
+export type CreateProductResponse = SuccessResponse<{
+  products: ProductType[]
+  pagination: PaginationType
+}>
+
+export type CreateProductBody = Omit<CreateProductSchema, 'price' | 'priceAfterDiscount' | 'status'> & {
+  price: number
+  priceAfterDiscount?: number
+  thumbnail: string // ID hình ảnh
+  photos?: string[]
+  status?: ProductStatus
 }

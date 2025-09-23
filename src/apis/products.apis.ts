@@ -1,5 +1,10 @@
 import http from '@/lib/http'
-import { GetProductsReqQuery, GetProductsResponse } from '@/types/products.types'
+import {
+  CreateProductBody,
+  CreateProductResponse,
+  GetProductsReqQuery,
+  GetProductsResponse
+} from '@/types/products.types'
 
 const productsApis = {
   getAllProducts({ query, accessToken }: { query: GetProductsReqQuery; accessToken: string }) {
@@ -9,6 +14,10 @@ const productsApis = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  createProduct(body: CreateProductBody) {
+    return http.post<CreateProductResponse>('/products', body)
   }
 } as const
 

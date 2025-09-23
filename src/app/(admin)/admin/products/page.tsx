@@ -1,6 +1,7 @@
 import { PlusCircle } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import productsApis from '@/apis/products.apis'
 import PageTitle from '@/app/(admin)/_components/page-title'
@@ -9,6 +10,7 @@ import AdminProductsSearch from '@/app/(admin)/admin/products/search'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import PATH from '@/constants/path'
 import { HttpError } from '@/lib/http'
 import { dateDistance, formatCurrency } from '@/lib/utils'
 import { ProductType } from '@/types/products.types'
@@ -53,9 +55,11 @@ export default async function AdminProductsPage({
     <div className='space-y-10'>
       <div className='flex justify-between items-center space-x-10'>
         <PageTitle title='Sản phẩm' subTitle={totalProducts.toString()} />
-        <Button variant='outline'>
-          <PlusCircle />
-          Thêm sản phẩm mới
+        <Button asChild variant='outline'>
+          <Link href={PATH.ADMIN_PRODUCTS_NEW}>
+            <PlusCircle />
+            Thêm sản phẩm mới
+          </Link>
         </Button>
       </div>
       <div className='space-y-4'>

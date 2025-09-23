@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <ModeToggle />
         </header>
-        <main className='py-10 px-14'>{children}</main>
+        <main className='p-8'>{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )

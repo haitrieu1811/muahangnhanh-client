@@ -77,7 +77,7 @@ export default function UploadImages({ onSuccess }: UploadImagesProps) {
 
   return (
     <React.Fragment>
-      <Button type='button' variant='outline' onClick={() => setIsOpenDialog(true)}>
+      <Button type='button' variant='outline' size='sm' onClick={() => setIsOpenDialog(true)}>
         <PlusCircle />
         Thêm ảnh mới
       </Button>

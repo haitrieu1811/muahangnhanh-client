@@ -17,7 +17,7 @@ export default function PageTitle({ title, subTitle }: { title: string; subTitle
       <Button size='icon' variant='outline' onClick={handleBack}>
         <ChevronLeft />
       </Button>
-      <h1 className='font-semibold tracking-tight text-3xl flex items-center space-x-2'>
+      <h1 className='font-semibold tracking-tight text-2xl flex items-center space-x-2'>
         <span>{title}</span> {subTitle && <span className='text-base text-muted-foreground'>({subTitle})</span>}
       </h1>
     </div>

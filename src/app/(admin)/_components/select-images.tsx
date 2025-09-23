@@ -13,6 +13,11 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { cn } from '@/lib/utils'
 import { ImageType } from '@/types/utils.types'
 
+export type ImageStateType = {
+  _id: string
+  url: string
+}
+
 /**
  * Prop `onChange` cung cấp một danh sách hình ảnh cho dù ở chế độ
  * chọn một ảnh - truy cập vào phần tử đầu tiên `Array[0]` để lấy dữ liệu hình
@@ -24,14 +29,14 @@ export default function SelectImages({
   onSubmit
 }: {
   multiple?: boolean
-  onChange?: (images: ImageType[]) => void
-  onSubmit?: (images: ImageType[]) => void
+  onChange?: (images: ImageStateType[]) => void
+  onSubmit?: (images: ImageStateType[]) => void
 }) {
   const imagesListRef = React.useRef<HTMLDivElement>(null)
 
   const [isOpenDialog, setIsOpenDialog] = React.useState<boolean>(false)
   const [currentPage, setCurrentPage] = React.useState(1)
-  const [selectedImages, setSelectedImages] = React.useState<ImageType[]>([])
+  const [selectedImages, setSelectedImages] = React.useState<ImageStateType[]>([])
 
   const getImagesQuery = useQuery({
     queryKey: ['get-images', { currentPage }],
@@ -92,12 +97,13 @@ export default function SelectImages({
 
   const handleSubmit = () => {
     setIsOpenDialog(false)
+    setSelectedImages([])
     onSubmit && onSubmit(selectedImages)
   }
 
   return (
     <React.Fragment>
-      <Button type='button' onClick={() => setIsOpenDialog(true)}>
+      <Button type='button' size='sm' variant='secondary' onClick={() => setIsOpenDialog(true)}>
         <ImageIcon />
         Chọn ảnh có sẵn
       </Button>
