@@ -20,7 +20,7 @@ export default function CreateNewButton() {
           <DialogHeader>
             <DialogTitle>Thêm danh mục sản phẩm mới</DialogTitle>
           </DialogHeader>
-          <CreateProductCategoryForm onSuccess={() => setIsOpenDialog(false)} />
+          <CreateProductCategoryForm onCreateSuccess={() => setIsOpenDialog(false)} />
         </DialogContent>
       </Dialog>
     </React.Fragment>

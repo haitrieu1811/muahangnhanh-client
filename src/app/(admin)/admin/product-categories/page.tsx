@@ -54,7 +54,7 @@ export default async function ProductCategoriesPage() {
                   <TableCell>{dateDistance(productCategory.updatedAt)}</TableCell>
                   <TableCell>
                     <div className='flex justify-end items-center'>
-                      <ProductCategoryActions productCategoryId={productCategory._id} />
+                      <ProductCategoryActions productCategory={productCategory} />
                     </div>
                   </TableCell>
                 </TableRow>

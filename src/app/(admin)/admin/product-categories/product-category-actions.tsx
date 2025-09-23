@@ -2,12 +2,12 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { EllipsisVertical } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 
 import productsApis from '@/apis/products.apis'
+import CreateProductCategoryForm from '@/app/(admin)/_components/create-product-category-form'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,12 +19,14 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import PATH from '@/constants/path'
+import { ProductCategoryType } from '@/types/products.types'
 
-export default function ProductCategoryActions({ productCategoryId }: { productCategoryId: string }) {
+export default function ProductCategoryActions({ productCategory }: { productCategory: ProductCategoryType }) {
   const router = useRouter()
 
+  const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false)
 
   const deleteProductMutation = useMutation({
@@ -45,15 +47,24 @@ export default function ProductCategoryActions({ productCategoryId }: { productC
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem asChild>
-            <Link href={PATH.ADMIN_PRODUCTS_DETAIL(productCategoryId)}>Chi tiết</Link>
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsUpdating(true)}>Chi tiết</DropdownMenuItem>
           <DropdownMenuItem className='text-destructive hover:text-destructive!' onClick={() => setIsDeleting(true)}>
             Xóa
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
+      {/* Cập nhật */}
+      <Dialog open={isUpdating} onOpenChange={setIsUpdating}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{productCategory.name}</DialogTitle>
+          </DialogHeader>
+          <CreateProductCategoryForm productCategory={productCategory} onUpdateSuccess={() => setIsUpdating(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Xác nhận xóa */}
       <AlertDialog open={isDeleting} onOpenChange={setIsDeleting}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -64,7 +75,7 @@ export default function ProductCategoryActions({ productCategoryId }: { productC
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleteProductMutation.mutate(productCategoryId)}>
+            <AlertDialogAction onClick={() => deleteProductMutation.mutate(productCategory._id)}>
               Tiếp tục
             </AlertDialogAction>
           </AlertDialogFooter>

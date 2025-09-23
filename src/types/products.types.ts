@@ -1,5 +1,5 @@
 import { ProductCategoryStatus, ProductStatus } from '@/constants/enum'
-import { CreateProductSchema } from '@/rules/products.rules'
+import { CreateProductCategorySchema, CreateProductSchema } from '@/rules/products.rules'
 import { PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
 
 export type ProductType = {
@@ -93,3 +93,5 @@ export type CreateProductCategoryResponse = SuccessResponse<{
     updatedAt: string
   }
 }>
+
+export type CreateProductCategoryReqBody = CreateProductCategorySchema & { thumbnail: string }

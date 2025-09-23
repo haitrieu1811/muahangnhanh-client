@@ -1,6 +1,6 @@
 import http from '@/lib/http'
-import { CreateProductCategorySchema } from '@/rules/products.rules'
 import {
+  CreateProductCategoryReqBody,
   CreateProductCategoryResponse,
   CreateProductReqBody,
   CreateProductResponse,
@@ -41,8 +41,12 @@ const productsApis = {
     return http.get<GetProductCategoriesResponse>('/product-categories')
   },
 
-  createProductCategory(body: CreateProductCategorySchema & { thumbnail: string }) {
+  createProductCategory(body: CreateProductCategoryReqBody) {
     return http.post<CreateProductCategoryResponse>('/product-categories', body)
+  },
+
+  updateProductCategory({ body, id }: { body: CreateProductCategoryReqBody; id: string }) {
+    return http.put<CreateProductCategoryResponse>(`/product-categories/${id}`, body)
   }
 } as const
 

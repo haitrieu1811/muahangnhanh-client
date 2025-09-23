@@ -21,16 +21,34 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { HttpResponse } from '@/lib/http'
 import { createProductCategoryRules, CreateProductCategorySchema } from '@/rules/products.rules'
-import { CreateProductCategoryResponse } from '@/types/products.types'
+import {
+  CreateProductCategoryReqBody,
+  CreateProductCategoryResponse,
+  ProductCategoryType
+} from '@/types/products.types'
 
 export default function CreateProductCategoryForm({
-  onSuccess
+  productCategory,
+  onCreateSuccess,
+  onUpdateSuccess
 }: {
-  onSuccess?: (data: HttpResponse<CreateProductCategoryResponse>) => void
+  productCategory?: ProductCategoryType
+  onCreateSuccess?: (data: HttpResponse<CreateProductCategoryResponse>) => void
+  onUpdateSuccess?: (data: HttpResponse<CreateProductCategoryResponse>) => void
 }) {
   const router = useRouter()
 
+  const isUpdateMode = !!productCategory
+
   const [thumbnail, setThumbnail] = React.useState<ImageStateType | null>(null)
+
+  React.useEffect(() => {
+    if (!productCategory) return
+    setThumbnail({
+      _id: productCategory.thumbnailId,
+      url: productCategory.thumbnail
+    })
+  }, [productCategory])
 
   const createProductCategoryMutation = useMutation({
     mutationKey: ['create-product-category'],
@@ -38,23 +56,43 @@ export default function CreateProductCategoryForm({
     onSuccess: (data) => {
       toast.success(data.payload.message)
       router.refresh()
-      onSuccess && onSuccess(data)
+      onCreateSuccess && onCreateSuccess(data)
     }
   })
+
+  const updateProductCategoryMutation = useMutation({
+    mutationKey: ['update-product-category'],
+    mutationFn: productsApis.updateProductCategory,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      router.refresh()
+      onUpdateSuccess && onUpdateSuccess(data)
+    }
+  })
+
+  const isPending = createProductCategoryMutation.isPending || updateProductCategoryMutation.isPending
 
   const form = useForm<CreateProductCategorySchema>({
     resolver: zodResolver(createProductCategoryRules),
     defaultValues: {
-      name: '',
-      description: ''
+      name: productCategory?.name ?? '',
+      description: productCategory?.description ?? ''
     }
   })
 
   const handleSubmit = form.handleSubmit((data) => {
     if (!thumbnail) return
-    createProductCategoryMutation.mutate({
+    const body: CreateProductCategoryReqBody = {
       ...data,
       thumbnail: thumbnail._id
+    }
+    if (!isUpdateMode) {
+      createProductCategoryMutation.mutate(body)
+      return
+    }
+    updateProductCategoryMutation.mutate({
+      body,
+      id: productCategory._id
     })
   })
 
@@ -103,9 +141,9 @@ export default function CreateProductCategoryForm({
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={createProductCategoryMutation.isPending}>
-          {createProductCategoryMutation.isPending && <Loader2 className='animate-spin' />}
-          Thêm
+        <Button type='submit' disabled={isPending}>
+          {isPending && <Loader2 className='animate-spin' />}
+          {!isUpdateMode ? 'Thêm' : 'Lưu lại'}
         </Button>
       </form>
     </Form>
