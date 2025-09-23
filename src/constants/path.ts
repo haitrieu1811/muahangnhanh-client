@@ -10,7 +10,8 @@ const PATH = {
   ADMIN_IMAGES: '/admin/images',
   ADMIN_PRODUCTS: '/admin/products',
   ADMIN_PRODUCTS_NEW: '/admin/products/new',
-  ADMIN_PRODUCTS_DETAIL: (id: string) => `/admin/products/${id}`
+  ADMIN_PRODUCTS_DETAIL: (id: string) => `/admin/products/${id}`,
+  ADMIN_PRODUCT_CATEGORIES: '/admin/product-categories'
 } as const
 
 export default PATH

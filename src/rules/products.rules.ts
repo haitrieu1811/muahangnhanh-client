@@ -4,6 +4,11 @@ import { ProductStatus } from '@/constants/enum'
 import { PRODUCTS_MESSAGES } from '@/constants/message'
 import { NUMBER_GREATER_THAN_ONE_REGEX } from '@/constants/regex'
 
+export const productCategoryRules = z.object({
+  name: z.string().min(1, PRODUCTS_MESSAGES.PRODUCT_CATEGORY_NAME_IS_REQUIRED),
+  description: z.string().optional()
+})
+
 export const productRules = z.object({
   name: z
     .string()
@@ -36,4 +41,10 @@ export const createProductRules = productRules
     }
   })
 
+export const createProductCategoryRules = productCategoryRules.pick({
+  name: true,
+  description: true
+})
+
 export type CreateProductSchema = z.infer<typeof createProductRules>
+export type CreateProductCategorySchema = z.infer<typeof createProductCategoryRules>

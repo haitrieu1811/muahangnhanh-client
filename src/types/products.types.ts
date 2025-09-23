@@ -1,4 +1,4 @@
-import { ProductStatus } from '@/constants/enum'
+import { ProductCategoryStatus, ProductStatus } from '@/constants/enum'
 import { CreateProductSchema } from '@/rules/products.rules'
 import { PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
 
@@ -64,3 +64,32 @@ export type CreateProductReqBody = Omit<CreateProductSchema, 'price' | 'priceAft
   photos?: string[]
   status?: ProductStatus
 }
+
+export type ProductCategoryType = {
+  _id: string
+  name: string
+  description: string
+  thumbnail: string
+  thumbnailId: string
+  status: ProductCategoryStatus
+  createdAt: string
+  updatedAt: string
+}
+
+export type GetProductCategoriesResponse = SuccessResponse<{
+  productCategories: ProductCategoryType[]
+  pagination: PaginationType
+}>
+
+export type CreateProductCategoryResponse = SuccessResponse<{
+  productCategory: {
+    _id: string
+    userId: string
+    thumbnail: string
+    name: string
+    description: string
+    status: ProductCategoryStatus
+    createdAt: string
+    updatedAt: string
+  }
+}>

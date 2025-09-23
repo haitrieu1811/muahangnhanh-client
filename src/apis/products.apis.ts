@@ -1,7 +1,10 @@
 import http from '@/lib/http'
+import { CreateProductCategorySchema } from '@/rules/products.rules'
 import {
+  CreateProductCategoryResponse,
   CreateProductReqBody,
   CreateProductResponse,
+  GetProductCategoriesResponse,
   GetProductResponse,
   GetProductsReqQuery,
   GetProductsResponse
@@ -32,6 +35,14 @@ const productsApis = {
 
   deleteProduct(id: string) {
     return http.delete<OnlyMessageResponse>(`/products/${id}`, {})
+  },
+
+  getProductCategories() {
+    return http.get<GetProductCategoriesResponse>('/product-categories')
+  },
+
+  createProductCategory(body: CreateProductCategorySchema & { thumbnail: string }) {
+    return http.post<CreateProductCategoryResponse>('/product-categories', body)
   }
 } as const
 

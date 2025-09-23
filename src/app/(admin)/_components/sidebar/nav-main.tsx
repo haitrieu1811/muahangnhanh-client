@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, Image, Tags, type LucideIcon } from 'lucide-react'
+import { ChevronRight, Flag, Image, Tags, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -39,6 +39,18 @@ const navMain: {
       {
         title: 'Tạo mới',
         url: PATH.ADMIN_PRODUCTS_NEW
+      }
+    ]
+  },
+  {
+    title: 'Danh mục sản phẩm',
+    url: PATH.ADMIN_PRODUCT_CATEGORIES,
+    icon: Flag,
+    isActive: false,
+    items: [
+      {
+        title: 'Danh sách',
+        url: PATH.ADMIN_PRODUCT_CATEGORIES
       }
     ]
   },

@@ -101,8 +101,10 @@ export default async function AdminProductsPage({
                     <TableCell>{formatCurrency(product.price)}&#8363;</TableCell>
                     <TableCell>{dateDistance(product.createdAt)}</TableCell>
                     <TableCell>{dateDistance(product.updatedAt)}</TableCell>
-                    <TableCell className='flex justify-end'>
-                      <ProductActions productId={product._id} />
+                    <TableCell>
+                      <div className='flex justify-end items-center'>
+                        <ProductActions productId={product._id} />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
