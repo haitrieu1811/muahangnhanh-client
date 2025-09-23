@@ -6,6 +6,7 @@ import {
   GetProductsReqQuery,
   GetProductsResponse
 } from '@/types/products.types'
+import { OnlyMessageResponse } from '@/types/utils.types'
 
 const productsApis = {
   getAllProducts({ query, accessToken }: { query: GetProductsReqQuery; accessToken: string }) {
@@ -27,6 +28,10 @@ const productsApis = {
 
   updateProduct({ body, id }: { body: CreateProductReqBody; id: string }) {
     return http.put<GetProductResponse>(`/products/${id}`, body)
+  },
+
+  deleteProduct(id: string) {
+    return http.delete<OnlyMessageResponse>(`/products/${id}`, {})
   }
 } as const
 
