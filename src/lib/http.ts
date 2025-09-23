@@ -169,6 +169,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     }
     // Các lỗi khác
     else {
+      console.error(data)
       throw new HttpError({
         status: res.status,
         payload

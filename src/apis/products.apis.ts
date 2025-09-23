@@ -1,7 +1,8 @@
 import http from '@/lib/http'
 import {
-  CreateProductBody,
+  CreateProductReqBody,
   CreateProductResponse,
+  GetProductResponse,
   GetProductsReqQuery,
   GetProductsResponse
 } from '@/types/products.types'
@@ -16,8 +17,16 @@ const productsApis = {
     })
   },
 
-  createProduct(body: CreateProductBody) {
+  createProduct(body: CreateProductReqBody) {
     return http.post<CreateProductResponse>('/products', body)
+  },
+
+  getProduct(id: string) {
+    return http.get<GetProductResponse>(`/products/${id}`)
+  },
+
+  updateProduct({ body, id }: { body: CreateProductReqBody; id: string }) {
+    return http.put<GetProductResponse>(`/products/${id}`, body)
   }
 } as const
 

@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Eye, Loader2, Trash } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -17,18 +18,30 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { createProductRules, CreateProductSchema } from '@/rules/products.rules'
-import { ProductType } from '@/types/products.types'
 import { ProductStatus } from '@/constants/enum'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { createProductRules, CreateProductSchema } from '@/rules/products.rules'
+import { CreateProductReqBody, ProductType } from '@/types/products.types'
 
 export default function CreateProductForm({ product }: { product?: ProductType }) {
+  const router = useRouter()
+
   const isUpdateMode = !!product
 
   const [thumbnail, setThumbnail] = React.useState<ImageStateType | null>(null)
   const [photos, setPhotos] = React.useState<ImageStateType[]>([])
+
+  React.useEffect(() => {
+    if (!product) return
+    const { thumbnail, photos } = product
+    setThumbnail({
+      _id: thumbnail._id,
+      url: thumbnail.url
+    })
+    setPhotos(photos)
+  }, [product])
 
   const createProductMutation = useMutation({
     mutationKey: ['create-product'],
@@ -41,14 +54,27 @@ export default function CreateProductForm({ product }: { product?: ProductType }
     }
   })
 
+  const updateProductMutation = useMutation({
+    mutationKey: ['update-product'],
+    mutationFn: productsApis.updateProduct,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      setThumbnail(null)
+      setPhotos([])
+      router.refresh()
+    }
+  })
+
+  const isPending = createProductMutation.isPending || updateProductMutation.isPending
+
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductRules),
     defaultValues: {
-      name: '',
-      description: '',
-      price: '',
-      priceAfterDiscount: '',
-      status: ProductStatus.Active.toString()
+      name: product?.name ?? '',
+      description: product?.description ?? '',
+      price: product?.price ? String(product.price) : '',
+      priceAfterDiscount: product?.priceAfterDiscount ? String(product.priceAfterDiscount) : '',
+      status: product?.status.toString() ?? ProductStatus.Active.toString()
     }
   })
 
@@ -62,18 +88,25 @@ export default function CreateProductForm({ product }: { product?: ProductType }
   }
 
   const handleSubmit = form.handleSubmit((data) => {
+    if (!thumbnail) return
+    const body: CreateProductReqBody = {
+      ...data,
+      price: Number(data.price),
+      priceAfterDiscount: Number(data.priceAfterDiscount) || undefined,
+      thumbnail: thumbnail._id,
+      photos: photos.map((photo) => photo._id),
+      status: Number(data.status) || undefined
+    }
     // Chế độ tạo mới
     if (!isUpdateMode) {
-      if (!thumbnail) return
-      createProductMutation.mutate({
-        ...data,
-        price: Number(data.price),
-        priceAfterDiscount: Number(data.priceAfterDiscount) || undefined,
-        thumbnail: thumbnail._id,
-        photos: photos.map((photo) => photo._id),
-        status: Number(data.status) || undefined
-      })
+      createProductMutation.mutate(body)
+      return
     }
+    // Chế độ cập nhật
+    updateProductMutation.mutate({
+      body,
+      id: product._id
+    })
   })
 
   return (
@@ -208,7 +241,7 @@ export default function CreateProductForm({ product }: { product?: ProductType }
                       className='w-full aspect-square object-cover rounded-md'
                     />
                   )}
-                  {!thumbnail && form.formState.isSubmitted && (
+                  {!thumbnail && form.formState.isSubmitted && !isUpdateMode && (
                     <p className='text-sm text-destructive'>Ảnh đại diện là bắt buộc.</p>
                   )}
                   <div className='grid gap-2'>
@@ -278,9 +311,9 @@ export default function CreateProductForm({ product }: { product?: ProductType }
         </div>
         <div className='sticky bottom-0 inset-x-0 bg-background flex justify-center p-4 space-x-2'>
           <Button variant='outline'>Hủy bỏ</Button>
-          <Button type='submit' disabled={createProductMutation.isPending}>
-            {createProductMutation.isPending && <Loader2 className='animate-spin' />}
-            Thêm sản phẩm
+          <Button type='submit' disabled={isPending}>
+            {isPending && <Loader2 className='animate-spin' />}
+            {!isUpdateMode ? 'Thêm sản phẩm' : 'Lưu lại'}
           </Button>
         </div>
       </form>

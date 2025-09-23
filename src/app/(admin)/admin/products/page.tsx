@@ -102,7 +102,7 @@ export default async function AdminProductsPage({
                     <TableCell>{dateDistance(product.createdAt)}</TableCell>
                     <TableCell>{dateDistance(product.updatedAt)}</TableCell>
                     <TableCell className='flex justify-end'>
-                      <ProductActions />
+                      <ProductActions productId={product._id} />
                     </TableCell>
                   </TableRow>
                 ))}

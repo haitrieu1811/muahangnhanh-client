@@ -53,7 +53,11 @@ export type CreateProductResponse = SuccessResponse<{
   pagination: PaginationType
 }>
 
-export type CreateProductBody = Omit<CreateProductSchema, 'price' | 'priceAfterDiscount' | 'status'> & {
+export type GetProductResponse = SuccessResponse<{
+  product: ProductType
+}>
+
+export type CreateProductReqBody = Omit<CreateProductSchema, 'price' | 'priceAfterDiscount' | 'status'> & {
   price: number
   priceAfterDiscount?: number
   thumbnail: string // ID hình ảnh
