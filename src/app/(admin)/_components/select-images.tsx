@@ -108,7 +108,7 @@ export default function SelectImages({
         Chọn ảnh có sẵn
       </Button>
       <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-        <DialogContent className='max-h-[90vh] overflow-y-auto min-w-[50vw]'>
+        <DialogContent className='max-h-[90vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Lựa chọn hình ảnh</DialogTitle>
           </DialogHeader>

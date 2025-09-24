@@ -82,7 +82,7 @@ export default function UploadImages({ onSuccess }: UploadImagesProps) {
         Thêm ảnh mới
       </Button>
       <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-        <DialogContent className='max-h-[90vh] overflow-y-auto min-w-[50vw]'>
+        <DialogContent className='max-h-[90vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Thêm ảnh mới</DialogTitle>
           </DialogHeader>
@@ -115,7 +115,7 @@ export default function UploadImages({ onSuccess }: UploadImagesProps) {
                   <strong className='font-semibold text-destructive'>300KB</strong>
                 </div>
               </div>
-              <div className='grid grid-cols-12 gap-2'>
+              <div className='grid grid-cols-12 gap-4'>
                 {previewImages.map((previewImage) => (
                   <div key={previewImage} className='group col-span-4 relative'>
                     <Image
@@ -123,7 +123,7 @@ export default function UploadImages({ onSuccess }: UploadImagesProps) {
                       height={200}
                       src={previewImage}
                       alt={previewImage}
-                      className='w-full aspect-video rounded-md'
+                      className='w-full aspect-square object-cover rounded-md'
                     />
                     <div className='absolute bottom-0 inset-x-0 p-2 bg-muted-foreground/50 flex justify-end space-x-1 opacity-0 group-hover:opacity-100 duration-100 rounded-b-md'>
                       <Button type='button' asChild size='icon' variant='secondary'>
@@ -143,7 +143,7 @@ export default function UploadImages({ onSuccess }: UploadImagesProps) {
                   </div>
                 ))}
                 <div
-                  className='col-span-4 bg-muted rounded-md flex flex-col justify-center items-center space-y-2 aspect-video'
+                  className='col-span-4 bg-muted rounded-md flex flex-col justify-center items-center space-y-2 aspect-square'
                   role='button'
                   onClick={handleStart}
                 >
