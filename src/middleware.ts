@@ -6,7 +6,7 @@ import PATH from '@/constants/path'
 import { jwtDecode, normalizePath } from '@/lib/utils'
 
 const adminPaths = [PATH.ADMIN]
-const authPaths = [PATH.LOGIN, PATH.REGISTER]
+const authPaths = ['/auth']
 const privatePaths = ['/me']
 
 export async function middleware(request: NextRequest) {
@@ -48,5 +48,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/login', '/register']
+  matcher: ['/admin/:path*', '/auth/:path*']
 }

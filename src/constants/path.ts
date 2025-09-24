@@ -1,9 +1,9 @@
 const PATH = {
   HOME: '/',
 
-  LOGIN: '/login',
-  REGISTER: '/register',
-  LOGOUT: '/logout',
+  LOGIN: '/auth/login',
+  REGISTER: '/auth/register',
+  LOGOUT: '/auth/logout',
 
   ADMIN: '/admin',
   ADMIN_ME: '/admin/me',

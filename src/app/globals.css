@@ -127,3 +127,7 @@
     @apply text-lg font-semibold;
   }
 }
+
+@theme {
+  --color-main: #6f00ff;
+}
