@@ -19,7 +19,8 @@ export const productRules = z.object({
     .string()
     .regex(NUMBER_GREATER_THAN_ONE_REGEX, PRODUCTS_MESSAGES.PRODUCT_PRICE_MUST_BE_A_INT_GREATER_THAN_ZERO),
   priceAfterDiscount: z.string().optional(),
-  status: z.enum([ProductStatus.Active.toString(), ProductStatus.Inactive.toString()]).optional()
+  status: z.enum([ProductStatus.Active.toString(), ProductStatus.Inactive.toString()]).optional(),
+  categoryId: z.string().min(1, PRODUCTS_MESSAGES.PRODUCT_CATEGORY_ID_IS_REQUIRED)
 })
 
 export const createProductRules = productRules
@@ -28,7 +29,8 @@ export const createProductRules = productRules
     description: true,
     price: true,
     priceAfterDiscount: true,
-    status: true
+    status: true,
+    categoryId: true
   })
   .strict()
   .superRefine(({ priceAfterDiscount }, ctx) => {
