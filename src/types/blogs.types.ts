@@ -1,4 +1,5 @@
 import { BlogStatus } from '@/constants/enum'
+import { CreateBlogSchema } from '@/rules/blogs.rules'
 import { PaginationType, SuccessResponse } from '@/types/utils.types'
 
 export type BlogType = {
@@ -26,4 +27,22 @@ export type BlogType = {
 export type GetBlogsResponse = SuccessResponse<{
   blogs: BlogType[]
   pagination: PaginationType
+}>
+
+export type CreateBlogReqBody = CreateBlogSchema & {
+  thumbnail: string
+}
+
+export type CreateBlogResponse = SuccessResponse<{
+  blog: {
+    _id: string
+    userId: string
+    thumbnail: string
+    title: string
+    content: string
+    status: BlogStatus
+    order: number
+    createdAt: string
+    updatedAt: string
+  }
 }>

@@ -40,7 +40,7 @@ export default function SelectImages({
 
   const getImagesQuery = useQuery({
     queryKey: ['get-images', { currentPage }],
-    queryFn: () => mediasApis.getImagesFromNextClientToServer({ page: currentPage, limit: 40 }),
+    queryFn: () => mediasApis.getImagesFromNextClientToServer({ page: currentPage, limit: 20 }),
     enabled: isOpenDialog
   })
 
