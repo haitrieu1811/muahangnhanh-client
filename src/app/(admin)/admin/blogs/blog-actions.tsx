@@ -1,9 +1,13 @@
 'use client'
 
+import { useMutation } from '@tanstack/react-query'
 import { EllipsisVertical } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
+import { toast } from 'sonner'
 
+import blogsApis from '@/apis/blogs.apis'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +23,18 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import PATH from '@/constants/path'
 
 export default function BlogActions({ blogId }: { blogId: string }) {
+  const router = useRouter()
+
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false)
+
+  const deleteBlogMutation = useMutation({
+    mutationKey: ['delete-blog'],
+    mutationFn: blogsApis.deleteBlog,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      router.refresh()
+    }
+  })
 
   return (
     <React.Fragment>
@@ -50,7 +65,7 @@ export default function BlogActions({ blogId }: { blogId: string }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-            <AlertDialogAction>Tiếp tục</AlertDialogAction>
+            <AlertDialogAction onClick={() => deleteBlogMutation.mutate(blogId)}>Tiếp tục</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
