@@ -47,6 +47,10 @@ const productsApis = {
 
   updateProductCategory({ body, id }: { body: CreateProductCategoryReqBody; id: string }) {
     return http.put<CreateProductCategoryResponse>(`/product-categories/${id}`, body)
+  },
+
+  deleteProductCategory(id: string) {
+    return http.delete<OnlyMessageResponse>(`/product-categories/${id}`, {})
   }
 } as const
 

@@ -29,9 +29,9 @@ export default function ProductCategoryActions({ productCategory }: { productCat
   const [isUpdating, setIsUpdating] = React.useState<boolean>(false)
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false)
 
-  const deleteProductMutation = useMutation({
-    mutationKey: ['delete-product'],
-    mutationFn: productsApis.deleteProduct,
+  const deleteProductCategoryMutation = useMutation({
+    mutationKey: ['delete-product-category'],
+    mutationFn: productsApis.deleteProductCategory,
     onSuccess: (data) => {
       router.refresh()
       toast.success(data.payload.message)
@@ -68,14 +68,14 @@ export default function ProductCategoryActions({ productCategory }: { productCat
       <AlertDialog open={isDeleting} onOpenChange={setIsDeleting}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Bạn muốn xóa sản phẩm này?</AlertDialogTitle>
+            <AlertDialogTitle>Bạn muốn xóa danh mục sản phẩm này?</AlertDialogTitle>
             <AlertDialogDescription>
-              Dữ liệu sản phẩm sẽ bị xóa vĩnh viễn và không thể khôi phục.
+              Dữ liệu danh mục sản phẩm sẽ bị xóa vĩnh viễn và không thể khôi phục.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleteProductMutation.mutate(productCategory._id)}>
+            <AlertDialogAction onClick={() => deleteProductCategoryMutation.mutate(productCategory._id)}>
               Tiếp tục
             </AlertDialogAction>
           </AlertDialogFooter>

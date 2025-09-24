@@ -27,40 +27,45 @@ export default async function ProductCategoriesPage() {
       </div>
       <Card>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Ảnh</TableHead>
-                <TableHead>Tên</TableHead>
-                <TableHead>Tạo lúc</TableHead>
-                <TableHead>Cập nhật lúc</TableHead>
-                <TableHead className='text-right'>Thao tác</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {productCategories.map((productCategory) => (
-                <TableRow key={productCategory._id}>
-                  <TableCell>
-                    <Image
-                      width={200}
-                      height={200}
-                      src={productCategory.thumbnail}
-                      alt={productCategory.name}
-                      className='size-[50px] aspect-square rounded-md object-cover'
-                    />
-                  </TableCell>
-                  <TableCell>{productCategory.name}</TableCell>
-                  <TableCell>{dateDistance(productCategory.createdAt)}</TableCell>
-                  <TableCell>{dateDistance(productCategory.updatedAt)}</TableCell>
-                  <TableCell>
-                    <div className='flex justify-end items-center'>
-                      <ProductCategoryActions productCategory={productCategory} />
-                    </div>
-                  </TableCell>
+          {productCategories.length > 0 && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Ảnh</TableHead>
+                  <TableHead>Tên</TableHead>
+                  <TableHead>Tạo lúc</TableHead>
+                  <TableHead>Cập nhật lúc</TableHead>
+                  <TableHead className='text-right'>Thao tác</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {productCategories.map((productCategory) => (
+                  <TableRow key={productCategory._id}>
+                    <TableCell>
+                      <Image
+                        width={200}
+                        height={200}
+                        src={productCategory.thumbnail}
+                        alt={productCategory.name}
+                        className='size-[50px] aspect-square rounded-md object-cover'
+                      />
+                    </TableCell>
+                    <TableCell>{productCategory.name}</TableCell>
+                    <TableCell>{dateDistance(productCategory.createdAt)}</TableCell>
+                    <TableCell>{dateDistance(productCategory.updatedAt)}</TableCell>
+                    <TableCell>
+                      <div className='flex justify-end items-center'>
+                        <ProductCategoryActions productCategory={productCategory} />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+          {productCategories.length === 0 && (
+            <p className='text-sm font-medium'>Không tìm thấy danh mục sản phẩm nào.</p>
+          )}
         </CardContent>
       </Card>
     </div>
