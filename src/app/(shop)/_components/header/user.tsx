@@ -58,7 +58,7 @@ export default function HeaderUser({ user }: { user: User | null }) {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src={user.avatar} alt={user.fullName} />
+                <AvatarImage src={user.avatar} alt={user.fullName} className='object-cover' />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>

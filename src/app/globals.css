@@ -130,10 +130,15 @@
 
 @theme {
   --color-main: #6f00ff;
+  --color-main-foreground: #e9b3fb;
 }
 
-@utility bg-main-and-hover {
-  @apply bg-main hover:bg-main/80!;
+@utility text-highlight {
+  @apply text-main dark:text-main-foreground;
+}
+
+@utility bg-highlight {
+  @apply bg-main hover:bg-main/80! dark:bg-main-foreground dark:hover:bg-main-foreground/80!;
 }
 
 @utility container {

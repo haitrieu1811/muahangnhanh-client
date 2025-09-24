@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 export default function HomePage() {
   return (
     <div>
-      <Button className='bg-main-and-hover'>CLick me</Button>
+      <Button className='bg-highlight'>CLick me</Button>
       <LogoutButton />
     </div>
   )

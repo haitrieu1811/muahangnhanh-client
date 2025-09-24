@@ -21,6 +21,11 @@ const productsApis = {
     })
   },
 
+  getProducts(query: GetProductsReqQuery) {
+    const searchParams = new URLSearchParams(query as Record<string, string>)
+    return http.get<GetProductsResponse>(`/products?${searchParams.toString()}`)
+  },
+
   createProduct(body: CreateProductReqBody) {
     return http.post<CreateProductResponse>('/products', body)
   },

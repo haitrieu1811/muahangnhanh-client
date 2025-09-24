@@ -1,18 +1,18 @@
 import { Menu } from 'lucide-react'
 import { cookies } from 'next/headers'
+import Image from 'next/image'
 import Link from 'next/link'
 
+import productsApis from '@/apis/products.apis'
 import usersApis from '@/apis/users.apis'
+import HeaderSearch from '@/app/(shop)/_components/header/search'
 import HeaderUser from '@/app/(shop)/_components/header/user'
 import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import PATH from '@/constants/path'
-import { User } from '@/types/users.types'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import PATH from '@/constants/path'
 import { ProductCategoryType } from '@/types/products.types'
-import productsApis from '@/apis/products.apis'
-import Image from 'next/image'
+import { User } from '@/types/users.types'
 
 export default async function ShopHeader() {
   const cookieStore = await cookies()
@@ -34,12 +34,11 @@ export default async function ShopHeader() {
   return (
     <header className='bg-background border-b'>
       <div className='container flex items-center justify-between space-x-10 h-14'>
-        {/* Logo */}
-        <Link href={PATH.HOME} className='font-semibold text-2xl tracking-tight'>
-          Logo
-        </Link>
-
-        <div className='flex items-center space-x-4'>
+        <div className='flex items-center space-x-8'>
+          {/* Logo */}
+          <Link href={PATH.HOME} className='font-semibold text-2xl tracking-tight'>
+            Logo
+          </Link>
           {/* Danh mục */}
           <Dialog>
             <DialogTrigger asChild>
@@ -74,9 +73,11 @@ export default async function ShopHeader() {
               )}
             </DialogContent>
           </Dialog>
+        </div>
 
-          {/* Tìm kiếm */}
-          <Input placeholder='Tìm kiếm...' className='w-[400px]' />
+        {/* Tìm kiếm */}
+        <div className='flex-1'>
+          <HeaderSearch />
         </div>
 
         <div className='flex items-center space-x-4'>
