@@ -1,5 +1,5 @@
 import http from '@/lib/http'
-import { CreateBlogReqBody, CreateBlogResponse, GetBlogsResponse } from '@/types/blogs.types'
+import { CreateBlogReqBody, CreateBlogResponse, GetBlogResponse, GetBlogsResponse } from '@/types/blogs.types'
 
 const blogsApis = {
   getBlogs() {
@@ -8,6 +8,14 @@ const blogsApis = {
 
   createBlog(body: CreateBlogReqBody) {
     return http.post<CreateBlogResponse>('/blogs', body)
+  },
+
+  getBlog(id: string) {
+    return http.get<GetBlogResponse>(`/blogs/${id}`)
+  },
+
+  updateBlog({ body, id }: { body: CreateBlogReqBody; id: string }) {
+    return http.put<CreateBlogResponse>(`/blogs/${id}`, body)
   }
 } as const
 

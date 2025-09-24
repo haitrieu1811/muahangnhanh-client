@@ -19,17 +19,25 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import PATH from '@/constants/path'
 import { createBlogRules, CreateBlogSchema } from '@/rules/blogs.rules'
+import { BlogType, CreateBlogReqBody } from '@/types/blogs.types'
 
-export default function CreateBlogForm() {
+export default function CreateBlogForm({ blog }: { blog?: BlogType }) {
   const router = useRouter()
 
+  const isUpdateMode = !!blog
+
   const [thumbnail, setThumbnail] = React.useState<ImageStateType | null>(null)
+
+  React.useEffect(() => {
+    if (!blog) return
+    setThumbnail(blog.thumbnail)
+  }, [blog])
 
   const form = useForm<CreateBlogSchema>({
     resolver: zodResolver(createBlogRules),
     defaultValues: {
-      title: '',
-      content: ''
+      title: blog?.title ?? '',
+      content: blog?.content ?? ''
     }
   })
 
@@ -42,11 +50,32 @@ export default function CreateBlogForm() {
     }
   })
 
+  const updateBlogMutation = useMutation({
+    mutationKey: ['update-blog'],
+    mutationFn: blogsApis.updateBlog,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      router.refresh()
+    }
+  })
+
+  const isPending = createBlogMutation.isPending || updateBlogMutation.isPending
+
   const handleSubmit = form.handleSubmit((data) => {
     if (!thumbnail) return
-    createBlogMutation.mutate({
+    const body: CreateBlogReqBody = {
       ...data,
       thumbnail: thumbnail._id
+    }
+    // Chế độ tạo mới
+    if (!isUpdateMode) {
+      createBlogMutation.mutate(body)
+      return
+    }
+    // Chế độ cập nhật
+    updateBlogMutation.mutate({
+      body,
+      id: blog._id
     })
   })
 
@@ -101,9 +130,9 @@ export default function CreateBlogForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={createBlogMutation.isPending}>
-          {createBlogMutation.isPending && <Loader2 className='animate-spin' />}
-          Thêm bài viết
+        <Button type='submit' disabled={isPending}>
+          {isPending && <Loader2 className='animate-spin' />}
+          {!isUpdateMode ? 'Thêm bài viết' : 'Lưu lại'}
         </Button>
       </form>
     </Form>

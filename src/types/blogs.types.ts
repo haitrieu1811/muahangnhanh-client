@@ -46,3 +46,7 @@ export type CreateBlogResponse = SuccessResponse<{
     updatedAt: string
   }
 }>
+
+export type GetBlogResponse = SuccessResponse<{
+  blog: BlogType
+}>
