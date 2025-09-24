@@ -131,3 +131,11 @@
 @theme {
   --color-main: #6f00ff;
 }
+
+@utility bg-main-and-hover {
+  @apply bg-main hover:bg-main/80!;
+}
+
+@utility container {
+  @apply max-w-7xl mx-auto;
+}
