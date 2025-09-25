@@ -32,7 +32,7 @@ export default async function ShopHeader() {
   } catch {}
 
   return (
-    <header className='bg-background border-b'>
+    <header className='bg-card border-b sticky top-0 inset-x-0 z-10'>
       <div className='container flex items-center justify-between space-x-10 h-14'>
         <div className='flex items-center space-x-8'>
           {/* Logo */}

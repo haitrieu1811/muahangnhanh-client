@@ -5,6 +5,11 @@ const PATH = {
   REGISTER: '/auth/register',
   LOGOUT: '/auth/logout',
 
+  ACCOUNT: '/account',
+  ACCOUNT_ADDRESSES: '/account/addresses',
+  ACCOUNT_ORDERS: '/account/orders',
+  ACCOUNT_CHANGE_PASSWORD: '/account/change-password',
+
   ADMIN: '/admin',
   ADMIN_ME: '/admin/me',
   ADMIN_IMAGES: '/admin/images',

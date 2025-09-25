@@ -1,8 +1,9 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,7 +21,7 @@ import { updateMeRules, UpdateMeSchema } from '@/rules/users.rules'
 import { User } from '@/types/users.types'
 
 export default function ProfileForm({ user }: { user: User }) {
-  const queryClient = useQueryClient()
+  const router = useRouter()
 
   const [avatar, setAvatar] = React.useState<{
     url: string
@@ -51,9 +52,7 @@ export default function ProfileForm({ user }: { user: User }) {
     onSuccess: (data) => {
       toast.success(data.payload.message)
       setUser(data.payload.data.user)
-      queryClient.invalidateQueries({
-        queryKey: ['get-me']
-      })
+      router.refresh()
     }
   })
 

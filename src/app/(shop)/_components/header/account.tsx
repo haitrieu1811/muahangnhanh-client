@@ -74,6 +74,7 @@ export default function HeaderAccount({ user }: { user: User | null }) {
               </PopoverContent>
             </Popover>
           </div>
+          {/* Tài khoản */}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
@@ -83,7 +84,9 @@ export default function HeaderAccount({ user }: { user: User | null }) {
             <DropdownMenuContent align='end'>
               <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Tài khoản</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={PATH.ACCOUNT}>Tài khoản</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
