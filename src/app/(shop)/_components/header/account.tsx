@@ -1,10 +1,13 @@
 'use client'
 
-import { Bell, ShoppingCart } from 'lucide-react'
+import { Bell, Handbag } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import HeaderCart from '@/app/(shop)/_components/header/cart'
+import HeaderNotifications from '@/app/(shop)/_components/header/notifications'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -14,12 +17,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import PATH from '@/constants/path'
 import useLogout from '@/hooks/use-logout'
 import { User } from '@/types/users.types'
-import { Badge } from '@/components/ui/badge'
 
-export default function HeaderUser({ user }: { user: User | null }) {
+export default function HeaderAccount({ user }: { user: User | null }) {
   const { handleLogout } = useLogout()
 
   return (
@@ -40,20 +43,36 @@ export default function HeaderUser({ user }: { user: User | null }) {
       {user && (
         <div className='flex items-center space-x-4'>
           <div className='flex space-x-1'>
-            <Button variant='outline'>
-              <Bell />
-              Thông báo
-              <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums' variant='destructive'>
-                99
-              </Badge>
-            </Button>
-            <Button variant='outline'>
-              <ShoppingCart />
-              Giỏ hàng
-              <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums' variant='destructive'>
-                99
-              </Badge>
-            </Button>
+            {/* Thông báo */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant='outline'>
+                  <Bell />
+                  Thông báo
+                  <Badge variant='destructive' className='h-5 min-w-5 rounded-full px-1 tabular-nums'>
+                    99
+                  </Badge>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align='end' className='w-[400px] p-0'>
+                <HeaderNotifications />
+              </PopoverContent>
+            </Popover>
+            {/* Giỏ hàng */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant='outline'>
+                  <Handbag />
+                  Giỏ hàng
+                  <Badge variant='destructive' className='h-5 min-w-5 rounded-full px-1 tabular-nums'>
+                    99
+                  </Badge>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align='end' className='p-0 w-[400px]'>
+                <HeaderCart />
+              </PopoverContent>
+            </Popover>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger>

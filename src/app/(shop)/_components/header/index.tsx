@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 import productsApis from '@/apis/products.apis'
 import usersApis from '@/apis/users.apis'
+import HeaderAccount from '@/app/(shop)/_components/header/account'
 import HeaderSearch from '@/app/(shop)/_components/header/search'
-import HeaderUser from '@/app/(shop)/_components/header/user'
 import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -81,7 +81,7 @@ export default async function ShopHeader() {
         </div>
 
         <div className='flex items-center space-x-4'>
-          <HeaderUser user={user} />
+          <HeaderAccount user={user} />
           <ModeToggle />
         </div>
       </div>
