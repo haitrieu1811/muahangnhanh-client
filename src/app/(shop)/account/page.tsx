@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 
 import usersApis from '@/apis/users.apis'
 import ProfileForm from '@/app/(admin)/admin/me/profile-form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { User } from '@/types/users.types'
 
 export default async function AccountPage() {
@@ -21,7 +21,8 @@ export default async function AccountPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-xl'>Thông tin tài khoản</CardTitle>
+        <CardTitle className='text-xl'>Hồ sơ của tôi</CardTitle>
+        <CardDescription>Quản lý thông tin hồ sơ để bảo mật tài khoản</CardDescription>
       </CardHeader>
       <CardContent>
         <ProfileForm user={user} />

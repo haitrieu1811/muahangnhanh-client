@@ -23,8 +23,8 @@ export default function InputPassword({ className, ...props }: React.ComponentPr
         className='absolute inset-y-0 right-0 w-10 flex justify-center items-center'
         onClick={handleToggleType}
       >
-        {type === 'password' && <EyeOff className='size-5' />}
-        {type === 'text' && <Eye className='size-5' />}
+        {type === 'password' && <EyeOff className='size-5 stroke-1' />}
+        {type === 'text' && <Eye className='size-5 stroke-1' />}
       </button>
     </div>
   )
