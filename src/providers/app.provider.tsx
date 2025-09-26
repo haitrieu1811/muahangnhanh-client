@@ -16,6 +16,7 @@ type AppContext = {
   cartItems: CartItemType[]
   totalCartItems: number
   totalCartAmount: number
+  isFetchingMyCart: boolean
 }
 
 const initialAppContext: AppContext = {
@@ -25,7 +26,8 @@ const initialAppContext: AppContext = {
   setUser: () => null,
   cartItems: [],
   totalCartItems: 0,
-  totalCartAmount: 0
+  totalCartAmount: 0,
+  isFetchingMyCart: false
 }
 
 export const AppContext = React.createContext<AppContext>(initialAppContext)
@@ -57,7 +59,8 @@ export default function AppProvider({ children }: { children: React.ReactNode })
         setUser,
         cartItems,
         totalCartItems,
-        totalCartAmount
+        totalCartAmount,
+        isFetchingMyCart: getMyCartQuery.isFetching
       }}
     >
       {children}

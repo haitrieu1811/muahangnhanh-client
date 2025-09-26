@@ -6,8 +6,10 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { NUMBER_GREATER_THAN_ONE_REGEX } from '@/constants/regex'
+import { cn } from '@/lib/utils'
 
 type QuantityControllerProps = {
+  size?: 'default' | 'sm'
   defaultValue?: number
   max?: number
   onDecrease?: (value: number) => void
@@ -17,6 +19,7 @@ type QuantityControllerProps = {
 }
 
 export default function QuantityController({
+  size = 'default',
   defaultValue = 1,
   max,
   onDecrease,
@@ -53,20 +56,45 @@ export default function QuantityController({
   }
 
   return (
-    <div className='flex space-x-1'>
-      <Button size='icon' variant='outline' onClick={handleDecrease}>
-        <Minus />
+    <div className='flex items-center space-x-1'>
+      <Button
+        size='icon'
+        variant='outline'
+        className={cn('rounded-none', {
+          'size-7': size === 'sm'
+        })}
+        onClick={handleDecrease}
+      >
+        <Minus
+          className={cn({
+            'size-4': size === 'sm'
+          })}
+        />
       </Button>
       <Input
         value={localValue}
-        className='w-[50px] text-center'
+        className={cn('text-center rounded-none', {
+          'w-[50px]': size === 'default',
+          'w-[50px] h-7 text-xs!': size === 'sm'
+        })}
         onChange={handleTyping}
         onBlur={() => {
           onBlur && onBlur(localValue)
         }}
       />
-      <Button size='icon' variant='outline' onClick={handleIncrease}>
-        <Plus />
+      <Button
+        size='icon'
+        variant='outline'
+        className={cn('rounded-none', {
+          'size-7': size === 'sm'
+        })}
+        onClick={handleIncrease}
+      >
+        <Plus
+          className={cn({
+            'size-4': size === 'sm'
+          })}
+        />
       </Button>
     </div>
   )

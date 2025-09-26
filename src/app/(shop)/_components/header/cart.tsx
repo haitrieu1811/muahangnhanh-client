@@ -69,8 +69,8 @@ export default function HeaderCart() {
             ))}
           </div>
           <div className='flex justify-center px-4 py-2'>
-            <Button variant='link' className='p-0 text-highlight'>
-              Quản lý giỏ hàng
+            <Button asChild variant='link' className='p-0 text-highlight'>
+              <Link href={PATH.CART}>Quản lý giỏ hàng</Link>
             </Button>
           </div>
         </React.Fragment>
