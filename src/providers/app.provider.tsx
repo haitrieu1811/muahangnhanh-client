@@ -22,9 +22,11 @@ type AppContext = {
   setExtendedCartItems: React.Dispatch<React.SetStateAction<ExtendedCartItem[]>>
   totalCartItems: number
   totalCartAmount: number
-  isFetchingMyCart: boolean
+  isLoadingMyCart: boolean
   totalCheckedCartItems: number
   totalCheckedCartAmount: number
+  handleCheckAllCartItems: () => void
+  isAllChecked: boolean
 }
 
 const initialAppContext: AppContext = {
@@ -37,9 +39,11 @@ const initialAppContext: AppContext = {
   setExtendedCartItems: () => null,
   totalCartItems: 0,
   totalCartAmount: 0,
-  isFetchingMyCart: false,
+  isLoadingMyCart: false,
   totalCheckedCartItems: 0,
-  totalCheckedCartAmount: 0
+  totalCheckedCartAmount: 0,
+  handleCheckAllCartItems: () => null,
+  isAllChecked: false
 }
 
 export const AppContext = React.createContext<AppContext>(initialAppContext)
@@ -66,9 +70,13 @@ export default function AppProvider({ children }: { children: React.ReactNode })
     setExtendedCartItems(
       cartItems.map((cartItem) => ({
         ...cartItem,
-        isChecked: false
+        isChecked: extendedCartItems
+          .filter((item) => item.isChecked)
+          .map((item) => item._id)
+          .includes(cartItem._id)
       }))
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems])
 
   const totalCartItems = getMyCartQuery.data?.payload.data.totalItems ?? 0
@@ -84,6 +92,19 @@ export default function AppProvider({ children }: { children: React.ReactNode })
         .reduce((acc, cartItem) => (acc += cartItem.quantity * cartItem.unitPriceAfterDiscount), 0),
     [extendedCartItems]
   )
+  const isAllChecked = React.useMemo(
+    () => extendedCartItems.every((cartItem) => cartItem.isChecked),
+    [extendedCartItems]
+  )
+
+  const handleCheckAllCartItems = () => {
+    setExtendedCartItems((cartItems) =>
+      cartItems.map((cartItem) => ({
+        ...cartItem,
+        isChecked: !isAllChecked
+      }))
+    )
+  }
 
   return (
     <AppContext.Provider
@@ -97,9 +118,11 @@ export default function AppProvider({ children }: { children: React.ReactNode })
         setExtendedCartItems,
         totalCartItems,
         totalCartAmount,
-        isFetchingMyCart: getMyCartQuery.isFetching,
+        isLoadingMyCart: getMyCartQuery.isLoading,
         totalCheckedCartItems,
-        totalCheckedCartAmount
+        totalCheckedCartAmount,
+        handleCheckAllCartItems,
+        isAllChecked
       }}
     >
       {children}

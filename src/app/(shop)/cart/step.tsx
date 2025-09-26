@@ -34,11 +34,11 @@ const STEPS = [
 ] as const
 
 export default function CartStep() {
-  const { totalCartItems, isFetchingMyCart } = useAppContext()
+  const { totalCartItems, isLoadingMyCart } = useAppContext()
   const isClient = useIsClient()
   return (
     <React.Fragment>
-      {totalCartItems > 0 && !isFetchingMyCart && isClient && (
+      {totalCartItems > 0 && !isLoadingMyCart && isClient && (
         <div className='space-y-2'>
           <Button asChild variant='link' className='text-main dark:text-main-foreground'>
             <Link href={PATH.HOME}>Mua thêm sản phẩm khác</Link>

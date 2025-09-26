@@ -75,7 +75,7 @@ export default function QuantityController({
         value={localValue}
         className={cn('text-center rounded-none', {
           'w-[50px]': size === 'default',
-          'w-[50px] h-7 text-xs!': size === 'sm'
+          'w-[50px] h-7': size === 'sm'
         })}
         onChange={handleTyping}
         onBlur={() => {

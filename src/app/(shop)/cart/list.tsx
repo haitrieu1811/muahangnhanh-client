@@ -1,23 +1,35 @@
 'use client'
 
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Handbag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { toast } from 'sonner'
 
+import cartItemsApis from '@/apis/cartItems.apis'
 import QuantityController from '@/components/quantity-controller'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
 import { cn, formatCurrency } from '@/lib/utils'
+import { Label } from '@/components/ui/label'
 
 export default function CartList() {
-  const { extendedCartItems, totalCartItems, totalCheckedCartAmount, isFetchingMyCart, setExtendedCartItems } =
-    useAppContext()
+  const queryClient = useQueryClient()
+
+  const {
+    extendedCartItems,
+    totalCartItems,
+    totalCheckedCartAmount,
+    isLoadingMyCart,
+    isAllChecked,
+    setExtendedCartItems,
+    handleCheckAllCartItems
+  } = useAppContext()
   const isClient = useIsClient()
 
   // Xử lý chọn một sản phẩm trong giỏ hàng -> checkout
@@ -35,14 +47,29 @@ export default function CartList() {
     )
   }
 
+  const updateCartItemMutation = useMutation({
+    mutationKey: ['update-cart-item'],
+    mutationFn: cartItemsApis.updateCartItem,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      queryClient.refetchQueries({
+        queryKey: ['get-my-cart']
+      })
+    }
+  })
+
+  const handleUpdate = (body: { quantity: number; cartItemId: string }) => {
+    updateCartItemMutation.mutate(body)
+  }
+
   return (
     <React.Fragment>
       {/* Danh sách sản phẩm trong giỏ hàng */}
-      {totalCartItems > 0 && isClient && !isFetchingMyCart && (
+      {totalCartItems > 0 && isClient && !isLoadingMyCart && (
         <div className='space-y-6'>
           <div className='space-y-2'>
             {extendedCartItems.map((cartItem) => (
-              <Label
+              <div
                 key={cartItem._id}
                 className={cn('flex space-x-4 rounded-md p-4', {
                   'bg-muted': cartItem.isChecked
@@ -103,13 +130,40 @@ export default function CartList() {
                       {formatCurrency(cartItem.product.price)}&#8363;
                     </div>
                   )}
-                  <QuantityController defaultValue={cartItem.quantity} size='sm' />
+                  <QuantityController
+                    size='sm'
+                    defaultValue={cartItem.quantity}
+                    onIncrease={(value) =>
+                      handleUpdate({
+                        cartItemId: cartItem._id,
+                        quantity: value
+                      })
+                    }
+                    onDecrease={(value) =>
+                      handleUpdate({
+                        cartItemId: cartItem._id,
+                        quantity: value
+                      })
+                    }
+                    onBlur={(value) =>
+                      handleUpdate({
+                        cartItemId: cartItem._id,
+                        quantity: value
+                      })
+                    }
+                  />
                 </div>
-              </Label>
+              </div>
             ))}
           </div>
           <Separator />
           <div className='space-y-4'>
+            <div>
+              <div className='flex items-center space-x-4'>
+                <Checkbox id='checkAll' checked={isAllChecked} onCheckedChange={handleCheckAllCartItems} />
+                <Label htmlFor='checkAll'>Chọn tất cả</Label>
+              </div>
+            </div>
             <div className='flex justify-between items-center'>
               <div className='font-medium'>Tổng tiền</div>
               <div className='text-main dark:text-main-foreground font-semibold text-2xl'>
@@ -129,7 +183,7 @@ export default function CartList() {
         </div>
       )}
       {/* Giỏ hàng trống */}
-      {totalCartItems === 0 && isClient && !isFetchingMyCart && (
+      {totalCartItems === 0 && isClient && !isLoadingMyCart && (
         <div className='flex flex-col justify-center items-center space-y-4'>
           <Handbag className='text-main dark:text-main-foreground size-10 stroke-1' />
           <p className='text-center'>Chưa có sản phẩm nào trong giỏ hàng</p>
