@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner'
@@ -10,6 +10,8 @@ import QuantityController from '@/components/quantity-controller'
 import { Button } from '@/components/ui/button'
 
 export default function ProductDetailActions({ productId }: { productId: string }) {
+  const queryClient = useQueryClient()
+
   const [quantity, setQuantity] = React.useState<number>(1)
 
   const addProductToCartMutation = useMutation({
@@ -17,6 +19,9 @@ export default function ProductDetailActions({ productId }: { productId: string 
     mutationFn: cartItemsApis.addToCart,
     onSuccess: (data) => {
       toast.success(data.payload.message)
+      queryClient.invalidateQueries({
+        queryKey: ['get-my-cart']
+      })
     }
   })
 

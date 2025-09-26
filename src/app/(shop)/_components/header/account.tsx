@@ -19,11 +19,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
 import useLogout from '@/hooks/use-logout'
 import { User } from '@/types/users.types'
 
 export default function HeaderAccount({ user }: { user: User | null }) {
   const { handleLogout } = useLogout()
+  const { totalCartItems } = useAppContext()
 
   return (
     <React.Fragment>
@@ -65,7 +67,7 @@ export default function HeaderAccount({ user }: { user: User | null }) {
                   <Handbag />
                   Giỏ hàng
                   <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
-                    99
+                    {totalCartItems}
                   </Badge>
                 </Button>
               </PopoverTrigger>
