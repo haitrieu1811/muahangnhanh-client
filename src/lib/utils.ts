@@ -57,3 +57,7 @@ export const dateDistance = (date: string) => {
 export const formatCurrency = (currency: number) => {
   return new Intl.NumberFormat('de-DE').format(currency)
 }
+
+export const rateSale = (originalPrice: number, salePrice: number) => {
+  return Math.round(((originalPrice - salePrice) / originalPrice) * 100)
+}
