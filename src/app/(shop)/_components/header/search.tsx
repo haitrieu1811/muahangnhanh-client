@@ -57,7 +57,7 @@ export default function HeaderSearch() {
       </div>
       {/* Kết quả tìm kiếm */}
       {debounceSearchKeyword.trim() && !isFetching && (
-        <div className='absolute top-[calc(100%+6px)] inset-x-0 bg-background rounded-md border'>
+        <div className='absolute top-[calc(100%+6px)] inset-x-0 rounded-md border bg-card'>
           {/* Danh sách kết quả */}
           {totalProducts > 0 && (
             <div className='p-2'>

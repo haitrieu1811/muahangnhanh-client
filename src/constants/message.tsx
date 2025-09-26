@@ -108,6 +108,8 @@ export const PRODUCTS_MESSAGES = {
 } as const
 
 export const ADDRESS_MESSAGES = {
+  PROVINCE_IS_REQUIRED: 'Vui lòng chọn tỉnh/thành.',
+  COMMUNES_IS_REQUIRED: 'Vui lòng chọn phường/xã.',
   GET_PROVINCES_SUCCESS: 'Lấy danh sách tỉnh/thành thành công.',
   GET_DISTRICTS_SUCCESS: 'Lấy danh sách quận/huyện thành công.',
   PROVINCE_ID_IS_REQUIRED: 'ID tỉnh/thành là bắt buộc.',
