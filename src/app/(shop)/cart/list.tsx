@@ -8,24 +8,56 @@ import React from 'react'
 import QuantityController from '@/components/quantity-controller'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
-import { formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
 
 export default function CartList() {
-  const { cartItems, totalCartItems, totalCartAmount, isFetchingMyCart } = useAppContext()
+  const { extendedCartItems, totalCartItems, totalCheckedCartAmount, isFetchingMyCart, setExtendedCartItems } =
+    useAppContext()
   const isClient = useIsClient()
+
+  // Xử lý chọn một sản phẩm trong giỏ hàng -> checkout
+  const handleCheck = ({ isChecked, cartItemId }: { isChecked: boolean; cartItemId: string }) => {
+    setExtendedCartItems((cartItems) =>
+      cartItems.map((cartItem) => {
+        if (cartItem._id === cartItemId) {
+          return {
+            ...cartItem,
+            isChecked
+          }
+        }
+        return cartItem
+      })
+    )
+  }
+
   return (
     <React.Fragment>
+      {/* Danh sách sản phẩm trong giỏ hàng */}
       {totalCartItems > 0 && isClient && !isFetchingMyCart && (
         <div className='space-y-6'>
-          <div className='space-y-4'>
-            {cartItems.map((cartItem) => (
-              <div key={cartItem._id} className='flex space-x-4'>
+          <div className='space-y-2'>
+            {extendedCartItems.map((cartItem) => (
+              <Label
+                key={cartItem._id}
+                className={cn('flex space-x-4 rounded-md p-4', {
+                  'bg-muted': cartItem.isChecked
+                })}
+              >
                 <div className='flex items-center'>
-                  <Checkbox />
+                  <Checkbox
+                    checked={cartItem.isChecked}
+                    onCheckedChange={(isChecked) =>
+                      handleCheck({
+                        isChecked: isChecked as boolean,
+                        cartItemId: cartItem._id
+                      })
+                    }
+                  />
                 </div>
                 <Link
                   href={PATH.PRODUCTS_DETAIL({
@@ -58,7 +90,7 @@ export default function CartList() {
                 </div>
                 <div className='flex flex-col items-end space-y-2'>
                   {cartItem.product.priceAfterDiscount < cartItem.product.price ? (
-                    <div>
+                    <div className='text-right'>
                       <div className='font-semibold text-main dark:text-main-foreground'>
                         {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
                       </div>
@@ -73,7 +105,7 @@ export default function CartList() {
                   )}
                   <QuantityController defaultValue={cartItem.quantity} size='sm' />
                 </div>
-              </div>
+              </Label>
             ))}
           </div>
           <Separator />
@@ -81,15 +113,22 @@ export default function CartList() {
             <div className='flex justify-between items-center'>
               <div className='font-medium'>Tổng tiền</div>
               <div className='text-main dark:text-main-foreground font-semibold text-2xl'>
-                {formatCurrency(totalCartAmount)}&#8363;
+                {formatCurrency(totalCheckedCartAmount)}&#8363;
               </div>
             </div>
-            <Button size='lg' className='w-full bg-highlight uppercase'>
-              Đặt hàng ngay
-            </Button>
+            <div
+              className={cn({
+                'cursor-not-allowed': totalCheckedCartAmount === 0
+              })}
+            >
+              <Button size='lg' disabled={totalCheckedCartAmount === 0} className='w-full bg-highlight uppercase'>
+                Đặt hàng ngay
+              </Button>
+            </div>
           </div>
         </div>
       )}
+      {/* Giỏ hàng trống */}
       {totalCartItems === 0 && isClient && !isFetchingMyCart && (
         <div className='flex flex-col justify-center items-center space-y-4'>
           <Handbag className='text-main dark:text-main-foreground size-10 stroke-1' />

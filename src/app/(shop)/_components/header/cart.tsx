@@ -10,7 +10,7 @@ import { formatCurrency } from '@/lib/utils'
 import PATH from '@/constants/path'
 
 export default function HeaderCart() {
-  const { cartItems, totalCartItems, totalCartAmount } = useAppContext()
+  const { extendedCartItems, totalCartItems, totalCartAmount } = useAppContext()
   return (
     <React.Fragment>
       {totalCartItems > 0 && (
@@ -39,7 +39,7 @@ export default function HeaderCart() {
             </div>
           </div>
           <div className='max-h-[400px] overflow-y-auto'>
-            {cartItems.map((cartItem) => (
+            {extendedCartItems.map((cartItem) => (
               <Link
                 key={cartItem._id}
                 href={PATH.PRODUCTS_DETAIL({

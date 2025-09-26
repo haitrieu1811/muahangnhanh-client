@@ -6,7 +6,7 @@ export default function CartPage() {
   return (
     <div className='container py-4'>
       <Card className='w-[600px] mx-auto'>
-        <CardContent className='space-y-10'>
+        <CardContent className='space-y-2'>
           <CartStep />
           <CartList />
         </CardContent>
