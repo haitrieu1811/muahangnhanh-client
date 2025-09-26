@@ -4,6 +4,7 @@ import React from 'react'
 
 import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
+import ProductDetailActions from '@/app/(shop)/products/[nameId]/actions'
 import ProductDetailPhotos from '@/app/(shop)/products/[nameId]/photos'
 import Prose from '@/components/prose'
 import { Badge } from '@/components/ui/badge'
@@ -65,17 +66,7 @@ export default async function ProductDetailPage({
                   </div>
                 )}
               </div>
-              <div className='flex space-x-2'>
-                <Button
-                  variant='outline'
-                  className='flex-auto border-main dark:border-main-foreground text-main dark:text-main-foreground hover:text-main'
-                >
-                  Thêm vào giỏ hàng
-                </Button>
-                <Button className='flex-auto bg-main dark:bg-main-foreground hover:bg-main/80 dark:hover:bg-main-foreground/80'>
-                  Mua ngay
-                </Button>
-              </div>
+              <ProductDetailActions productId={product._id} />
             </div>
           </div>
         </CardContent>
