@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 
 import mediasApis from '@/apis/medias.apis'
-import UploadImages from '@/app/(admin)/_components/upload-images'
+import UploadImages from '@/components/upload-images'
 import ImagesList from '@/app/(admin)/admin/images/images-list'
 import { ImageType } from '@/types/utils.types'
 import PageTitle from '@/app/(admin)/_components/page-title'
