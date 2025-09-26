@@ -49,7 +49,7 @@ export default function HeaderAccount({ user }: { user: User | null }) {
                 <Button variant='outline'>
                   <Bell />
                   Thông báo
-                  <Badge variant='destructive' className='h-5 min-w-5 rounded-full px-1 tabular-nums'>
+                  <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
                     99
                   </Badge>
                 </Button>
@@ -64,7 +64,7 @@ export default function HeaderAccount({ user }: { user: User | null }) {
                 <Button variant='outline'>
                   <Handbag />
                   Giỏ hàng
-                  <Badge variant='destructive' className='h-5 min-w-5 rounded-full px-1 tabular-nums'>
+                  <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
                     99
                   </Badge>
                 </Button>

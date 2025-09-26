@@ -1,10 +1,11 @@
 import http from '@/lib/http'
 import { CreateBlogReqBody, CreateBlogResponse, GetBlogResponse, GetBlogsResponse } from '@/types/blogs.types'
-import { OnlyMessageResponse } from '@/types/utils.types'
+import { OnlyMessageResponse, PaginationReqQuery } from '@/types/utils.types'
 
 const blogsApis = {
-  getBlogs() {
-    return http.get<GetBlogsResponse>('/blogs')
+  getBlogs(query: PaginationReqQuery = {}) {
+    const searchParams = new URLSearchParams(query as Record<string, string>)
+    return http.get<GetBlogsResponse>(`/blogs?${searchParams}`)
   },
 
   createBlog(body: CreateBlogReqBody) {

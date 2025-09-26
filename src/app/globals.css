@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -139,6 +140,10 @@
 
 @utility bg-highlight {
   @apply bg-main hover:bg-main/80! dark:bg-main-foreground dark:hover:bg-main-foreground/80!;
+}
+
+@utility text-main-color {
+  @apply text-main dark:text-main-foreground;
 }
 
 @utility container {

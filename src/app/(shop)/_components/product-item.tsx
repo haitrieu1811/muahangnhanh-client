@@ -5,10 +5,17 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency, rateSale } from '@/lib/utils'
 import { ProductType } from '@/types/products.types'
+import PATH from '@/constants/path'
 
 export default function ProductItem({ product }: { product: ProductType }) {
   return (
-    <Link href={'#'} className='group relative block rounded-md overflow-hidden'>
+    <Link
+      href={PATH.PRODUCTS_DETAIL({
+        name: product.name,
+        id: product._id
+      })}
+      className='group relative block rounded-md overflow-hidden'
+    >
       {product.priceAfterDiscount < product.price && (
         <div className='absolute top-0 right-0 z-1 rounded-bl-md bg-main dark:bg-main-foreground p-1 text-primary-foreground text-xs font-semibold'>
           Giảm {rateSale(product.price, product.priceAfterDiscount)}%
