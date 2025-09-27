@@ -7,7 +7,7 @@ import { jwtDecode, normalizePath } from '@/lib/utils'
 
 const adminPaths = [PATH.ADMIN]
 const authPaths = ['/auth']
-const privatePaths = [PATH.ACCOUNT]
+const privatePaths = [PATH.ACCOUNT, PATH.CART]
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -27,6 +27,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Trang cá nhân - phải đăng nhập mới vào được
+
   if (privatePaths.map((item) => normalizePath(item)).some((path) => normalizePath(pathname).startsWith(path))) {
     if (!accessToken) {
       return NextResponse.redirect(new URL(PATH.LOGIN, request.url))
@@ -48,5 +49,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/auth/:path*', '/account/:path*']
+  matcher: ['/admin/:path*', '/auth/:path*', '/account/:path*', '/cart/:path*']
 }

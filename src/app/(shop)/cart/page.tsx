@@ -1,14 +1,12 @@
-import CartList from '@/app/(shop)/cart/list'
-import CartStep from '@/app/(shop)/cart/step'
+import Cart from '@/app/(shop)/cart'
 import { Card, CardContent } from '@/components/ui/card'
 
 export default function CartPage() {
   return (
     <div className='container py-4'>
       <Card className='w-[600px] mx-auto'>
-        <CardContent className='space-y-2'>
-          <CartStep />
-          <CartList />
+        <CardContent>
+          <Cart />
         </CardContent>
       </Card>
     </div>

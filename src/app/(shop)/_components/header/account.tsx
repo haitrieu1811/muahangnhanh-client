@@ -66,9 +66,11 @@ export default function HeaderAccount({ user }: { user: User | null }) {
                 <Button variant='outline'>
                   <Handbag />
                   Giỏ hàng
-                  <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
-                    {totalCartItems}
-                  </Badge>
+                  {totalCartItems > 0 && (
+                    <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
+                      {totalCartItems > 99 ? '99+' : totalCartItems}
+                    </Badge>
+                  )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent align='end' className='p-0 w-[400px]'>

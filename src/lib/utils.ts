@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { EntityError } from '@/lib/http'
 import { TokenPayload } from '@/types/utils.types'
+import { Address } from '@/types/addresses.types'
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -78,4 +79,8 @@ export const generateNameId = ({ name, id }: { name: string; id: string }) => {
 export const getIdFromNameId = (nameId: string) => {
   const arr = nameId.split('-i-')
   return arr[arr.length - 1]
+}
+
+export const formatAddress = (address: Address) => {
+  return `${address.detail}, ${address.commune.prefix} ${address.commune.name}, ${address.province.prefix} ${address.province.name}`
 }

@@ -27,6 +27,7 @@ type AppContext = {
   totalCheckedCartAmount: number
   handleCheckAllCartItems: () => void
   isAllChecked: boolean
+  checkedCartItems: ExtendedCartItem[]
 }
 
 const initialAppContext: AppContext = {
@@ -43,7 +44,8 @@ const initialAppContext: AppContext = {
   totalCheckedCartItems: 0,
   totalCheckedCartAmount: 0,
   handleCheckAllCartItems: () => null,
-  isAllChecked: false
+  isAllChecked: false,
+  checkedCartItems: []
 }
 
 export const AppContext = React.createContext<AppContext>(initialAppContext)
@@ -96,6 +98,10 @@ export default function AppProvider({ children }: { children: React.ReactNode })
     () => extendedCartItems.every((cartItem) => cartItem.isChecked),
     [extendedCartItems]
   )
+  const checkedCartItems = React.useMemo(
+    () => extendedCartItems.filter((cartItem) => cartItem.isChecked),
+    [extendedCartItems]
+  )
 
   const handleCheckAllCartItems = () => {
     setExtendedCartItems((cartItems) =>
@@ -122,7 +128,8 @@ export default function AppProvider({ children }: { children: React.ReactNode })
         totalCheckedCartItems,
         totalCheckedCartAmount,
         handleCheckAllCartItems,
-        isAllChecked
+        isAllChecked,
+        checkedCartItems
       }}
     >
       {children}

@@ -21,12 +21,16 @@ const addressesApis = {
     return http.post<CreateAddressResponse>('/addresses', body)
   },
 
-  getMyAddresses(accessToken: string) {
+  getMyAddressesFromNextServerToServer(accessToken: string) {
     return http.get<GetAddressesResponse>('/addresses/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  getMyAddressesFromNextClientToServer() {
+    return http.get<GetAddressesResponse>('/addresses/me')
   },
 
   setDefaultAddress(addressId: string) {

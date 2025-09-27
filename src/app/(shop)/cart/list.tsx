@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Handbag } from 'lucide-react'
+import { Handbag, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -11,12 +11,13 @@ import cartItemsApis from '@/apis/cartItems.apis'
 import QuantityController from '@/components/quantity-controller'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
 import { cn, formatCurrency } from '@/lib/utils'
-import { Label } from '@/components/ui/label'
+import { CartContext } from '@/app/(shop)/cart'
 
 export default function CartList() {
   const queryClient = useQueryClient()
@@ -31,6 +32,7 @@ export default function CartList() {
     handleCheckAllCartItems
   } = useAppContext()
   const isClient = useIsClient()
+  const { setStep } = React.useContext(CartContext)
 
   // Xử lý chọn một sản phẩm trong giỏ hàng -> checkout
   const handleCheck = ({ isChecked, cartItemId }: { isChecked: boolean; cartItemId: string }) => {
@@ -60,6 +62,21 @@ export default function CartList() {
 
   const handleUpdate = (body: { quantity: number; cartItemId: string }) => {
     updateCartItemMutation.mutate(body)
+  }
+
+  const deleteCartItemsMutation = useMutation({
+    mutationKey: ['delete-cart-items'],
+    mutationFn: cartItemsApis.deleteCartItems,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      queryClient.refetchQueries({
+        queryKey: ['get-my-cart']
+      })
+    }
+  })
+
+  const handleDelete = (cartItemIds: string[]) => {
+    deleteCartItemsMutation.mutate({ cartItemIds })
   }
 
   return (
@@ -111,7 +128,7 @@ export default function CartList() {
                   >
                     {cartItem.product.name}
                   </Link>
-                  <Button variant='link' className='p-0 text-destructive'>
+                  <Button variant='link' className='p-0 text-destructive' onClick={() => handleDelete([cartItem._id])}>
                     Xóa
                   </Button>
                 </div>
@@ -175,7 +192,12 @@ export default function CartList() {
                 'cursor-not-allowed': totalCheckedCartAmount === 0
               })}
             >
-              <Button size='lg' disabled={totalCheckedCartAmount === 0} className='w-full bg-highlight uppercase'>
+              <Button
+                size='lg'
+                disabled={totalCheckedCartAmount === 0}
+                className='w-full bg-highlight uppercase'
+                onClick={() => setStep('info')} // Chuyển sang bước nhập thông tin đặt hàng
+              >
                 Đặt hàng ngay
               </Button>
             </div>
@@ -184,7 +206,7 @@ export default function CartList() {
       )}
       {/* Giỏ hàng trống */}
       {totalCartItems === 0 && isClient && !isLoadingMyCart && (
-        <div className='flex flex-col justify-center items-center space-y-4'>
+        <div className='flex flex-col justify-center items-center space-y-4 py-8'>
           <Handbag className='text-main dark:text-main-foreground size-10 stroke-1' />
           <p className='text-center'>Chưa có sản phẩm nào trong giỏ hàng</p>
           <Button
@@ -194,6 +216,12 @@ export default function CartList() {
           >
             <Link href={PATH.HOME}>Bắt đầu mua hàng</Link>
           </Button>
+        </div>
+      )}
+      {/* Loading */}
+      {isLoadingMyCart && isClient && (
+        <div className='flex justify-center items-center py-8'>
+          <Loader2 className='size-10 stroke-1 animate-spin text-main dark:text-main-foreground' />
         </div>
       )}
     </React.Fragment>

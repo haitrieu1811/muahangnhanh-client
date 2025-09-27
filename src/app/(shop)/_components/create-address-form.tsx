@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 import addressesApis from '@/apis/addresses.apis'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -127,8 +127,6 @@ export default function CreateAddressForm({
       addressId: address._id
     })
   })
-
-  console.log(form.watch())
 
   return (
     <Form {...form}>
@@ -289,6 +287,9 @@ export default function CreateAddressForm({
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
+                <FormDescription>
+                  Không cần nhập tỉnh/thành phố, phường/xã, bạn chỉ cần nhập số nhà, tên đường, tên khu vực...
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

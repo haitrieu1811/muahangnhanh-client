@@ -59,20 +59,8 @@ export type Address = {
   _id: string
   fullName: string
   phoneNumber: string
-  province: {
-    _id: string
-    name: string
-    prefix: string
-    createdAt: string
-    updatedAt: string
-  }
-  commune: {
-    _id: string
-    name: string
-    prefix: string
-    createdAt: string
-    updatedAt: string
-  }
+  province: ProvinceType
+  commune: CommuneType
   detail: string
   type: AddressType
   isDefault: boolean
