@@ -1,15 +1,30 @@
 'use client'
 
-import { BadgeCheck, BadgeX, Check, CheckCheck, CheckCircle2, Loader, Loader2, Truck, X } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import {
+  BadgeCheck,
+  BadgeX,
+  Check,
+  CheckCheck,
+  CheckCircle2,
+  EllipsisVertical,
+  Loader,
+  Loader2,
+  Truck,
+  X
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
+import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 
+import ordersApis from '@/apis/orders.apis'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { OrderStatus } from '@/constants/enum'
 import PATH from '@/constants/path'
@@ -74,6 +89,15 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
     router.replace(`${pathname}?${params.toString()}`)
   }, 500)
 
+  const cancelOrderMutation = useMutation({
+    mutationKey: ['cancel-order'],
+    mutationFn: ordersApis.cancelOrder,
+    onSuccess: (data) => {
+      toast.success(data.payload.message)
+      router.refresh()
+    }
+  })
+
   return (
     <Tabs defaultValue={status?.toString() ?? '-1'} onValueChange={(status) => handleFilterByStatus(Number(status))}>
       <TabsList>
@@ -89,8 +113,32 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
           {orders.map((order) => (
             <Card key={order._id}>
               <CardHeader>
-                <CardTitle>Mã đơn: #{order.code}</CardTitle>
-                <CardAction>{ORDER_BADGES[order.status]}</CardAction>
+                <CardTitle>{ORDER_BADGES[order.status]}</CardTitle>
+                <CardDescription>#{order.code}</CardDescription>
+                <CardAction>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size='icon' variant='outline'>
+                        <EllipsisVertical />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                      <DropdownMenuItem>Chi tiết đơn</DropdownMenuItem>
+                      {order.status === OrderStatus.Waiting && (
+                        <DropdownMenuItem
+                          disabled={cancelOrderMutation.isPending && cancelOrderMutation.variables === order._id}
+                          className='text-destructive hover:text-destructive!'
+                          onClick={() => cancelOrderMutation.mutate(order._id)}
+                        >
+                          {cancelOrderMutation.isPending && cancelOrderMutation.variables === order._id && (
+                            <Loader2 className='animate-spin' />
+                          )}
+                          Hủy đơn
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </CardAction>
               </CardHeader>
               <CardContent>
                 <div className='space-y-4'>
@@ -133,20 +181,10 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
                     </Link>
                   ))}
                 </div>
-                <div className='mt-10 flex items-center justify-end space-x-2'>
-                  <div>Tổng thanh toán:</div>
-                  <div className='text-highlight font-semibold'>{order.totalAmount.toLocaleString()}&#8363;</div>
-                </div>
               </CardContent>
               <CardFooter className='justify-end space-x-2'>
-                <Button variant='outline' size='sm'>
-                  Chi tiết đơn
-                </Button>
-                {order.status === OrderStatus.Waiting && (
-                  <Button variant='destructive' size='sm'>
-                    Hủy đơn
-                  </Button>
-                )}
+                <div className='text-sm'>Tổng thanh toán:</div>
+                <div className='text-highlight font-semibold'>{order.totalAmount.toLocaleString()}&#8363;</div>
               </CardFooter>
             </Card>
           ))}
