@@ -91,6 +91,9 @@ export default function HeaderAccount({ user }: { user: User | null }) {
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT}>Tài khoản</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={PATH.ACCOUNT_ORDERS}>Đơn hàng của tôi</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

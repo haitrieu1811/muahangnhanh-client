@@ -20,7 +20,7 @@ export default function OrderSuccess() {
           <Link href={PATH.HOME}>Quay về trang chủ</Link>
         </Button>
         <Button asChild className='bg-highlight'>
-          <Link href={PATH.HOME}>Xem đơn hàng</Link>
+          <Link href={PATH.ACCOUNT_ORDERS}>Xem đơn hàng</Link>
         </Button>
       </div>
     </div>

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
 import { cn } from '@/lib/utils'
 
-const pages = [
+const PAGES = [
   {
     url: PATH.ACCOUNT,
     icon: UserRound,
@@ -35,7 +35,7 @@ export default function AccountSidebar() {
   const pathname = usePathname()
   return (
     <aside className='w-[240px] border rounded-md p-1 space-y-1 bg-card sticky top-18'>
-      {pages.map((page) => (
+      {PAGES.map((page) => (
         <Button asChild key={page.url} variant='ghost'>
           <Link
             href={page.url}

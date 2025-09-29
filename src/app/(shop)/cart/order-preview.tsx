@@ -100,9 +100,9 @@ export default function OrderPreview() {
                   <span className='line-clamp-1'>{cartItem.product.name}</span>
                 </div>
               </TableCell>
-              <TableCell>{cartItem.product.price.toLocaleString()}&#8363;</TableCell>
+              <TableCell>{cartItem.unitPriceAfterDiscount.toLocaleString()}&#8363;</TableCell>
               <TableCell>{cartItem.quantity}</TableCell>
-              <TableCell>{(cartItem.product.price * cartItem.quantity).toLocaleString()}&#8363;</TableCell>
+              <TableCell>{(cartItem.unitPriceAfterDiscount * cartItem.quantity).toLocaleString()}&#8363;</TableCell>
             </TableRow>
           ))}
         </TableBody>

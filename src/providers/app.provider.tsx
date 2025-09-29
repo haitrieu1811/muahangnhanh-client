@@ -57,7 +57,7 @@ export default function AppProvider({ children }: { children: React.ReactNode })
   const [extendedCartItems, setExtendedCartItems] = React.useState(initialAppContext.extendedCartItems)
 
   const getMyCartQuery = useQuery({
-    queryKey: ['get-my-cart'],
+    queryKey: ['get-my-cart', isAuthenticated],
     queryFn: () => cartItemsApis.getMyCart(),
     enabled: isAuthenticated
   })

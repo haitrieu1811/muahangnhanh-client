@@ -14,6 +14,7 @@ const PATH = {
   ACCOUNT_ADDRESSES: '/account/addresses',
   ACCOUNT_ORDERS: '/account/orders',
   ACCOUNT_CHANGE_PASSWORD: '/account/change-password',
+  ACCOUNT_ORDERS_DETAIL: (id: string) => `/account/orders/${id}`,
 
   ADMIN: '/admin',
   ADMIN_ME: '/admin/me',

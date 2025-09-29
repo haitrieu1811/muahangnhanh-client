@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Mona_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -8,7 +8,7 @@ import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
 
-const fontSans = Mona_Sans({
+const fontSans = Inter({
   subsets: ['vietnamese']
 })
 
