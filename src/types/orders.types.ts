@@ -110,3 +110,7 @@ export type GetMyOrdersResponse = SuccessResponse<{
 export type GetOrdersReqQuery = PaginationReqQuery & {
   status?: OrderStatus
 }
+
+export type GetOrderResponse = SuccessResponse<{
+  order: OrderType
+}>

@@ -1,6 +1,12 @@
 import { OrderStatus } from '@/constants/enum'
 import http from '@/lib/http'
-import { CreateOrderReqBody, CreateOrderResponse, GetMyOrdersResponse, GetOrdersReqQuery } from '@/types/orders.types'
+import {
+  CreateOrderReqBody,
+  CreateOrderResponse,
+  GetMyOrdersResponse,
+  GetOrderResponse,
+  GetOrdersReqQuery
+} from '@/types/orders.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 const ordersApis = {
@@ -20,6 +26,14 @@ const ordersApis = {
   cancelOrder(orderId: string) {
     return http.post<OnlyMessageResponse>(`/orders/${orderId}/cancel`, {
       status: OrderStatus.Cancel
+    })
+  },
+
+  getOrderfromNextServerToServer({ orderId, accessToken }: { orderId: string; accessToken: string }) {
+    return http.get<GetOrderResponse>(`/orders/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
     })
   }
 } as const

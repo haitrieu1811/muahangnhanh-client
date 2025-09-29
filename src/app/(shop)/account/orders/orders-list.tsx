@@ -1,18 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import {
-  BadgeCheck,
-  BadgeX,
-  Check,
-  CheckCheck,
-  CheckCircle2,
-  EllipsisVertical,
-  Loader,
-  Loader2,
-  Truck,
-  X
-} from 'lucide-react'
+import { CheckCheck, CheckCircle2, EllipsisVertical, Loader, Loader2, Truck, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -21,7 +10,7 @@ import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 
 import ordersApis from '@/apis/orders.apis'
-import { Badge } from '@/components/ui/badge'
+import ORDER_BADGES from '@/components/order-badges'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -38,39 +27,6 @@ const ORDER_STATUSES = [
   { value: OrderStatus.Success.toString(), label: 'Đã giao', icon: CheckCheck },
   { value: OrderStatus.Cancel.toString(), label: 'Đã hủy', icon: X }
 ] as const
-
-const ORDER_BADGES = {
-  [OrderStatus.Waiting]: (
-    <Badge className='bg-yellow-500'>
-      <Loader />
-      Chờ xác nhận
-    </Badge>
-  ),
-  [OrderStatus.Confirmed]: (
-    <Badge className='bg-pink-500'>
-      <Check />
-      Đã xác nhận
-    </Badge>
-  ),
-  [OrderStatus.Delivering]: (
-    <Badge className='bg-blue-500'>
-      <Truck />
-      Đang vận chuyển
-    </Badge>
-  ),
-  [OrderStatus.Success]: (
-    <Badge className='bg-green-500'>
-      <BadgeCheck />
-      Thành công
-    </Badge>
-  ),
-  [OrderStatus.Cancel]: (
-    <Badge className='bg-red-500'>
-      <BadgeX />
-      Đã hủy
-    </Badge>
-  )
-} as const
 
 export default function OrdersList({ orders, totalOrders }: { orders: OrderType[]; totalOrders: number }) {
   const router = useRouter()
@@ -123,7 +79,9 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
-                      <DropdownMenuItem>Chi tiết đơn</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href={PATH.ACCOUNT_ORDERS_DETAIL(order._id)}>Chi tiết đơn</Link>
+                      </DropdownMenuItem>
                       {order.status === OrderStatus.Waiting && (
                         <DropdownMenuItem
                           disabled={cancelOrderMutation.isPending && cancelOrderMutation.variables === order._id}
@@ -184,7 +142,9 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
               </CardContent>
               <CardFooter className='justify-end space-x-2'>
                 <div className='text-sm'>Tổng thanh toán:</div>
-                <div className='text-highlight font-semibold'>{order.totalAmount.toLocaleString()}&#8363;</div>
+                <div className='text-highlight font-semibold'>
+                  {(order.totalAmount + order.shippingFee - order.totalDiscount).toLocaleString()}&#8363;
+                </div>
               </CardFooter>
             </Card>
           ))}
