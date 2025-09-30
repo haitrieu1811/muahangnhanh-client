@@ -1,4 +1,4 @@
-import { ProductCategoryStatus, ProductStatus } from '@/constants/enum'
+import { ProductCategoryStatus } from '@/constants/enum'
 import { CreateProductCategorySchema, CreateProductSchema } from '@/rules/products.rules'
 import { PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
 
@@ -33,7 +33,8 @@ export type ProductType = {
   }
   price: number
   priceAfterDiscount: number
-  status: ProductStatus
+  isFlashSale: boolean
+  isActive: boolean
   categoryId: string
   createdAt: string
   updatedAt: string
@@ -46,6 +47,8 @@ export type GetProductsResponse = SuccessResponse<{
 
 export type GetProductsReqQuery = PaginationReqQuery & {
   name?: string
+  isFlashSale?: boolean
+  isActive?: boolean
 }
 
 export type CreateProductResponse = SuccessResponse<{
@@ -62,7 +65,6 @@ export type CreateProductReqBody = Omit<CreateProductSchema, 'price' | 'priceAft
   priceAfterDiscount?: number
   thumbnail: string // ID hình ảnh
   photos?: string[]
-  status?: ProductStatus
 }
 
 export type ProductCategoryType = {

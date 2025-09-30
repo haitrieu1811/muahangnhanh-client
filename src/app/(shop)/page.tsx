@@ -18,7 +18,10 @@ export default async function HomePage() {
   try {
     const [getProductCategoriesRes, getProductsRes, getBlogsRes] = await Promise.all([
       productsApis.getProductCategories(),
-      productsApis.getProducts({}),
+      productsApis.getProducts({
+        isFlashSale: true,
+        isActive: true
+      }),
       blogsApis.getBlogs()
     ])
     productCategories = getProductCategoriesRes.payload.data.productCategories

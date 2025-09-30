@@ -66,7 +66,12 @@ export default async function ProductDetailPage({
                   </div>
                 )}
               </div>
-              <ProductDetailActions productId={product._id} />
+              {product.isActive && <ProductDetailActions productId={product._id} />}
+              {!product.isActive && (
+                <div className='border-2 rounded-md border-destructive text-destructive p-2 flex justify-center'>
+                  Sản phẩm đã tạm ngừng hoạt động
+                </div>
+              )}
             </div>
           </div>
         </CardContent>

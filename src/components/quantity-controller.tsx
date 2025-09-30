@@ -12,6 +12,7 @@ type QuantityControllerProps = {
   size?: 'default' | 'sm'
   defaultValue?: number
   max?: number
+  disabled?: boolean
   onDecrease?: (value: number) => void
   onIncrease?: (value: number) => void
   onTyping?: (value: number) => void
@@ -22,6 +23,7 @@ export default function QuantityController({
   size = 'default',
   defaultValue = 1,
   max,
+  disabled = false,
   onDecrease,
   onIncrease,
   onTyping,
@@ -60,6 +62,7 @@ export default function QuantityController({
       <Button
         size='icon'
         variant='outline'
+        disabled={disabled}
         className={cn('rounded-none', {
           'size-7': size === 'sm'
         })}
@@ -72,6 +75,7 @@ export default function QuantityController({
         />
       </Button>
       <Input
+        disabled={disabled}
         value={localValue}
         className={cn('text-center rounded-none', {
           'w-[50px]': size === 'default',
@@ -85,6 +89,7 @@ export default function QuantityController({
       <Button
         size='icon'
         variant='outline'
+        disabled={disabled}
         className={cn('rounded-none', {
           'size-7': size === 'sm'
         })}

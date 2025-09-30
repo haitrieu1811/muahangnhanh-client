@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import PATH from '@/constants/path'
 import { dateDistance, formatCurrency } from '@/lib/utils'
 import { ProductType } from '@/types/products.types'
+import { Badge } from '@/components/ui/badge'
 
 const MAX_CHARACTERS = 50
 
@@ -68,7 +69,9 @@ export default async function AdminProductsPage({
                 <TableRow>
                   <TableHead>Ảnh</TableHead>
                   <TableHead>Tên sản phẩm</TableHead>
-                  <TableHead>Giá tiền</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Giá gốc</TableHead>
+                  <TableHead>Giá sau khi giảm</TableHead>
                   <TableHead>Tạo lúc</TableHead>
                   <TableHead>Cập nhật lúc</TableHead>
                   <TableHead className='text-right'>Thao tác</TableHead>
@@ -93,7 +96,12 @@ export default async function AdminProductsPage({
                           : product.name}
                       </span>
                     </TableCell>
+                    <TableCell>
+                      {product.isActive && <Badge className='bg-green-500'>Hoạt động</Badge>}
+                      {!product.isActive && <Badge className='bg-red-500'>Tạm ngừng</Badge>}
+                    </TableCell>
                     <TableCell>{formatCurrency(product.price)}&#8363;</TableCell>
+                    <TableCell>{formatCurrency(product.priceAfterDiscount)}&#8363;</TableCell>
                     <TableCell>{dateDistance(product.createdAt)}</TableCell>
                     <TableCell>{dateDistance(product.updatedAt)}</TableCell>
                     <TableCell>

@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { ProductStatus } from '@/constants/enum'
 import { PRODUCTS_MESSAGES } from '@/constants/message'
 import { NUMBER_GREATER_THAN_ONE_REGEX } from '@/constants/regex'
 
@@ -19,8 +18,9 @@ export const productRules = z.object({
     .string()
     .regex(NUMBER_GREATER_THAN_ONE_REGEX, PRODUCTS_MESSAGES.PRODUCT_PRICE_MUST_BE_A_INT_GREATER_THAN_ZERO),
   priceAfterDiscount: z.string().optional(),
-  status: z.enum([ProductStatus.Active.toString(), ProductStatus.Inactive.toString()]).optional(),
-  categoryId: z.string().min(1, PRODUCTS_MESSAGES.PRODUCT_CATEGORY_ID_IS_REQUIRED)
+  categoryId: z.string().min(1, PRODUCTS_MESSAGES.PRODUCT_CATEGORY_ID_IS_REQUIRED),
+  isFlashSale: z.boolean().optional(),
+  isActive: z.boolean().optional()
 })
 
 export const createProductRules = productRules
@@ -29,8 +29,9 @@ export const createProductRules = productRules
     description: true,
     price: true,
     priceAfterDiscount: true,
-    status: true,
-    categoryId: true
+    categoryId: true,
+    isFlashSale: true,
+    isActive: true
   })
   .strict()
   .superRefine(({ priceAfterDiscount }, ctx) => {

@@ -30,17 +30,6 @@ export enum ProductCategoryStatus {
   Inactive
 }
 
-export enum ProductStatus {
-  Active,
-  Inactive
-}
-
-export enum ProductApprovalStatus {
-  Pending,
-  Resolved,
-  Rejected
-}
-
 export enum AddressType {
   Home,
   Office

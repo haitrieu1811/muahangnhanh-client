@@ -85,93 +85,104 @@ export default function CartList() {
       {totalCartItems > 0 && isClient && !isLoadingMyCart && (
         <div className='space-y-6'>
           <div className='space-y-2'>
-            {extendedCartItems.map((cartItem) => (
-              <div
-                key={cartItem._id}
-                className={cn('flex space-x-4 rounded-md p-4', {
-                  'bg-muted': cartItem.isChecked
-                })}
-              >
-                <div className='flex items-center'>
-                  <Checkbox
-                    checked={cartItem.isChecked}
-                    onCheckedChange={(isChecked) =>
-                      handleCheck({
-                        isChecked: isChecked as boolean,
-                        cartItemId: cartItem._id
-                      })
-                    }
-                  />
-                </div>
-                <Link
-                  href={PATH.PRODUCTS_DETAIL({
-                    name: cartItem.product.name,
-                    id: cartItem.product._id
+            {extendedCartItems.map((cartItem) => {
+              const isActive = cartItem.product.isActive
+              return (
+                <div
+                  key={cartItem._id}
+                  className={cn('flex space-x-4 rounded-md p-4', {
+                    'bg-muted': cartItem.isChecked,
+                    'border-2 border-destructive': !isActive
                   })}
-                  className='shrink-0 border p-2 rounded-md'
                 >
-                  <Image
-                    width={100}
-                    height={100}
-                    src={cartItem.product.thumbnail}
-                    alt={cartItem.product.name}
-                    className='size-[80px] aspect-square object-cover rounded-md'
-                  />
-                </Link>
-                <div className='flex-1'>
+                  <div className='flex items-center'>
+                    <Checkbox
+                      disabled={!isActive}
+                      checked={cartItem.isChecked}
+                      onCheckedChange={(isChecked) =>
+                        handleCheck({
+                          isChecked: isChecked as boolean,
+                          cartItemId: cartItem._id
+                        })
+                      }
+                    />
+                  </div>
                   <Link
                     href={PATH.PRODUCTS_DETAIL({
                       name: cartItem.product.name,
                       id: cartItem.product._id
                     })}
-                    className='font-medium text-sm line-clamp-2'
+                    className='shrink-0 border p-2 rounded-md'
                   >
-                    {cartItem.product.name}
+                    <Image
+                      width={100}
+                      height={100}
+                      src={cartItem.product.thumbnail}
+                      alt={cartItem.product.name}
+                      className='size-[80px] aspect-square object-cover rounded-md'
+                    />
                   </Link>
-                  <Button variant='link' className='p-0 text-destructive' onClick={() => handleDelete([cartItem._id])}>
-                    Xóa
-                  </Button>
-                </div>
-                <div className='flex flex-col items-end space-y-2'>
-                  {cartItem.product.priceAfterDiscount < cartItem.product.price ? (
-                    <div className='text-right'>
-                      <div className='font-semibold text-main dark:text-main-foreground'>
-                        {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
+                  <div className='flex-1'>
+                    <Link
+                      href={PATH.PRODUCTS_DETAIL({
+                        name: cartItem.product.name,
+                        id: cartItem.product._id
+                      })}
+                      className='font-medium text-sm line-clamp-2'
+                    >
+                      {cartItem.product.name}
+                    </Link>
+                    <Button
+                      variant='link'
+                      className='p-0 text-destructive'
+                      onClick={() => handleDelete([cartItem._id])}
+                    >
+                      Xóa
+                    </Button>
+                    {!isActive && <p className='text-sm text-muted-foreground'>Tạm ngừng hoạt động</p>}
+                  </div>
+                  <div className='flex flex-col items-end space-y-2'>
+                    {cartItem.product.priceAfterDiscount < cartItem.product.price ? (
+                      <div className='text-right'>
+                        <div className='font-semibold text-main dark:text-main-foreground'>
+                          {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
+                        </div>
+                        <div className='text-sm text-muted-foreground line-through'>
+                          {formatCurrency(cartItem.product.price)}&#8363;
+                        </div>
                       </div>
-                      <div className='text-sm text-muted-foreground line-through'>
+                    ) : (
+                      <div className='font-semibold text-main dark:text-main-foreground'>
                         {formatCurrency(cartItem.product.price)}&#8363;
                       </div>
-                    </div>
-                  ) : (
-                    <div className='font-semibold text-main dark:text-main-foreground'>
-                      {formatCurrency(cartItem.product.price)}&#8363;
-                    </div>
-                  )}
-                  <QuantityController
-                    size='sm'
-                    defaultValue={cartItem.quantity}
-                    onIncrease={(value) =>
-                      handleUpdate({
-                        cartItemId: cartItem._id,
-                        quantity: value
-                      })
-                    }
-                    onDecrease={(value) =>
-                      handleUpdate({
-                        cartItemId: cartItem._id,
-                        quantity: value
-                      })
-                    }
-                    onBlur={(value) =>
-                      handleUpdate({
-                        cartItemId: cartItem._id,
-                        quantity: value
-                      })
-                    }
-                  />
+                    )}
+                    <QuantityController
+                      size='sm'
+                      disabled={!isActive}
+                      defaultValue={cartItem.quantity}
+                      onIncrease={(value) =>
+                        handleUpdate({
+                          cartItemId: cartItem._id,
+                          quantity: value
+                        })
+                      }
+                      onDecrease={(value) =>
+                        handleUpdate({
+                          cartItemId: cartItem._id,
+                          quantity: value
+                        })
+                      }
+                      onBlur={(value) =>
+                        handleUpdate({
+                          cartItemId: cartItem._id,
+                          quantity: value
+                        })
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <Separator />
           <div className='space-y-4'>

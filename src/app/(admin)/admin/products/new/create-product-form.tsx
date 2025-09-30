@@ -12,19 +12,18 @@ import { toast } from 'sonner'
 
 import productsApis from '@/apis/products.apis'
 import CreateProductCategoryForm from '@/app/(admin)/_components/create-product-category-form'
-import SelectImages, { ImageStateType } from '@/components/select-images'
-import UploadImages from '@/components/upload-images'
 import RichTextEditor from '@/components/rich-text-editor'
+import SelectImages, { ImageStateType } from '@/components/select-images'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { ProductStatus } from '@/constants/enum'
+import UploadImages from '@/components/upload-images'
 import PATH from '@/constants/path'
 import { createProductRules, CreateProductSchema } from '@/rules/products.rules'
 import { CreateProductReqBody, ProductCategoryType, ProductType } from '@/types/products.types'
@@ -85,8 +84,9 @@ export default function CreateProductForm({
       description: product?.description ?? '',
       price: product?.price ? String(product.price) : '',
       priceAfterDiscount: product?.priceAfterDiscount ? String(product.priceAfterDiscount) : '',
-      status: product?.status.toString() ?? ProductStatus.Active.toString(),
-      categoryId: product?.categoryId ?? ''
+      categoryId: product?.categoryId ?? '',
+      isFlashSale: product?.isFlashSale ?? false,
+      isActive: product?.isActive ?? true
     }
   })
 
@@ -106,8 +106,7 @@ export default function CreateProductForm({
       price: Number(data.price),
       priceAfterDiscount: Number(data.priceAfterDiscount) || undefined,
       thumbnail: thumbnail._id,
-      photos: photos.map((photo) => photo._id),
-      status: Number(data.status) || undefined
+      photos: photos.map((photo) => photo._id)
     }
     // Chế độ tạo mới
     if (!isUpdateMode) {
@@ -125,86 +124,14 @@ export default function CreateProductForm({
     <React.Fragment>
       <Form {...form}>
         <form onSubmit={handleSubmit}>
-          <div className='grid grid-cols-12 gap-8'>
-            {/* Thông tin chung - giá tiền */}
-            <div className='col-span-8 grid gap-8'>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Thông tin chung</CardTitle>
-                </CardHeader>
-                <CardContent className='space-y-8'>
-                  {/* Tên */}
-                  <FormField
-                    control={form.control}
-                    name='name'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tên</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {/* Mô tả */}
-                  <FormField
-                    control={form.control}
-                    name='description'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Mô tả</FormLabel>
-                        <FormControl>
-                          <RichTextEditor content={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Giá tiền</CardTitle>
-                </CardHeader>
-                <CardContent className='space-y-8'>
-                  {/* Giá gốc */}
-                  <FormField
-                    control={form.control}
-                    name='price'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá gốc</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {/* Giá sau khi giảm */}
-                  <FormField
-                    control={form.control}
-                    name='priceAfterDiscount'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá sau khi giảm</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-            {/* Hình ảnh - Danh mục - Trạng thái */}
-            <div className='col-span-4 space-y-8'>
+          <div className='grid grid-cols-12 gap-4'>
+            {/* Cấu hình - Hình ảnh */}
+            <div className='col-span-4 grid gap-4'>
               {/* Hình ảnh */}
               <Card>
                 <CardHeader>
                   <CardTitle>Hình ảnh</CardTitle>
+                  <CardDescription>Ảnh đại diện và hình ảnh chi tiết sản phẩm</CardDescription>
                 </CardHeader>
                 <CardContent className='grid gap-8'>
                   {/* Ảnh đại diện */}
@@ -285,43 +212,50 @@ export default function CreateProductForm({
                   </div>
                 </CardContent>
               </Card>
-              {/* Danh mục - Trạng thái */}
+              {/* Cấu hình */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Danh mục - Trạng thái</CardTitle>
+                  <CardTitle>Cấu hình</CardTitle>
                 </CardHeader>
                 <CardContent className='grid gap-8'>
-                  {/* Trạng thái */}
-                  <FormField
-                    control={form.control}
-                    name='status'
-                    render={({ field }) => (
-                      <FormItem className='space-y-3'>
-                        <FormLabel>Trạng thái</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className='flex flex-col'
-                          >
-                            <FormItem className='flex items-center gap-3'>
-                              <FormControl>
-                                <RadioGroupItem value={ProductStatus.Active.toString()} />
-                              </FormControl>
-                              <FormLabel className='font-normal'>Hoạt động</FormLabel>
-                            </FormItem>
-                            <FormItem className='flex items-center gap-3'>
-                              <FormControl>
-                                <RadioGroupItem value={ProductStatus.Inactive.toString()} />
-                              </FormControl>
-                              <FormLabel className='font-normal'>Tạm dừng</FormLabel>
-                            </FormItem>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className='grid gap-4'>
+                    {/* Trạng thái hoạt động */}
+                    <FormField
+                      control={form.control}
+                      name='isActive'
+                      render={({ field }) => (
+                        <FormItem className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
+                          <div className='space-y-0.5'>
+                            <FormLabel>Trạng thái hoạt động</FormLabel>
+                            <FormDescription>
+                              Nếu tắt trạng thái hoạt động, sản phẩm sẽ không được hiển thị cho khách hàng.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    {/* Flash sale */}
+                    <FormField
+                      control={form.control}
+                      name='isFlashSale'
+                      render={({ field }) => (
+                        <FormItem className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
+                          <div className='space-y-0.5'>
+                            <FormLabel>Là flash sale</FormLabel>
+                            <FormDescription>
+                              Sản phẩm này sẽ được hiển thị ở mục flash sale ở trang chủ.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   {/* Danh mục */}
                   <div className='grid gap-2'>
                     <FormField
@@ -356,8 +290,84 @@ export default function CreateProductForm({
                 </CardContent>
               </Card>
             </div>
+            {/* Thông tin chung - giá tiền */}
+            <div className='col-span-8 grid gap-8'>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Thông tin chung</CardTitle>
+                </CardHeader>
+                <CardContent className='space-y-8'>
+                  {/* Tên */}
+                  <FormField
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tên</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* Mô tả */}
+                  <FormField
+                    control={form.control}
+                    name='description'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mô tả</FormLabel>
+                        <FormControl>
+                          <RichTextEditor content={field.value} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Giá tiền</CardTitle>
+                </CardHeader>
+                <CardContent className='space-y-8'>
+                  {/* Giá gốc */}
+                  <FormField
+                    control={form.control}
+                    name='price'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Giá gốc</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* Giá sau khi giảm */}
+                  <FormField
+                    control={form.control}
+                    name='priceAfterDiscount'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Giá sau khi giảm</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </div>
           </div>
-          <div className='sticky bottom-0 inset-x-0 bg-background flex justify-end p-4 space-x-2'>
+          <div className='sticky bottom-0 inset-x-0 bg-background flex justify-center p-4 space-x-2'>
+            <Button type='button' variant='outline' onClick={() => router.back()}>
+              Quay lại
+            </Button>
             <Button type='submit' disabled={isPending}>
               {isPending && <Loader2 className='animate-spin' />}
               {!isUpdateMode ? 'Thêm sản phẩm' : 'Lưu lại'}

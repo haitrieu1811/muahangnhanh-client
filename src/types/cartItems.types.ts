@@ -8,6 +8,8 @@ export type CartItemType = {
     name: string
     price: number
     priceAfterDiscount: number
+    isFlashSale: boolean
+    isActive: boolean
     createdAt: string
     updatedAt: string
   }
