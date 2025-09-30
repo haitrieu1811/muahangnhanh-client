@@ -49,6 +49,11 @@ export type GetProductsReqQuery = PaginationReqQuery & {
   name?: string
   isFlashSale?: boolean
   isActive?: boolean
+  categoryIds?: string
+  minPrice?: string
+  maxPrice?: string
+  sortBy?: string
+  orderBy?: string
 }
 
 export type CreateProductResponse = SuccessResponse<{

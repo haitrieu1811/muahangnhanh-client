@@ -36,8 +36,8 @@ export default async function ShopHeader() {
       <div className='container flex items-center justify-between space-x-10 h-14'>
         <div className='flex items-center space-x-8'>
           {/* Logo */}
-          <Link href={PATH.HOME} className='font-semibold text-2xl tracking-tight'>
-            Logo
+          <Link href={PATH.HOME} className='font-black text-3xl border-b-4 border-main dark:border-main-foreground'>
+            MHNH
           </Link>
           {/* Danh mục */}
           <Dialog>
@@ -56,7 +56,7 @@ export default async function ShopHeader() {
                   {productCategories.map((productCategory) => (
                     <Link
                       key={productCategory._id}
-                      href={'/'}
+                      href={`${PATH.PRODUCTS}?categoryIds=${productCategory._id}`}
                       className='col-span-2 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
                     >
                       <Image

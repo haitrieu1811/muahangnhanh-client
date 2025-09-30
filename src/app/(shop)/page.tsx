@@ -9,6 +9,7 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { BlogType } from '@/types/blogs.types'
 import { ProductCategoryType, ProductType } from '@/types/products.types'
+import PATH from '@/constants/path'
 
 export default async function HomePage() {
   let productCategories: ProductCategoryType[] = []
@@ -86,7 +87,7 @@ export default async function HomePage() {
             {productCategories.map((productCategory) => (
               <Link
                 key={productCategory._id}
-                href={'/'}
+                href={`${PATH.PRODUCTS}?categoryIds=${productCategory._id}`}
                 className='col-span-1 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
               >
                 <Image
@@ -106,6 +107,11 @@ export default async function HomePage() {
       <Card>
         <CardHeader>
           <CardTitle className='text-xl'>Flash sale</CardTitle>
+          <CardAction>
+            <Button asChild variant='link' className='text-highlight p-0'>
+              <Link href={PATH.PRODUCTS}>Xem thêm</Link>
+            </Button>
+          </CardAction>
         </CardHeader>
         <CardContent>
           <div className='grid grid-cols-12 gap-4'>

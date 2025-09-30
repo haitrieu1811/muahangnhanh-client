@@ -30,10 +30,12 @@ export default function ProductItem({ product }: { product: ProductType }) {
           className='w-full aspect-square object-cover group-hover:scale-105 duration-100'
         />
         <div className='absolute bottom-0 inset-x-0 p-1'>
-          <Badge variant='destructive' className='bg-red-600!'>
-            <Flame className='stroke-yellow-400' />
-            Flash sale
-          </Badge>
+          {product.isFlashSale && (
+            <Badge variant='destructive' className='bg-red-600!'>
+              <Flame className='stroke-yellow-400' />
+              Flash sale
+            </Badge>
+          )}
         </div>
       </div>
       <div className='mt-2 space-y-2'>

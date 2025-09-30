@@ -19,29 +19,31 @@ export default function ProductDetailPhotos({ product }: { product: ProductType 
         alt={product.name}
         className='w-full aspect-square object-cover rounded-md'
       />
-      <Carousel
-        opts={{
-          align: 'start'
-        }}
-      >
-        <CarouselContent className='-ml-2'>
-          {product.photos.map((photo) => (
-            <CarouselItem key={photo._id} className='basis-1/5 pl-2'>
-              <Link data-fancybox='gallery' href={photo.url}>
-                <Image
-                  width={50}
-                  height={50}
-                  src={photo.url}
-                  alt=''
-                  className='w-full aspect-square object-cover rounded-md'
-                />
-              </Link>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious variant='secondary' className='-left-4' />
-        <CarouselNext variant='secondary' className='-right-4' />
-      </Carousel>
+      {product.photos.length > 0 && (
+        <Carousel
+          opts={{
+            align: 'start'
+          }}
+        >
+          <CarouselContent className='-ml-2'>
+            {product.photos.map((photo) => (
+              <CarouselItem key={photo._id} className='basis-1/5 pl-2'>
+                <Link data-fancybox='gallery' href={photo.url}>
+                  <Image
+                    width={50}
+                    height={50}
+                    src={photo.url}
+                    alt=''
+                    className='w-full aspect-square object-cover rounded-md'
+                  />
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious variant='secondary' className='-left-4' />
+          <CarouselNext variant='secondary' className='-right-4' />
+        </Carousel>
+      )}
     </div>
   )
 }
