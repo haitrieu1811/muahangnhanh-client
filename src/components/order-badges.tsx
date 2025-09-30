@@ -1,4 +1,4 @@
-import { BadgeCheck, BadgeX, Check, Loader, Truck } from 'lucide-react'
+import { BadgeCheck, BadgeX, Check, CheckCheck, CheckCircle2, Loader, Loader2, Truck, X } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { OrderStatus } from '@/constants/enum'
@@ -35,5 +35,14 @@ const ORDER_BADGES = {
     </Badge>
   )
 } as const
+
+export const ORDER_STATUSES = [
+  { value: '-1', label: 'Tất cả', icon: Loader2 },
+  { value: OrderStatus.Waiting.toString(), label: 'Chờ xác nhận', icon: Loader },
+  { value: OrderStatus.Confirmed.toString(), label: 'Đã xác nhận', icon: CheckCircle2 },
+  { value: OrderStatus.Delivering.toString(), label: 'Đang giao', icon: Truck },
+  { value: OrderStatus.Success.toString(), label: 'Đã giao', icon: CheckCheck },
+  { value: OrderStatus.Cancel.toString(), label: 'Đã hủy', icon: X }
+] as const
 
 export default ORDER_BADGES

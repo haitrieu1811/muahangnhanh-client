@@ -92,17 +92,11 @@ export type OrderType = {
   totalDiscount: number
   note: string
   status: OrderStatus
-  orderedAt: string
-  confirmedAt: null
-  shippedAt: null
-  canceledAt: null
-  succeededAt: null
-  ratedAt: null
   createdAt: string
   updatedAt: string
 }
 
-export type GetMyOrdersResponse = SuccessResponse<{
+export type GetOrdersResponse = SuccessResponse<{
   orders: OrderType[]
   pagination: PaginationType
 }>
@@ -113,4 +107,16 @@ export type GetOrdersReqQuery = PaginationReqQuery & {
 
 export type GetOrderResponse = SuccessResponse<{
   order: OrderType
+}>
+
+export type OrderEventType = {
+  _id: string
+  content: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type GetOrderEventsResponse = SuccessResponse<{
+  totalOrderEvents: number
+  orderEvents: OrderEventType[]
 }>

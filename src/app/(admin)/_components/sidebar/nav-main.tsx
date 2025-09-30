@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, Flag, Image, Newspaper, Tags, type LucideIcon } from 'lucide-react'
+import { ChevronRight, Flag, Image, Newspaper, NotepadText, Tags, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -27,10 +27,22 @@ const navMain: {
   }[]
 }[] = [
   {
+    title: 'Đơn hàng',
+    url: PATH.ADMIN_ORDERS,
+    icon: NotepadText,
+    isActive: true,
+    items: [
+      {
+        title: 'Danh sách',
+        url: PATH.ADMIN_ORDERS
+      }
+    ]
+  },
+  {
     title: 'Sản phẩm',
     url: '#',
     icon: Tags,
-    isActive: true,
+    isActive: false,
     items: [
       {
         title: 'Danh sách',

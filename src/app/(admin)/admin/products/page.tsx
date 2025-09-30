@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import PATH from '@/constants/path'
-import { HttpError } from '@/lib/http'
 import { dateDistance, formatCurrency } from '@/lib/utils'
 import { ProductType } from '@/types/products.types'
 
@@ -45,11 +44,7 @@ export default async function AdminProductsPage({
     })
     products = res.payload.data.products
     totalProducts = res.payload.data.pagination.totalRows
-  } catch (error) {
-    if (error instanceof HttpError) {
-      console.error(error.payload)
-    }
-  }
+  } catch {}
 
   return (
     <div className='space-y-10'>

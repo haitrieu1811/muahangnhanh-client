@@ -10,7 +10,8 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import PATH from '@/constants/path'
 import { dateDistance, formatAddress } from '@/lib/utils'
 import { Address } from '@/types/addresses.types'
-import { OrderType } from '@/types/orders.types'
+import { OrderEventType, OrderType } from '@/types/orders.types'
+import OrderEvents from '@/components/order-events'
 
 export default async function OrderDetailPage({
   params
@@ -25,6 +26,7 @@ export default async function OrderDetailPage({
   const accessToken = cookieStore.get('accessToken')?.value ?? ''
 
   let order: OrderType | null = null
+  let orderEvents: OrderEventType[] = []
 
   try {
     const res = await ordersApis.getOrderfromNextServerToServer({
@@ -35,6 +37,14 @@ export default async function OrderDetailPage({
   } catch {}
 
   if (!order) return null
+
+  try {
+    const res = await ordersApis.getOrderEventsFromNextServerToServer({
+      accessToken,
+      orderId: order._id
+    })
+    orderEvents = res.payload.data.orderEvents
+  } catch {}
 
   return (
     <Card>
@@ -59,8 +69,9 @@ export default async function OrderDetailPage({
           className='h-[3px] mb-8'
         />
         <div className='space-y-8'>
-          {/* Thông tin nhận hàng - Timeline */}
+          {/* Thông tin nhận hàng - Dòng thời gian */}
           <div className='grid grid-cols-12 gap-8'>
+            {/* Thông tin nhận hàng */}
             <div className='col-span-4'>
               <h3>Địa chỉ nhận hàng</h3>
               <div className='mt-4 text-sm space-y-2'>
@@ -68,6 +79,11 @@ export default async function OrderDetailPage({
                 <div className='text-muted-foreground'>{order.address.phoneNumber}</div>
                 <div className='text-muted-foreground'>{formatAddress(order.address as Address)}</div>
               </div>
+            </div>
+            {/* Dòng thời gian */}
+            <div className='col-span-8 space-y-4'>
+              <h3>Dòng thời gian</h3>
+              <OrderEvents orderEvents={orderEvents} />
             </div>
           </div>
           {/* Sản phẩm đặt mua */}

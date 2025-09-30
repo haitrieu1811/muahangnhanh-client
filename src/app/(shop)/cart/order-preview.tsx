@@ -21,7 +21,7 @@ export default function OrderPreview() {
   const queryClient = useQueryClient()
 
   const { orderAddress, note, shippingMethod, shippingFee, setStep } = React.useContext(CartContext)
-  const { checkedCartItems, totalCheckedCartAmount, totalCheckedCartItems } = useAppContext()
+  const { checkedCartItems, totalCheckedCartAmount } = useAppContext()
 
   const [isConfirmed, setIsConfirmed] = React.useState<CheckedState>(false)
 
@@ -35,6 +35,11 @@ export default function OrderPreview() {
     }
   })
 
+  const totalCheckoutItems = React.useMemo(
+    () => checkedCartItems.reduce((acc, item) => (acc += item.quantity), 0),
+    [checkedCartItems]
+  )
+
   const handleCheckout = () => {
     if (!orderAddress || !isConfirmed) return
     createOrderMutation.mutate({
@@ -44,7 +49,7 @@ export default function OrderPreview() {
       shippingMethod,
       shippingFee,
       totalAmount: totalCheckedCartAmount + shippingFee,
-      totalItems: totalCheckedCartItems
+      totalItems: totalCheckoutItems
     })
   }
 

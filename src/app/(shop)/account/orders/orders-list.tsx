@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { CheckCheck, CheckCircle2, EllipsisVertical, Loader, Loader2, Truck, X } from 'lucide-react'
+import { EllipsisVertical, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 
 import ordersApis from '@/apis/orders.apis'
-import ORDER_BADGES from '@/components/order-badges'
+import ORDER_BADGES, { ORDER_STATUSES } from '@/components/order-badges'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -18,15 +18,6 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { OrderStatus } from '@/constants/enum'
 import PATH from '@/constants/path'
 import { OrderType } from '@/types/orders.types'
-
-const ORDER_STATUSES = [
-  { value: '-1', label: 'Tất cả', icon: Loader2 },
-  { value: OrderStatus.Waiting.toString(), label: 'Chờ xác nhận', icon: Loader },
-  { value: OrderStatus.Confirmed.toString(), label: 'Đã xác nhận', icon: CheckCircle2 },
-  { value: OrderStatus.Delivering.toString(), label: 'Đang giao', icon: Truck },
-  { value: OrderStatus.Success.toString(), label: 'Đã giao', icon: CheckCheck },
-  { value: OrderStatus.Cancel.toString(), label: 'Đã hủy', icon: X }
-] as const
 
 export default function OrdersList({ orders, totalOrders }: { orders: OrderType[]; totalOrders: number }) {
   const router = useRouter()
