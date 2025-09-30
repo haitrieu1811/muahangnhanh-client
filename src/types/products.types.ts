@@ -79,6 +79,7 @@ export type ProductCategoryType = {
   thumbnail: string
   thumbnailId: string
   status: ProductCategoryStatus
+  totalProducts: number
   createdAt: string
   updatedAt: string
 }

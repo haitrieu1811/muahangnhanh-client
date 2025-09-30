@@ -33,6 +33,7 @@ export default async function ProductCategoriesPage() {
                 <TableRow>
                   <TableHead>Ảnh</TableHead>
                   <TableHead>Tên</TableHead>
+                  <TableHead>Số sản phẩm</TableHead>
                   <TableHead>Tạo lúc</TableHead>
                   <TableHead>Cập nhật lúc</TableHead>
                   <TableHead className='text-right'>Thao tác</TableHead>
@@ -51,6 +52,7 @@ export default async function ProductCategoriesPage() {
                       />
                     </TableCell>
                     <TableCell>{productCategory.name}</TableCell>
+                    <TableCell>{productCategory.totalProducts} sản phẩm</TableCell>
                     <TableCell>{dateDistance(productCategory.createdAt)}</TableCell>
                     <TableCell>{dateDistance(productCategory.updatedAt)}</TableCell>
                     <TableCell>

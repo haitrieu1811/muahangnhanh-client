@@ -21,6 +21,7 @@ import {
 } from '@/lib/storage'
 import { jwtDecode, normalizePath } from '@/lib/utils'
 import { GetMeResponse, LoginResponse } from '@/types/users.types'
+import { toast } from 'sonner'
 
 export const isClient = () => typeof window !== 'undefined'
 
@@ -170,6 +171,9 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     // Các lỗi khác
     else {
       console.error(data)
+      if (isClient()) {
+        toast.error((data.payload as any).message)
+      }
       throw new HttpError({
         status: res.status,
         payload

@@ -8,8 +8,8 @@ import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 
 import { EntityError } from '@/lib/http'
-import { TokenPayload } from '@/types/utils.types'
 import { Address } from '@/types/addresses.types'
+import { TokenPayload } from '@/types/utils.types'
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))

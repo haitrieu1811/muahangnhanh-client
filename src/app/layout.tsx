@@ -30,7 +30,7 @@ export default function RootLayout({
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
             <AppProvider>
               {children}
-              <Toaster richColors position='bottom-left' />
+              <Toaster richColors position='top-center' />
               <NextTopLoader showSpinner={false} shadow={false} />
             </AppProvider>
           </ThemeProvider>
