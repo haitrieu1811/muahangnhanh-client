@@ -7,6 +7,7 @@ import productsApis from '@/apis/products.apis'
 import usersApis from '@/apis/users.apis'
 import HeaderAccount from '@/app/(shop)/_components/header/account'
 import HeaderSearch from '@/app/(shop)/_components/header/search'
+import Logo from '@/components/logo'
 import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -36,15 +37,13 @@ export default async function ShopHeader() {
       <div className='container flex items-center justify-between space-x-10 h-14'>
         <div className='flex items-center space-x-8'>
           {/* Logo */}
-          <Link href={PATH.HOME} className='font-black text-3xl border-b-4 border-main dark:border-main-foreground'>
-            MHNH
-          </Link>
+          <Logo />
           {/* Danh mục */}
           <Dialog>
             <DialogTrigger asChild>
               <Button variant='secondary'>
                 <Menu />
-                Danh mục
+                Danh mục sản phẩm
               </Button>
             </DialogTrigger>
             <DialogContent className='max-h-[90vh] overflow-y-auto'>
@@ -74,12 +73,10 @@ export default async function ShopHeader() {
             </DialogContent>
           </Dialog>
         </div>
-
         {/* Tìm kiếm */}
         <div className='flex-1'>
           <HeaderSearch />
         </div>
-
         <div className='flex items-center space-x-4'>
           <HeaderAccount user={user} />
           <ModeToggle />

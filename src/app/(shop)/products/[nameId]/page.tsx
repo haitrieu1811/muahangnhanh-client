@@ -40,7 +40,7 @@ export default async function ProductDetailPage({
   if (!product) return null
 
   return (
-    <div className='container mt-4 space-y-4'>
+    <div className='container py-4 space-y-4'>
       <Card>
         <CardContent>
           <div className='grid grid-cols-12 gap-10'>
