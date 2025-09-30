@@ -27,6 +27,7 @@ export default async function OrderDetailPage({
 
   let order: OrderType | null = null
   let orderEvents: OrderEventType[] = []
+  let totalOrderEvents: number = 0
 
   try {
     const res = await ordersApis.getOrderfromNextServerToServer({
@@ -44,6 +45,7 @@ export default async function OrderDetailPage({
       orderId: order._id
     })
     orderEvents = res.payload.data.orderEvents
+    totalOrderEvents = res.payload.data.totalOrderEvents
   } catch {}
 
   return (
@@ -83,7 +85,8 @@ export default async function OrderDetailPage({
             {/* Dòng thời gian */}
             <div className='col-span-8 space-y-4'>
               <h3>Dòng thời gian</h3>
-              <OrderEvents orderEvents={orderEvents} />
+              {totalOrderEvents > 0 && <OrderEvents orderEvents={orderEvents} />}
+              {totalOrderEvents === 0 && <p className='text-sm'>Chưa có sự kiện nào.</p>}
             </div>
           </div>
           {/* Sản phẩm đặt mua */}

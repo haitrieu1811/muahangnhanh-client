@@ -13,13 +13,14 @@ export default function HeaderCart() {
   const { extendedCartItems, totalCartItems, totalCartAmount } = useAppContext()
   return (
     <React.Fragment>
+      {/* Danh sách sản phẩm trong giỏ hàng */}
       {totalCartItems > 0 && (
         <React.Fragment>
           <div className='flex justify-between items-center space-x-10 px-4 py-2'>
             <h3 className='tracking-tight'>Giỏ hàng</h3>
             <div className='px-4 py-2 flex items-center space-x-6'>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <div className='flex items-center space-x-1'>
                     <Handbag className='text-highlight size-4' />
                     <span className='text-sm'>{totalCartItems}</span>
@@ -28,7 +29,7 @@ export default function HeaderCart() {
                 <TooltipContent>Tổng sản phẩm</TooltipContent>
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <div className='flex items-center space-x-1'>
                     <Banknote className='text-highlight size-4' />
                     <span className='text-sm'>{formatCurrency(totalCartAmount)}&#8363;</span>
@@ -59,7 +60,7 @@ export default function HeaderCart() {
                   <h3 className='text-sm font-normal line-clamp-2'>{cartItem.product.name}</h3>
                   <div className='flex items-center space-x-1'>
                     <span className='text-sm text-highlight font-medium'>
-                      {formatCurrency(cartItem.unitPriceAfterDiscount)}&#8363;
+                      {formatCurrency(cartItem.product.priceAfterDiscount)}&#8363;
                     </span>
                     <X className='size-3' />
                     <span className='text-sm font-medium'>{cartItem.quantity}</span>
@@ -76,6 +77,7 @@ export default function HeaderCart() {
         </React.Fragment>
       )}
 
+      {/* Giỏ hàng trống */}
       {totalCartItems === 0 && (
         <div className='flex flex-col justify-center items-center p-4 space-y-2'>
           <Handbag className='size-10 stroke-1 text-highlight' />
