@@ -33,50 +33,52 @@ export default async function HomePage() {
   return (
     <div className='container py-4 space-y-4'>
       {/* Carousel */}
-      <Carousel>
-        <CarouselContent>
-          <CarouselItem className='rounded-md'>
-            <div className='bg-blue-400 rounded-md flex items-center justify-between space-x-10'>
-              <div className='flex-1 pl-20 space-y-4 text-white'>
-                <h3 className='text-2xl tracking-tight'>Học HTML CSS cho người mới</h3>
-                <p>
-                  Thực hành dự án với Figma, hàng trăm bài tập, hướng dẫn 100% bởi Sơn Đặng, tặng kèm Flashcards, v.v.
-                </p>
-                <Button variant='secondary' className='rounded-full'>
-                  Học thử miễn phí{' '}
-                </Button>
+      <div className='px-4 md:px-0'>
+        <Carousel>
+          <CarouselContent>
+            <CarouselItem className='rounded-md'>
+              <div className='bg-blue-400 h-full rounded-md flex items-center justify-between space-x-10'>
+                <div className='flex-1 pl-4 lg:pl-20 py-4 space-y-4 text-white'>
+                  <h3 className='text-2xl tracking-tight'>Học HTML CSS cho người mới</h3>
+                  <p>
+                    Thực hành dự án với Figma, hàng trăm bài tập, hướng dẫn 100% bởi Sơn Đặng, tặng kèm Flashcards, v.v.
+                  </p>
+                  <Button variant='secondary' className='rounded-full'>
+                    Học thử miễn phí{' '}
+                  </Button>
+                </div>
+                <Image
+                  width={500}
+                  height={500}
+                  src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c01.png'}
+                  alt=''
+                  className='h-[240px] object-contain shrink-0 hidden lg:block'
+                />
               </div>
-              <Image
-                width={500}
-                height={500}
-                src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c01.png'}
-                alt=''
-                className='h-[240px] object-contain shrink-0'
-              />
-            </div>
-          </CarouselItem>
-          <CarouselItem className='rounded-md'>
-            <div className='bg-main rounded-md flex items-center justify-between space-x-10'>
-              <div className='flex-1 pl-20 space-y-4 text-white'>
-                <h3 className='text-2xl tracking-tight'>Mở bán khóa Javascript Pro</h3>
-                <p>Từ 08/08/2024 khóa học sẽ có giá 1.399k. Khi khóa học hoàn thiện sẽ trở về giá gốc.</p>
-                <Button variant='secondary' className='rounded-full'>
-                  Học thử miễn phí{' '}
-                </Button>
+            </CarouselItem>
+            <CarouselItem className='rounded-md'>
+              <div className='bg-main h-full rounded-md flex items-center justify-between space-x-10'>
+                <div className='flex-1 pl-4 lg:pl-20 py-4 space-y-4 text-white'>
+                  <h3 className='text-2xl tracking-tight'>Mở bán khóa Javascript Pro</h3>
+                  <p>Từ 08/08/2024 khóa học sẽ có giá 1.399k. Khi khóa học hoàn thiện sẽ trở về giá gốc.</p>
+                  <Button variant='secondary' className='rounded-full'>
+                    Học thử miễn phí{' '}
+                  </Button>
+                </div>
+                <Image
+                  width={500}
+                  height={500}
+                  src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c02.png'}
+                  alt=''
+                  className='h-[240px] object-contain shrink-0 hidden lg:block'
+                />
               </div>
-              <Image
-                width={500}
-                height={500}
-                src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c02.png'}
-                alt=''
-                className='h-[240px] object-contain shrink-0'
-              />
-            </div>
-          </CarouselItem>
-        </CarouselContent>
-        <CarouselPrevious variant='secondary' className='-left-4' />
-        <CarouselNext variant='secondary' className='-right-4' />
-      </Carousel>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious variant='secondary' className='-left-4' />
+          <CarouselNext variant='secondary' className='-right-4' />
+        </Carousel>
+      </div>
       {/* Danh mục nổi bật */}
       <Card>
         <CardHeader>
@@ -88,7 +90,7 @@ export default async function HomePage() {
               <Link
                 key={productCategory._id}
                 href={`${PATH.PRODUCTS}?categoryIds=${productCategory._id}`}
-                className='col-span-1 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
+                className='col-span-4 md:col-span-2 lg:col-span-1 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
               >
                 <Image
                   width={50}
@@ -116,7 +118,7 @@ export default async function HomePage() {
         <CardContent>
           <div className='grid grid-cols-12 gap-4'>
             {products.map((product) => (
-              <div key={product._id} className='col-span-2'>
+              <div key={product._id} className='col-span-6 md:col-span-3 lg:col-span-2'>
                 <ProductItem product={product} />
               </div>
             ))}
@@ -136,14 +138,14 @@ export default async function HomePage() {
         <CardContent>
           <div className='grid grid-cols-12 gap-4'>
             {blogs.slice(0, 4).map((blog) => (
-              <div key={blog._id} className='col-span-3'>
+              <div key={blog._id} className='col-span-12 md:col-span-6 lg:col-span-3'>
                 <Link href={'#'} className='group relative block rounded-md overflow-hidden space-y-2'>
                   <div className='rounded-md overflow-hidden'>
                     <Image
                       width={200}
                       height={200}
                       src={blog.thumbnail.url}
-                      alt=''
+                      alt={blog.title}
                       className='w-full aspect-video object-cover group-hover:scale-105 duration-100'
                     />
                   </div>

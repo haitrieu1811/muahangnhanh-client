@@ -14,7 +14,7 @@ export default function HeaderNotificationsPopover({ children }: { children: Rea
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent align='end' className='w-[400px] p-0'>
+      <PopoverContent align='end' className='w-[400px] max-w-screen p-0'>
         {totalNotifications > 0 && (
           <React.Fragment>
             <div className='flex justify-between items-center space-x-10 px-4 py-2'>

@@ -16,7 +16,7 @@ export default function HeaderCartPopover({ children }: { children: React.ReactN
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent align='end' className='p-0 w-[400px]'>
+      <PopoverContent align='end' className='p-0 w-[400px] max-w-screen'>
         {/* Danh sách sản phẩm trong giỏ hàng */}
         {totalCartItems > 0 && (
           <React.Fragment>
