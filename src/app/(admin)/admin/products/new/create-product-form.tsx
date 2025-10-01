@@ -124,9 +124,9 @@ export default function CreateProductForm({
     <React.Fragment>
       <Form {...form}>
         <form onSubmit={handleSubmit}>
-          <div className='grid grid-cols-12 gap-4'>
+          <div className='flex items-start gap-4'>
             {/* Cấu hình - Hình ảnh */}
-            <div className='col-span-4 grid gap-4'>
+            <div className='basis-1/3 grid gap-4'>
               {/* Hình ảnh */}
               <Card>
                 <CardHeader>
@@ -291,80 +291,72 @@ export default function CreateProductForm({
               </Card>
             </div>
             {/* Thông tin chung - giá tiền */}
-            <div className='col-span-8 grid gap-8'>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Thông tin chung</CardTitle>
-                </CardHeader>
-                <CardContent className='space-y-8'>
-                  {/* Tên */}
-                  <FormField
-                    control={form.control}
-                    name='name'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tên</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {/* Mô tả */}
-                  <FormField
-                    control={form.control}
-                    name='description'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Mô tả</FormLabel>
-                        <FormControl>
-                          <RichTextEditor content={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Giá tiền</CardTitle>
-                </CardHeader>
-                <CardContent className='space-y-8'>
-                  {/* Giá gốc */}
-                  <FormField
-                    control={form.control}
-                    name='price'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá gốc</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {/* Giá sau khi giảm */}
-                  <FormField
-                    control={form.control}
-                    name='priceAfterDiscount'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Giá sau khi giảm</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-            </div>
+            <Card className='flex-1'>
+              <CardHeader>
+                <CardTitle>Thông tin chung</CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-8'>
+                {/* Tên */}
+                <FormField
+                  control={form.control}
+                  name='name'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tên</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Giá gốc */}
+                <FormField
+                  control={form.control}
+                  name='price'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giá gốc</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Giá sau khi giảm */}
+                <FormField
+                  control={form.control}
+                  name='priceAfterDiscount'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giá sau khi giảm</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormDescription>Mặc định nếu không điền thì giá sau khi giảm sẽ bằng giá gốc</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Mô tả */}
+                <FormField
+                  control={form.control}
+                  name='description'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mô tả</FormLabel>
+                      <FormControl>
+                        <RichTextEditor content={field.value} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
           </div>
-          <div className='sticky bottom-0 inset-x-0 bg-background flex justify-center p-4 space-x-2'>
+          <div className='sticky bottom-0 inset-x-0 z-10 bg-background flex justify-center p-4 space-x-2'>
             <Button type='button' variant='outline' onClick={() => router.back()}>
               Quay lại
             </Button>

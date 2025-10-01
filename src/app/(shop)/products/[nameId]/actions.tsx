@@ -29,13 +29,12 @@ export default function ProductDetailActions({ productId }: { productId: string 
     <div className='space-y-4'>
       <div className='flex items-center space-x-4'>
         <QuantityController
-          max={10}
+          max={100}
           onDecrease={(value) => setQuantity(value)}
           onIncrease={(value) => setQuantity(value)}
           onBlur={(value) => setQuantity(value)}
           onTyping={(value) => setQuantity(value)}
         />
-        <p className='text-sm'>Còn 1 sản phẩm</p>
       </div>
       <div className='flex space-x-2'>
         <Button
