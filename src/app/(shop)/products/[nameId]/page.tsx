@@ -43,19 +43,19 @@ export default async function ProductDetailPage({
     <div className='container py-4 space-y-4'>
       <Card>
         <CardContent>
-          <div className='grid grid-cols-12 gap-10'>
-            <div className='col-span-5'>
+          <div className='grid grid-cols-12 gap-2 md:gap-4 lg:gap-10'>
+            <div className='col-span-12 md:col-span-6 lg:col-span-5'>
               <ProductDetailPhotos product={product} />
             </div>
-            <div className='col-span-7 space-y-6'>
+            <div className='col-span-12 md:col-span-6 lg:col-span-7 space-y-6'>
               <h1>{product.name}</h1>
-              <div className='flex items-center space-x-4'>
+              <div className='grid gap-2 md:gap-0 md:flex md:items-center md:space-x-4'>
                 {product.priceAfterDiscount < product.price ? (
                   <React.Fragment>
-                    <div className='font-semibold text-3xl text-main dark:text-main-foreground'>
+                    <span className='font-semibold text-3xl text-main dark:text-main-foreground'>
                       {formatCurrency(product.priceAfterDiscount)}&#8363;
-                    </div>
-                    <div className='text-muted-foreground line-through'>{formatCurrency(product.price)}&#8363;</div>
+                    </span>
+                    <span className='text-muted-foreground line-through'>{formatCurrency(product.price)}&#8363;</span>
                     <Badge className='bg-main dark:bg-main-foreground'>
                       {rateSale(product.price, product.priceAfterDiscount)}%
                     </Badge>
@@ -76,7 +76,7 @@ export default async function ProductDetailPage({
           </div>
         </CardContent>
       </Card>
-      <div className='flex items-start space-x-4'>
+      <div className='flex flex-wrap items-start space-x-0 lg:space-x-4 space-y-4 lg:space-y-0'>
         <Card className='flex-1'>
           <CardHeader>
             <CardTitle className='text-xl'>Mô tả sản phẩm</CardTitle>
@@ -85,7 +85,7 @@ export default async function ProductDetailPage({
             <Prose html={product.description} />
           </CardContent>
         </Card>
-        <Card className='basis-1/3'>
+        <Card className='basis-full lg:basis-1/3'>
           <CardHeader>
             <CardTitle className='text-xl'>Bài viết</CardTitle>
             <CardAction>

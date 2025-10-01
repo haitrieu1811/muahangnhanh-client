@@ -27,7 +27,7 @@ export default function ProductDetailPhotos({ product }: { product: ProductType 
         >
           <CarouselContent className='-ml-2'>
             {product.photos.map((photo) => (
-              <CarouselItem key={photo._id} className='basis-1/8 pl-2'>
+              <CarouselItem key={photo._id} className='basis-1/4 md:basis-1/6 lg:basis-1/8 pl-2'>
                 <Link data-fancybox='gallery' href={photo.url}>
                   <Image
                     width={50}
