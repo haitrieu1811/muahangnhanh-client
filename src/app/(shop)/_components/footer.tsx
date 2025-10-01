@@ -55,7 +55,7 @@ const FOOTERS = [
 
 export default function ShopFooter() {
   return (
-    <footer className='bg-card border-t'>
+    <footer className='bg-card border-t mb-14 lg:mb-0'>
       <div className='container p-4 py-6 lg:py-8'>
         <div className='md:flex md:justify-between'>
           <div className='mb-6 md:mb-0'>

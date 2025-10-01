@@ -1,17 +1,19 @@
-import { Menu } from 'lucide-react'
+import { Bell, Handbag, Menu, Search } from 'lucide-react'
 import { cookies } from 'next/headers'
-import Image from 'next/image'
-import Link from 'next/link'
+import React from 'react'
 
 import productsApis from '@/apis/products.apis'
 import usersApis from '@/apis/users.apis'
 import HeaderAccount from '@/app/(shop)/_components/header/account'
+import HeaderCartPopover from '@/app/(shop)/_components/header/cart-popover'
+import CategoriesDialog from '@/app/(shop)/_components/header/categories-dialog'
+import MobileNav from '@/app/(shop)/_components/header/mobile-nav'
+import HeaderNotificationsPopover from '@/app/(shop)/_components/header/notifications-popover'
 import HeaderSearch from '@/app/(shop)/_components/header/search'
 import Logo from '@/components/logo'
 import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import PATH from '@/constants/path'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ProductCategoryType } from '@/types/products.types'
 import { User } from '@/types/users.types'
 
@@ -33,55 +35,74 @@ export default async function ShopHeader() {
   } catch {}
 
   return (
-    <header className='bg-card border-b sticky top-0 inset-x-0 z-10'>
-      <div className='container flex items-center justify-between space-x-10 h-14'>
-        <div className='flex items-center space-x-8'>
-          {/* Logo */}
-          <Logo />
-          {/* Danh mục */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant='secondary'>
+    <React.Fragment>
+      {/* PC */}
+      <header className='hidden lg:block bg-card border-b sticky top-0 inset-x-0 z-10'>
+        <div className='container flex items-center justify-between space-x-10 h-14 px-4 lg:px-0'>
+          <div className='flex items-center space-x-8'>
+            {/* Logo */}
+            <Logo />
+            {/* Danh mục */}
+            <CategoriesDialog categories={productCategories}>
+              <Button variant='outline'>
                 <Menu />
                 Danh mục sản phẩm
               </Button>
-            </DialogTrigger>
-            <DialogContent className='max-h-[90vh] overflow-y-auto'>
-              <DialogHeader>
-                <DialogTitle>Danh mục sản phẩm</DialogTitle>
-              </DialogHeader>
-              {productCategories.length > 0 && (
-                <div className='grid grid-cols-10 gap-1 mt-4'>
-                  {productCategories.map((productCategory) => (
-                    <Link
-                      key={productCategory._id}
-                      href={`${PATH.PRODUCTS}?categoryIds=${productCategory._id}`}
-                      className='col-span-2 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
-                    >
-                      <Image
-                        width={50}
-                        height={50}
-                        src={productCategory.thumbnail}
-                        alt={productCategory.name}
-                        className='size-[50px] rounded-md object-cover'
-                      />
-                      <p className='text-center text-sm'>{productCategory.name}</p>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </DialogContent>
-          </Dialog>
+            </CategoriesDialog>
+          </div>
+          {/* Tìm kiếm */}
+          <div className='flex-1'>
+            <HeaderSearch />
+          </div>
+          {/* Giỏ hàng - thông báo - tài khoản */}
+          <div className='flex items-center space-x-4'>
+            <HeaderAccount user={user} accessToken={accessToken} />
+            <ModeToggle />
+          </div>
         </div>
-        {/* Tìm kiếm */}
-        <div className='flex-1'>
-          <HeaderSearch />
+      </header>
+      {/* Mobile */}
+      <header className='block lg:hidden border-b bg-card sticky top-0 inset-x-0 z-10'>
+        <div className='flex justify-between items-center space-x-4 px-4 h-14'>
+          {/* Logo */}
+          <Logo />
+          <div className='flex space-x-2'>
+            {/* Tìm kiếm */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button size='icon' variant='outline'>
+                  <Search />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-screen'>
+                <HeaderSearch />
+              </PopoverContent>
+            </Popover>
+            {/* Danh mục sản phẩm */}
+            <CategoriesDialog categories={productCategories}>
+              <Button size='icon' variant='outline'>
+                <Menu />
+              </Button>
+            </CategoriesDialog>
+            {/* Thông báo */}
+            <HeaderNotificationsPopover>
+              <Button size='icon' variant='outline'>
+                <Bell />
+              </Button>
+            </HeaderNotificationsPopover>
+            {/* Giỏ hàng */}
+            <HeaderCartPopover>
+              <Button size='icon' variant='outline'>
+                <Handbag />
+              </Button>
+            </HeaderCartPopover>
+            {/* Mode toggle */}
+            <ModeToggle />
+          </div>
         </div>
-        <div className='flex items-center space-x-4'>
-          <HeaderAccount user={user} accessToken={accessToken} />
-          <ModeToggle />
-        </div>
-      </div>
-    </header>
+      </header>
+      {/* Mobile nav */}
+      <MobileNav />
+    </React.Fragment>
   )
 }

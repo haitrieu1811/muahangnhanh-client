@@ -4,8 +4,8 @@ import { Bell, Handbag } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-import HeaderCart from '@/app/(shop)/_components/header/cart'
-import HeaderNotifications from '@/app/(shop)/_components/header/notifications'
+import HeaderCartPopover from '@/app/(shop)/_components/header/cart-popover'
+import HeaderNotificationsPopover from '@/app/(shop)/_components/header/notifications-popover'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -17,7 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
@@ -50,37 +49,25 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
         <div className='flex items-center space-x-4'>
           <div className='flex space-x-1'>
             {/* Thông báo */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant='outline'>
-                  <Bell />
-                  Thông báo
-                  <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
-                    99
-                  </Badge>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align='end' className='w-[400px] p-0'>
-                <HeaderNotifications />
-              </PopoverContent>
-            </Popover>
+            <HeaderNotificationsPopover>
+              <Button variant='outline'>
+                <Bell />
+                Thông báo
+                <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>99</Badge>
+              </Button>
+            </HeaderNotificationsPopover>
             {/* Giỏ hàng */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant='outline'>
-                  <Handbag />
-                  Giỏ hàng
-                  {totalCartItems > 0 && (
-                    <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
-                      {totalCartItems > 99 ? '99+' : totalCartItems}
-                    </Badge>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align='end' className='p-0 w-[400px]'>
-                <HeaderCart />
-              </PopoverContent>
-            </Popover>
+            <HeaderCartPopover>
+              <Button variant='outline'>
+                <Handbag />
+                Giỏ hàng
+                {totalCartItems > 0 && (
+                  <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
+                    {totalCartItems > 99 ? '99+' : totalCartItems}
+                  </Badge>
+                )}
+              </Button>
+            </HeaderCartPopover>
           </div>
           {/* Tài khoản */}
           <DropdownMenu>
