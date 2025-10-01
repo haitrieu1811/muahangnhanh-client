@@ -42,8 +42,8 @@ export default function ChangePasswordForm() {
   return (
     <Form {...form}>
       <form className='grid gap-8' onSubmit={handleSubmit}>
-        <div className='grid grid-cols-12 gap-8'>
-          <div className='col-span-6'>
+        <div className='grid grid-cols-12 gap-4 md:gap-8'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='oldPassword'
@@ -58,7 +58,7 @@ export default function ChangePasswordForm() {
               )}
             />
           </div>
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='password'
@@ -73,7 +73,7 @@ export default function ChangePasswordForm() {
               )}
             />
           </div>
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='confirmPassword'

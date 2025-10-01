@@ -47,7 +47,7 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
 
   return (
     <Tabs defaultValue={status?.toString() ?? '-1'} onValueChange={(status) => handleFilterByStatus(Number(status))}>
-      <TabsList>
+      <TabsList className='flex-col md:flex-row w-full items-stretch h-auto'>
         {ORDER_STATUSES.map((orderStatus) => (
           <TabsTrigger key={orderStatus.value} value={orderStatus.value}>
             {orderStatus.label}
@@ -98,7 +98,7 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
                         name: item.product.name,
                         id: item.product._id
                       })}
-                      className='flex justify-between items-center space-x-10'
+                      className='flex flex-wrap justify-between items-center space-x-2 md:space-x-10'
                     >
                       <div className='flex flex-1 items-center space-x-4'>
                         <Image
@@ -113,7 +113,7 @@ export default function OrdersList({ orders, totalOrders }: { orders: OrderType[
                           <div className='text-muted-foreground'>Số lượng: {item.quantity}</div>
                         </div>
                       </div>
-                      <div className='text-right text-sm'>
+                      <div className='w-full md:w-auto text-right text-sm'>
                         {item.unitPriceAfterDiscount < item.unitPrice ? (
                           <React.Fragment>
                             <div className='text-highlight font-semibold'>

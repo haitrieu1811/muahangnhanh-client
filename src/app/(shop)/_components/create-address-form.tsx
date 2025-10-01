@@ -133,7 +133,7 @@ export default function CreateAddressForm({
       <form className='space-y-8' onSubmit={handleSubmit}>
         <div className='grid grid-cols-12 gap-4'>
           {/* Tên */}
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='fullName'
@@ -149,7 +149,7 @@ export default function CreateAddressForm({
             />
           </div>
           {/* Số điện thoại */}
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='phoneNumber'
@@ -167,7 +167,7 @@ export default function CreateAddressForm({
         </div>
         <div className='grid grid-cols-12 gap-4'>
           {/* Tỉnh - Thành phố */}
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='provinceId'
@@ -223,7 +223,7 @@ export default function CreateAddressForm({
             />
           </div>
           {/* Phường - Xã */}
-          <div className='col-span-6'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='communeId'

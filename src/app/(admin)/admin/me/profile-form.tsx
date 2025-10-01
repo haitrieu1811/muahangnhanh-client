@@ -80,7 +80,7 @@ export default function ProfileForm({ user }: { user: User }) {
               {user.fullName[1].toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className='flex space-x-2'>
+          <div className='grid gap-2 md:flex md:space-x-2'>
             <UploadImages />
             <SelectImages
               onSubmit={(images) => {
@@ -90,8 +90,8 @@ export default function ProfileForm({ user }: { user: User }) {
             />
           </div>
         </div>
-        <div className='grid grid-cols-12 gap-8'>
-          <div className='col-span-6'>
+        <div className='grid grid-cols-12 gap-4 md:gap-8'>
+          <div className='col-span-12 md:col-span-6'>
             <FormField
               control={form.control}
               name='fullName'
@@ -106,7 +106,7 @@ export default function ProfileForm({ user }: { user: User }) {
               )}
             />
           </div>
-          <div className='col-span-6 grid gap-2'>
+          <div className='col-span-12 md:col-span-6 grid gap-2'>
             <Label>Email</Label>
             <Input defaultValue={user.email} disabled />
             <FormDescription>Email không thể thay đổi sau khi tạo tài khoản.</FormDescription>

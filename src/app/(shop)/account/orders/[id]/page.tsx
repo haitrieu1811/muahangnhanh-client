@@ -57,7 +57,7 @@ export default async function OrderDetailPage({
         <CardDescription>Cập nhật {dateDistance(order.updatedAt)}</CardDescription>
         <CardAction>
           <div className='flex flex-col items-end space-y-2'>
-            <div className='text-muted-foreground text-sm'>Mã đơn hàng #{order.code}</div>
+            <div className='text-muted-foreground text-sm text-right'>Mã đơn hàng #{order.code}</div>
             {ORDER_BADGES[order.status]}
           </div>
         </CardAction>
@@ -72,9 +72,9 @@ export default async function OrderDetailPage({
         />
         <div className='space-y-8'>
           {/* Thông tin nhận hàng - Dòng thời gian */}
-          <div className='grid grid-cols-12 gap-8'>
+          <div className='grid grid-cols-12 gap-4 md:gap-8'>
             {/* Thông tin nhận hàng */}
-            <div className='col-span-4'>
+            <div className='col-span-12 md:col-span-4'>
               <h3>Địa chỉ nhận hàng</h3>
               <div className='mt-4 text-sm space-y-2'>
                 <div className='font-semibold'>{order.address.fullName}</div>
@@ -83,7 +83,7 @@ export default async function OrderDetailPage({
               </div>
             </div>
             {/* Dòng thời gian */}
-            <div className='col-span-8 space-y-4'>
+            <div className='col-span-12 md:col-span-8 space-y-4'>
               <h3>Dòng thời gian</h3>
               {totalOrderEvents > 0 && <OrderEvents orderEvents={orderEvents} />}
               {totalOrderEvents === 0 && <p className='text-sm'>Chưa có sự kiện nào.</p>}

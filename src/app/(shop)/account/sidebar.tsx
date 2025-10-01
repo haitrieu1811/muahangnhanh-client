@@ -34,7 +34,7 @@ const PAGES = [
 export default function AccountSidebar() {
   const pathname = usePathname()
   return (
-    <aside className='w-[240px] border rounded-md p-1 space-y-1 bg-card sticky top-18'>
+    <aside className='w-full lg:w-[240px] border lg:rounded-md p-1 space-y-1 bg-card lg:sticky lg:top-18'>
       {PAGES.map((page) => (
         <Button asChild key={page.url} variant='ghost'>
           <Link
