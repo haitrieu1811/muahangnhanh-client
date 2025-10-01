@@ -3,6 +3,56 @@ import Link from 'next/link'
 import Logo from '@/components/logo'
 import { Separator } from '@/components/ui/separator'
 
+const FOOTERS = [
+  {
+    heading: 'Frontend',
+    pages: [
+      {
+        url: 'https://ui.shadcn.com/',
+        name: 'ShadcnUI'
+      },
+      {
+        url: 'https://nextjs.org/',
+        name: 'NextJS'
+      },
+      {
+        url: 'https://tailwindcss.com/',
+        name: 'TailwindCSS'
+      }
+    ]
+  },
+  {
+    heading: 'Backend',
+    pages: [
+      {
+        url: 'https://nodejs.org/',
+        name: 'NodeJS'
+      },
+      {
+        url: 'https://expressjs.com/',
+        name: 'ExpressJS'
+      },
+      {
+        url: 'https://www.mongodb.com/',
+        name: 'MongoDB'
+      }
+    ]
+  },
+  {
+    heading: 'Theo dõi tôi',
+    pages: [
+      {
+        url: 'https://github.com/haitrieu1811',
+        name: 'Github'
+      },
+      {
+        url: 'https://www.facebook.com/tran.trieu.5074/',
+        name: 'Facebook'
+      }
+    ]
+  }
+] as const
+
 export default function ShopFooter() {
   return (
     <footer className='bg-card border-t'>
@@ -12,61 +62,20 @@ export default function ShopFooter() {
             <Logo />
           </div>
           <div className='grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3'>
-            <div>
-              <h2 className='mb-6 text-sm font-semibold uppercase'>Frontend</h2>
-              <ul className='text-muted-foreground font-medium space-y-4'>
-                <li>
-                  <Link target='_blank' href='https://ui.shadcn.com/' className='hover:underline'>
-                    ShadcnUI
-                  </Link>
-                </li>
-                <li>
-                  <Link target='_blank' href='https://nextjs.org/' className='hover:underline'>
-                    NextJS
-                  </Link>
-                </li>
-                <li>
-                  <Link target='_blank' href='https://tailwindcss.com/' className='hover:underline'>
-                    TailwindCSS
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className='mb-6 text-sm font-semibold uppercase'>Backend</h2>
-              <ul className='text-muted-foreground space-y-4 font-medium'>
-                <li>
-                  <Link target='_blank' href='https://nodejs.org/' className='hover:underline '>
-                    NodeJS
-                  </Link>
-                </li>
-                <li>
-                  <Link target='_blank' href='https://expressjs.com/' className='hover:underline '>
-                    ExpressJS
-                  </Link>
-                </li>
-                <li>
-                  <Link target='_blank' href='https://www.mongodb.com/' className='hover:underline '>
-                    MongoDB
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h2 className='mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white'>Theo dõi tôi</h2>
-              <ul className='text-muted-foreground space-y-4 font-medium'>
-                <li>
-                  <Link target='_blank' href='https://github.com/haitrieu1811' className='hover:underline'>
-                    Github
-                  </Link>
-                </li>
-                <li>
-                  <Link target='_blank' href='https://www.facebook.com/tran.trieu.5074/' className='hover:underline'>
-                    Facebook
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {FOOTERS.map((footer, index) => (
+              <div key={index}>
+                <h2 className='mb-6 text-sm font-semibold uppercase'>{footer.heading}</h2>
+                <ul className='text-muted-foreground text-sm font-medium space-y-4'>
+                  {footer.pages.map((page) => (
+                    <li key={page.url}>
+                      <Link target='_blank' href={page.url} className='hover:underline'>
+                        {page.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
         <Separator className='my-6' />

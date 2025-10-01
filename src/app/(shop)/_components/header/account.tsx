@@ -6,7 +6,7 @@ import React from 'react'
 
 import HeaderCart from '@/app/(shop)/_components/header/cart'
 import HeaderNotifications from '@/app/(shop)/_components/header/notifications'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,12 +18,16 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import useLogout from '@/hooks/use-logout'
+import { jwtDecode } from '@/lib/utils'
 import { User } from '@/types/users.types'
 
-export default function HeaderAccount({ user }: { user: User | null }) {
+export default function HeaderAccount({ user, accessToken }: { user: User | null; accessToken: string }) {
+  const { userRole } = jwtDecode(accessToken)
+
   const { handleLogout } = useLogout()
   const { totalCartItems } = useAppContext()
 
@@ -83,6 +87,10 @@ export default function HeaderAccount({ user }: { user: User | null }) {
             <DropdownMenuTrigger>
               <Avatar>
                 <AvatarImage src={user.avatar} alt={user.fullName} className='object-cover' />
+                <AvatarFallback>
+                  {user.fullName[0].toUpperCase()}
+                  {user.fullName[1].toUpperCase()}
+                </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
@@ -91,6 +99,11 @@ export default function HeaderAccount({ user }: { user: User | null }) {
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT}>Tài khoản</Link>
               </DropdownMenuItem>
+              {userRole === UserRole.Admin && (
+                <DropdownMenuItem asChild>
+                  <Link href={PATH.ADMIN}>Trang quản trị</Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT_ORDERS}>Đơn hàng của tôi</Link>
               </DropdownMenuItem>

@@ -68,19 +68,10 @@ export default function ProductsFilter({ productCategories }: { productCategorie
     router.replace(`${pathname}?${params.toString()}`)
   }, 1000)
 
-  const handleReset = (fields?: string[]) => {
-    // Xóa từng trường
-    if (fields?.length) {
-      fields.forEach((field) => {
-        params.delete(field)
-      })
-    }
-    // Xóa tất cả
-    else {
-      params.delete('categoryIds')
-      params.delete('minPrice')
-      params.delete('maxPrice')
-    }
+  const handleReset = (fields: string[]) => {
+    fields.forEach((field) => {
+      params.delete(field)
+    })
     router.replace(`${pathname}?${params.toString()}`)
   }
 
@@ -122,14 +113,6 @@ export default function ProductsFilter({ productCategories }: { productCategorie
           <Input placeholder='Đến' defaultValue={maxPrice?.toString()} onChange={handleMaxPrice} />
         </div>
       </div>
-      <Button
-        className='bg-highlight'
-        defaultValue={maxPrice?.toString()}
-        value={maxPrice?.toString()}
-        onClick={() => handleReset()}
-      >
-        Xóa tất cả
-      </Button>
     </div>
   )
 }

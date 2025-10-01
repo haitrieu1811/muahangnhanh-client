@@ -13,10 +13,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
-import { cn, handleErrorsFromServer, jwtDecode } from '@/lib/utils'
+import { cn, handleErrorsFromServer } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
@@ -38,13 +37,7 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     onSuccess: async (data) => {
       const { accessToken, refreshToken, user } = data.payload.data
       await usersApis.setTokens({ accessToken, refreshToken })
-      // Chuyển hướng sau khi đăng nhập thành công theo role
-      const decodedAccessToken = jwtDecode(accessToken)
-      if (decodedAccessToken.userRole === UserRole.Admin) {
-        router.push(PATH.ADMIN)
-      } else {
-        router.push(PATH.HOME)
-      }
+      router.push(PATH.HOME)
       setIsAuthenticated(true)
       setUser(user)
       router.refresh()

@@ -31,7 +31,7 @@ export default async function HomePage() {
   } catch {}
 
   return (
-    <div className='container py-2 space-y-4'>
+    <div className='container py-4 space-y-4'>
       {/* Carousel */}
       <Carousel>
         <CarouselContent>

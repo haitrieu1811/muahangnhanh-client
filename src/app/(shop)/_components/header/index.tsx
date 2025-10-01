@@ -78,7 +78,7 @@ export default async function ShopHeader() {
           <HeaderSearch />
         </div>
         <div className='flex items-center space-x-4'>
-          <HeaderAccount user={user} />
+          <HeaderAccount user={user} accessToken={accessToken} />
           <ModeToggle />
         </div>
       </div>
