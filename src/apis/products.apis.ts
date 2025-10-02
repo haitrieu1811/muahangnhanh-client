@@ -9,7 +9,7 @@ import {
   GetProductsReqQuery,
   GetProductsResponse
 } from '@/types/products.types'
-import { OnlyMessageResponse } from '@/types/utils.types'
+import { OnlyMessageResponse, PaginationReqQuery } from '@/types/utils.types'
 
 const productsApis = {
   getAllProducts({ query, accessToken }: { query: GetProductsReqQuery; accessToken: string }) {
@@ -42,8 +42,9 @@ const productsApis = {
     return http.delete<OnlyMessageResponse>(`/products/${id}`, {})
   },
 
-  getProductCategories() {
-    return http.get<GetProductCategoriesResponse>('/product-categories')
+  getProductCategories(query?: PaginationReqQuery) {
+    const params = new URLSearchParams(query as Record<string, string>)
+    return http.get<GetProductCategoriesResponse>(`/product-categories?${params.toString()}`)
   },
 
   createProductCategory(body: CreateProductCategoryReqBody) {

@@ -24,7 +24,9 @@ export default async function HomePage() {
 
   try {
     const [getProductCategoriesRes, getProductsRes, getBlogsRes] = await Promise.all([
-      productsApis.getProductCategories(),
+      productsApis.getProductCategories({
+        limit: 12
+      }),
       productsApis.getProducts({
         isFlashSale: true,
         isActive: true

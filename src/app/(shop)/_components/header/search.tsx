@@ -33,28 +33,26 @@ export default function HeaderSearch() {
 
   return (
     <div className='relative'>
-      <div className='relative'>
-        <div className='absolute left-0 inset-y-0 w-10 flex justify-center items-center'>
-          <Search className='stroke-1 size-4' />
-        </div>
-        <Input
-          ref={inputRef}
-          placeholder='Tìm kiếm...'
-          value={searchKeyword}
-          className='pl-10'
-          onChange={(e) => setSearchKeyword(e.target.value)}
-        />
-        {isFetching && (
-          <div className='absolute right-0 inset-y-0 w-10 flex justify-center items-center'>
-            <Loader2 className='stroke-1 size-4 animate-spin' />
-          </div>
-        )}
-        {!isFetching && searchKeyword.length > 0 && (
-          <button className='absolute right-0 inset-y-0 w-10 flex justify-center items-center' onClick={handleClear}>
-            <X className='stroke-1 size-4' />
-          </button>
-        )}
+      <div className='absolute left-0 inset-y-0 w-10 flex justify-center items-center'>
+        <Search className='stroke-1 size-4' />
       </div>
+      <Input
+        ref={inputRef}
+        placeholder='Tìm kiếm...'
+        value={searchKeyword}
+        className='pl-10'
+        onChange={(e) => setSearchKeyword(e.target.value)}
+      />
+      {isFetching && (
+        <div className='absolute right-0 inset-y-0 w-10 flex justify-center items-center'>
+          <Loader2 className='stroke-1 size-4 animate-spin' />
+        </div>
+      )}
+      {!isFetching && searchKeyword.length > 0 && (
+        <button className='absolute right-0 inset-y-0 w-10 flex justify-center items-center' onClick={handleClear}>
+          <X className='stroke-1 size-4' />
+        </button>
+      )}
       {/* Kết quả tìm kiếm */}
       {debounceSearchKeyword.trim() && !isFetching && (
         <div className='absolute top-[calc(100%+6px)] inset-x-0 rounded-md border bg-card'>

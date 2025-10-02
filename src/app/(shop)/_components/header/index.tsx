@@ -30,7 +30,9 @@ export default async function ShopHeader() {
   } catch {}
 
   try {
-    const getProductCategoriesRes = await productsApis.getProductCategories()
+    const getProductCategoriesRes = await productsApis.getProductCategories({
+      limit: 12
+    })
     productCategories = getProductCategoriesRes.payload.data.productCategories
   } catch {}
 
