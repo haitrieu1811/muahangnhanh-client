@@ -10,6 +10,7 @@ import Prose from '@/components/prose'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import PATH from '@/constants/path'
 import { formatCurrency, getIdFromNameId, rateSale } from '@/lib/utils'
 import { BlogType } from '@/types/blogs.types'
 import { ProductType } from '@/types/products.types'
@@ -22,14 +23,14 @@ export default async function ProductDetailPage({
   }>
 }) {
   const { nameId } = await params
-  const id = getIdFromNameId(nameId)
+  const productId = getIdFromNameId(nameId)
 
   let product: ProductType | null = null
   let blogs: BlogType[] = []
 
   try {
     const [getProductRes, getBlogsRes] = await Promise.all([
-      productsApis.getProduct(id),
+      productsApis.getProduct(productId),
       blogsApis.getBlogs({ limit: 5 })
     ])
 
@@ -77,6 +78,7 @@ export default async function ProductDetailPage({
         </CardContent>
       </Card>
       <div className='flex flex-wrap items-start space-x-0 lg:space-x-4 space-y-4 lg:space-y-0'>
+        {/* Mô tả */}
         <Card className='flex-1'>
           <CardHeader>
             <CardTitle className='text-xl'>Mô tả sản phẩm</CardTitle>
@@ -85,18 +87,26 @@ export default async function ProductDetailPage({
             <Prose html={product.description} />
           </CardContent>
         </Card>
+        {/* Bài viết */}
         <Card className='basis-full lg:basis-1/3'>
           <CardHeader>
             <CardTitle className='text-xl'>Bài viết</CardTitle>
             <CardAction>
-              <Button asChild variant='link' className='p-0'>
-                <Link href='#'>Xem thêm</Link>
+              <Button asChild variant='link' className='p-0 text-highlight'>
+                <Link href={PATH.BLOGS}>Xem thêm</Link>
               </Button>
             </CardAction>
           </CardHeader>
           <CardContent className='space-y-4'>
             {blogs.map((blog) => (
-              <Link key={blog._id} href={'#'} className='flex items-center space-x-2'>
+              <Link
+                key={blog._id}
+                href={PATH.BLOGS_DETAIL({
+                  name: blog.title,
+                  id: blog._id
+                })}
+                className='flex items-center space-x-2'
+              >
                 <Image
                   width={100}
                   height={100}

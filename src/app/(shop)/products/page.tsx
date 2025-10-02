@@ -79,7 +79,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         </Card>
         <Card className='flex-1'>
           <CardHeader>
-            <CardTitle className='text-2xl'>Sản phẩm</CardTitle>
+            <CardTitle className='text-2xl'>Tất cả sản phẩm</CardTitle>
             <CardAction>
               <ProductsOrder />
             </CardAction>

@@ -15,7 +15,6 @@ export default async function BlogsPage({
   }>
 }) {
   const { page } = await searchParams
-  console.log(page)
 
   let blogs: BlogType[] = []
   let totalPages: number = 0
