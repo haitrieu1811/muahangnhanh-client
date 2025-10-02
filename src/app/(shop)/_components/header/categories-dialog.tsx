@@ -1,21 +1,33 @@
+import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import PATH from '@/constants/path'
 import { ProductCategoryType } from '@/types/products.types'
 
 export default function CategoriesDialog({
   categories,
-  children
+  smallTrigger
 }: {
   categories: ProductCategoryType[]
-  children: React.ReactNode
+  smallTrigger?: boolean
 }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        {!smallTrigger ? (
+          <Button variant='outline'>
+            <Menu />
+            Danh mục sản phẩm
+          </Button>
+        ) : (
+          <Button size='icon' variant='outline'>
+            <Menu />
+          </Button>
+        )}
+      </DialogTrigger>
       <DialogContent className='max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
           <DialogTitle>Danh mục sản phẩm</DialogTitle>

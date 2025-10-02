@@ -1,4 +1,4 @@
-import { Bell, Handbag, Menu, Search } from 'lucide-react'
+import { Bell, Handbag, Search } from 'lucide-react'
 import { cookies } from 'next/headers'
 import React from 'react'
 
@@ -30,9 +30,7 @@ export default async function ShopHeader() {
   } catch {}
 
   try {
-    const getProductCategoriesRes = await productsApis.getProductCategories({
-      limit: 12
-    })
+    const getProductCategoriesRes = await productsApis.getProductCategories()
     productCategories = getProductCategoriesRes.payload.data.productCategories
   } catch {}
 
@@ -45,12 +43,7 @@ export default async function ShopHeader() {
             {/* Logo */}
             <Logo />
             {/* Danh mục */}
-            <CategoriesDialog categories={productCategories}>
-              <Button variant='outline'>
-                <Menu />
-                Danh mục sản phẩm
-              </Button>
-            </CategoriesDialog>
+            <CategoriesDialog categories={productCategories} />
           </div>
           {/* Tìm kiếm */}
           <div className='flex-1'>
@@ -81,11 +74,7 @@ export default async function ShopHeader() {
               </PopoverContent>
             </Popover>
             {/* Danh mục sản phẩm */}
-            <CategoriesDialog categories={productCategories}>
-              <Button size='icon' variant='outline'>
-                <Menu />
-              </Button>
-            </CategoriesDialog>
+            <CategoriesDialog smallTrigger categories={productCategories} />
             {/* Thông báo */}
             <HeaderNotificationsPopover>
               <Button size='icon' variant='outline'>
