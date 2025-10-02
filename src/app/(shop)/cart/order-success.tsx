@@ -11,15 +11,15 @@ export default function OrderSuccess() {
       <p className='text-center text-sm font-medium px-10'>
         Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được tiếp nhận và đang được xử lý.
       </p>
-      <div className='flex space-x-2'>
+      <div className='flex flex-wrap md:space-x-2 space-y-2 md:space-y-0'>
         <Button
           asChild
           variant='outline'
-          className='border-main dark:border-main-foreground text-main dark:text-main-foreground hover:text-main'
+          className='border-main dark:border-main-foreground text-main dark:text-main-foreground hover:text-main w-full md:w-auto'
         >
           <Link href={PATH.HOME}>Quay về trang chủ</Link>
         </Button>
-        <Button asChild className='bg-highlight'>
+        <Button asChild className='bg-highlight w-full md:w-auto'>
           <Link href={PATH.ACCOUNT_ORDERS}>Xem đơn hàng</Link>
         </Button>
       </div>

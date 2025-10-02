@@ -90,23 +90,23 @@ export default function CartList() {
               return (
                 <div
                   key={cartItem._id}
-                  className={cn('flex space-x-4 rounded-md p-4', {
+                  className={cn('flex flex-wrap items-center space-x-4 rounded-md p-4', {
                     'bg-muted': cartItem.isChecked,
                     'border-2 border-destructive': !isActive
                   })}
                 >
-                  <div className='flex items-center'>
-                    <Checkbox
-                      disabled={!isActive}
-                      checked={cartItem.isChecked}
-                      onCheckedChange={(isChecked) =>
-                        handleCheck({
-                          isChecked: isChecked as boolean,
-                          cartItemId: cartItem._id
-                        })
-                      }
-                    />
-                  </div>
+                  {/* Checkbox */}
+                  <Checkbox
+                    disabled={!isActive}
+                    checked={cartItem.isChecked}
+                    onCheckedChange={(isChecked) =>
+                      handleCheck({
+                        isChecked: isChecked as boolean,
+                        cartItemId: cartItem._id
+                      })
+                    }
+                  />
+                  {/* Hỉnh ảnh */}
                   <Link
                     href={PATH.PRODUCTS_DETAIL({
                       name: cartItem.product.name,
@@ -119,9 +119,10 @@ export default function CartList() {
                       height={100}
                       src={cartItem.product.thumbnail}
                       alt={cartItem.product.name}
-                      className='size-[80px] aspect-square object-cover rounded-md'
+                      className='size-10 md:size-[80px] aspect-square object-cover rounded-md'
                     />
                   </Link>
+                  {/* Tên - Xóa sản phẩm */}
                   <div className='flex-1'>
                     <Link
                       href={PATH.PRODUCTS_DETAIL({
@@ -141,7 +142,8 @@ export default function CartList() {
                     </Button>
                     {!isActive && <p className='text-sm text-muted-foreground'>Tạm ngừng hoạt động</p>}
                   </div>
-                  <div className='flex flex-col items-end space-y-2'>
+                  {/* Giá và cập nhật số lượng */}
+                  <div className='flex flex-col items-end space-y-2 w-full md:w-auto'>
                     {cartItem.product.priceAfterDiscount < cartItem.product.price ? (
                       <div className='text-right'>
                         <div className='font-semibold text-main dark:text-main-foreground'>
@@ -225,7 +227,7 @@ export default function CartList() {
             variant='outline'
             className='border-main dark:border-main-foreground text-main dark:text-main-foreground hover:text-main'
           >
-            <Link href={PATH.HOME}>Bắt đầu mua hàng</Link>
+            <Link href={PATH.PRODUCTS}>Bắt đầu mua hàng</Link>
           </Button>
         </div>
       )}

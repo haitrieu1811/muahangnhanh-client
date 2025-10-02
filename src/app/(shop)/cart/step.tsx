@@ -43,7 +43,7 @@ export default function CartStep() {
       {/* Nếu đang ở bước giỏ hàng thì hiển thị nút "Mua thêm sản phẩm khác" */}
       {cartStep === 'list' && (
         <Button asChild variant='link' className='text-main dark:text-main-foreground'>
-          <Link href={PATH.HOME}>Mua thêm sản phẩm khác</Link>
+          <Link href={PATH.PRODUCTS}>Mua thêm sản phẩm khác</Link>
         </Button>
       )}
       {/* Nếu không phải bước giỏ hàng thì hiển thị nút "Quay lại" */}

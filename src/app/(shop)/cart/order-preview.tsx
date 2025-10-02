@@ -76,7 +76,7 @@ export default function OrderPreview() {
         </TableBody>
       </Table>
       <h3 className='mb-2'>Sản phẩm mua</h3>
-      <Table className='border table-fixed'>
+      <Table className='border'>
         <TableHeader>
           <TableRow>
             <TableHead className='w-1/2'>Sản phẩm</TableHead>
@@ -112,6 +112,12 @@ export default function OrderPreview() {
               Tổng cộng:
             </TableCell>
             <TableCell className='font-semibold text-right'>{totalCheckedCartAmount.toLocaleString()}&#8363;</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className='text-right font-semibold'>
+              Tổng sản phẩm:
+            </TableCell>
+            <TableCell className='font-semibold text-right'>{totalCheckoutQuantity} sản phẩm</TableCell>
           </TableRow>
           <TableRow>
             <TableCell colSpan={3} className='text-right font-semibold'>

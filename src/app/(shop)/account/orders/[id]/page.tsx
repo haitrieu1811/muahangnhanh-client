@@ -135,6 +135,10 @@ export default async function OrderDetailPage({
               <div className='text-right w-[160px]'>{order.totalAmount.toLocaleString()}&#8363;</div>
             </div>
             <div className='flex items-center space-x-8'>
+              <div className='text-muted-foreground'>Tổng sản phẩm</div>
+              <div className='text-right w-[160px]'>{order.totalItems} sản phẩm</div>
+            </div>
+            <div className='flex items-center space-x-8'>
               <div className='text-muted-foreground'>Phí vận chuyển</div>
               <div className='text-right w-[160px]'>{order.shippingFee.toLocaleString()}&#8363;</div>
             </div>
