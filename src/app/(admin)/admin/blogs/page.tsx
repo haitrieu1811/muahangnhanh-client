@@ -5,6 +5,7 @@ import Link from 'next/link'
 import blogsApis from '@/apis/blogs.apis'
 import PageTitle from '@/app/(admin)/_components/page-title'
 import BlogActions from '@/app/(admin)/admin/blogs/blog-actions'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -58,7 +59,16 @@ export default async function AdminBlogsPage() {
                         className='size-[50px] aspect-square rounded-md object-cover'
                       />
                     </TableCell>
-                    <TableCell>{blog.title}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div>{blog.title}</div>
+                        {!blog.metadata && (
+                          <Badge variant='outline' className='border-yellow-500 text-yellow-500'>
+                            Bổ sung metadata
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>{dateDistance(blog.createdAt)}</TableCell>
                     <TableCell>{dateDistance(blog.updatedAt)}</TableCell>
                     <TableCell>

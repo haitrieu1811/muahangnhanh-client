@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import { convert } from 'html-to-text'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -30,24 +29,18 @@ export async function generateMetadata({
   const blogId = getIdFromNameId(nameId)
   const res = await blogsApis.getBlog(blogId)
   const blog = res.payload.data.blog
-  const description = convert(blog.content, {
-    limits: {
-      maxChildNodes: 1,
-      ellipsis: ''
-    }
-  })
   const path = PATH.BLOGS_DETAIL({
     name: blog.title,
     id: blog._id
   })
   const url = `${ENV_CONFIG.NEXT_PUBLIC_BASE_URL}/${normalizePath(path)}`
   return {
-    title: blog.title,
-    description,
+    title: blog.metadata?.title,
+    description: blog.metadata?.description,
     openGraph: {
       ...baseOpenGraph,
-      title: blog.title,
-      description,
+      title: blog.metadata?.title,
+      description: blog.metadata?.description,
       url,
       images: [
         {

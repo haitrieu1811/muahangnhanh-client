@@ -1,4 +1,3 @@
-import { convert } from 'html-to-text'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -31,24 +30,18 @@ export async function generateMetadata({
   const productId = getIdFromNameId(nameId)
   const res = await productsApis.getProduct(productId)
   const product = res.payload.data.product
-  const description = convert(product.description, {
-    limits: {
-      ellipsis: '',
-      maxChildNodes: 1
-    }
-  })
   const path = PATH.PRODUCTS_DETAIL({
     name: product.name,
     id: product._id
   })
   const url = `${ENV_CONFIG.NEXT_PUBLIC_BASE_URL}/${normalizePath(path)}`
   return {
-    title: product.name,
-    description,
+    title: product.metadata?.title,
+    description: product.metadata?.description,
     openGraph: {
       ...baseOpenGraph,
-      title: product.name,
-      description,
+      title: product.metadata?.title,
+      description: product.metadata?.description,
       url,
       images: [
         {

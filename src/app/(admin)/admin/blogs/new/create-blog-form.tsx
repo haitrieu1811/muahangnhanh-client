@@ -13,6 +13,7 @@ import blogsApis from '@/apis/blogs.apis'
 import RichTextEditor from '@/components/rich-text-editor'
 import SelectImages, { ImageStateType } from '@/components/select-images'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -80,61 +81,65 @@ export default function CreateBlogForm({ blog }: { blog?: BlogType }) {
   })
 
   return (
-    <Form {...form}>
-      <form className='space-y-8' onSubmit={handleSubmit}>
-        {/* Ảnh đại diện */}
-        <div className='grid gap-2'>
-          <Label>Ảnh đại diện</Label>
-          {thumbnail && (
-            <Image
-              width={200}
-              height={200}
-              src={thumbnail.url}
-              alt=''
-              className='size-[200px] object-cover rounded-md'
+    <Card>
+      <CardContent>
+        <Form {...form}>
+          <form className='space-y-8' onSubmit={handleSubmit}>
+            {/* Ảnh đại diện */}
+            <div className='grid gap-2'>
+              <Label>Ảnh đại diện</Label>
+              {thumbnail && (
+                <Image
+                  width={200}
+                  height={200}
+                  src={thumbnail.url}
+                  alt=''
+                  className='size-[200px] object-cover rounded-md'
+                />
+              )}
+              {!thumbnail && form.formState.isSubmitted && (
+                <p className='text-sm text-destructive'>Ảnh đại diện là bắt buộc.</p>
+              )}
+              <div className='space-x-2'>
+                <UploadImages />
+                <SelectImages onSubmit={(images) => setThumbnail(images[0])} />
+              </div>
+            </div>
+            {/* Tiêu đề */}
+            <FormField
+              control={form.control}
+              name='title'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tiêu đề</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          )}
-          {!thumbnail && form.formState.isSubmitted && (
-            <p className='text-sm text-destructive'>Ảnh đại diện là bắt buộc.</p>
-          )}
-          <div className='space-x-2'>
-            <UploadImages />
-            <SelectImages onSubmit={(images) => setThumbnail(images[0])} />
-          </div>
-        </div>
-        {/* Tiêu đề */}
-        <FormField
-          control={form.control}
-          name='title'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tiêu đề</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Nội dung */}
-        <FormField
-          control={form.control}
-          name='content'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nội dung</FormLabel>
-              <FormControl>
-                <RichTextEditor content={field.value} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type='submit' disabled={isPending}>
-          {isPending && <Loader2 className='animate-spin' />}
-          {!isUpdateMode ? 'Thêm bài viết' : 'Lưu lại'}
-        </Button>
-      </form>
-    </Form>
+            {/* Nội dung */}
+            <FormField
+              control={form.control}
+              name='content'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nội dung</FormLabel>
+                  <FormControl>
+                    <RichTextEditor content={field.value} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type='submit' disabled={isPending}>
+              {isPending && <Loader2 className='animate-spin' />}
+              {!isUpdateMode ? 'Thêm bài viết' : 'Lưu lại'}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }

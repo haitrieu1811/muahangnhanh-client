@@ -1,6 +1,6 @@
 import { BlogStatus } from '@/constants/enum'
 import { CreateBlogSchema } from '@/rules/blogs.rules'
-import { PaginationType, SuccessResponse } from '@/types/utils.types'
+import { MetadataType, PaginationType, SuccessResponse } from '@/types/utils.types'
 
 export type BlogType = {
   _id: string
@@ -20,6 +20,7 @@ export type BlogType = {
   content: string
   order: number
   status: BlogStatus
+  metadata: MetadataType | null
   createdAt: string
   updatedAt: string
 }

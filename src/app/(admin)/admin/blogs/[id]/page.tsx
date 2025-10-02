@@ -1,6 +1,6 @@
 import blogsApis from '@/apis/blogs.apis'
 import PageTitle from '@/app/(admin)/_components/page-title'
-import CreateBlogForm from '@/app/(admin)/admin/blogs/new/create-blog-form'
+import AdminBlogDetailTabs from '@/app/(admin)/admin/blogs/[id]/tabs'
 import { BlogType } from '@/types/blogs.types'
 
 export default async function AdminBlogDetailPage({
@@ -24,7 +24,7 @@ export default async function AdminBlogDetailPage({
   return (
     <div className='space-y-10'>
       <PageTitle title={blog.title} />
-      <CreateBlogForm blog={blog} />
+      <AdminBlogDetailTabs blog={blog} />
     </div>
   )
 }

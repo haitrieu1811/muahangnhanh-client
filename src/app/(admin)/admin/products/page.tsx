@@ -7,13 +7,13 @@ import productsApis from '@/apis/products.apis'
 import PageTitle from '@/app/(admin)/_components/page-title'
 import ProductActions from '@/app/(admin)/admin/products/product-actions'
 import AdminProductsSearch from '@/app/(admin)/admin/products/search'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import PATH from '@/constants/path'
 import { dateDistance, formatCurrency } from '@/lib/utils'
 import { ProductType } from '@/types/products.types'
-import { Badge } from '@/components/ui/badge'
 
 const MAX_CHARACTERS = 50
 
@@ -90,11 +90,18 @@ export default async function AdminProductsPage({
                       />
                     </TableCell>
                     <TableCell>
-                      <span>
-                        {product.name.length > MAX_CHARACTERS
-                          ? `${product.name.substring(0, MAX_CHARACTERS)}...`
-                          : product.name}
-                      </span>
+                      <div>
+                        <div>
+                          {product.name.length > MAX_CHARACTERS
+                            ? `${product.name.substring(0, MAX_CHARACTERS)}...`
+                            : product.name}
+                        </div>
+                        {!product.metadata && (
+                          <Badge variant='outline' className='border-yellow-500 text-yellow-500'>
+                            Bổ sung metadata
+                          </Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       {product.isActive && <Badge className='bg-green-500'>Hoạt động</Badge>}

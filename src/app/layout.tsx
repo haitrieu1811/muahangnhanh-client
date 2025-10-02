@@ -16,7 +16,7 @@ const fontSans = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Mua Hàng Nhanh',
+    template: '%s',
     default: 'Mua Hàng Nhanh'
   },
   description:

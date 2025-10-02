@@ -1,6 +1,6 @@
 import { ProductCategoryStatus } from '@/constants/enum'
 import { CreateProductCategorySchema, CreateProductSchema } from '@/rules/products.rules'
-import { PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
+import { MetadataType, PaginationReqQuery, PaginationType, SuccessResponse } from '@/types/utils.types'
 
 export type ProductType = {
   _id: string
@@ -36,6 +36,7 @@ export type ProductType = {
   isFlashSale: boolean
   isActive: boolean
   categoryId: string
+  metadata: MetadataType | null
   createdAt: string
   updatedAt: string
 }

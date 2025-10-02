@@ -60,3 +60,16 @@ export type UploadImagesResponse = SuccessResponse<{
     url: string
   }[]
 }>
+
+// Metadata SEO
+export type MetadataType = {
+  _id: string
+  title: string
+  description: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type CreateMetadataResponse = SuccessResponse<{
+  metadata: MetadataType
+}>
