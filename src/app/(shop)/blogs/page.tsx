@@ -3,6 +3,7 @@ import omitBy from 'lodash/omitBy'
 
 import blogsApis from '@/apis/blogs.apis'
 import BlogItem from '@/components/blog-item'
+import Breadcrumb from '@/components/breadcrumb'
 import CustomPagination from '@/components/custom-pagination'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BlogType } from '@/types/blogs.types'
@@ -35,7 +36,14 @@ export default async function BlogsPage({
   } catch {}
 
   return (
-    <div className='container py-4'>
+    <div className='container pb-4'>
+      <Breadcrumb
+        data={[
+          {
+            name: 'Bài viết'
+          }
+        ]}
+      />
       <Card>
         <CardHeader>
           <CardTitle className='text-xl'>Tất cả bài viết</CardTitle>

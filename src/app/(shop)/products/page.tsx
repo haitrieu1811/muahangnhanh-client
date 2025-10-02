@@ -6,11 +6,12 @@ import productsApis from '@/apis/products.apis'
 import ProductItem from '@/app/(shop)/_components/product-item'
 import ProductsFilter from '@/app/(shop)/products/filter'
 import ProductsOrder from '@/app/(shop)/products/sort'
+import Breadcrumb from '@/components/breadcrumb'
 import CustomPagination from '@/components/custom-pagination'
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { GetProductsReqQuery, ProductCategoryType, ProductType } from '@/types/products.types'
 import { Button } from '@/components/ui/button'
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { GetProductsReqQuery, ProductCategoryType, ProductType } from '@/types/products.types'
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<GetProductsReqQuery> }) {
   const { categoryIds: categoryIdsStr, sortBy, orderBy, page, limit, minPrice, maxPrice } = await searchParams
@@ -48,7 +49,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   } catch {}
 
   return (
-    <div className='container py-4'>
+    <div className='container pb-4'>
+      <Breadcrumb data={[{ name: 'Sản phẩm' }]} />
       {/* Bộ lọc ở mobile */}
       <Sheet>
         <SheetTrigger asChild>
