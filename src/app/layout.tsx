@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
+import { baseOpenGraph } from '@/app/shared-metadata'
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
@@ -19,7 +20,8 @@ export const metadata: Metadata = {
     default: 'Mua Hàng Nhanh'
   },
   description:
-    'Mua Hàng Nhanh - Thương hiệu hàng đầu về TMĐT chính hãng, giá tốt. Giao hàng nhanh toàn quốc. Đổi trả dễ dàng. Mua sắm ngay hôm nay!'
+    'Mua Hàng Nhanh - Thương hiệu hàng đầu về TMĐT chính hãng, giá tốt. Giao hàng nhanh toàn quốc. Đổi trả dễ dàng. Mua sắm ngay hôm nay!',
+  openGraph: baseOpenGraph
 }
 
 export default function RootLayout({

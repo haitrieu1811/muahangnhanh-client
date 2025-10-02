@@ -15,6 +15,9 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Loại bỏ ký tự `/` đầu tiên nếu đường dẫn bắt đầu bằng ký tự `/`
+ */
 export const normalizePath = (path: string) => {
   return path.startsWith('/') ? path.slice(1) : path
 }

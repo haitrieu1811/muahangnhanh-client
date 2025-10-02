@@ -8,13 +8,15 @@ import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
 import ProductDetailActions from '@/app/(shop)/products/[nameId]/actions'
 import ProductDetailPhotos from '@/app/(shop)/products/[nameId]/photos'
+import { baseOpenGraph } from '@/app/shared-metadata'
 import Breadcrumb from '@/components/breadcrumb'
 import Prose from '@/components/prose'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ENV_CONFIG } from '@/constants/config'
 import PATH from '@/constants/path'
-import { formatCurrency, getIdFromNameId, rateSale } from '@/lib/utils'
+import { formatCurrency, getIdFromNameId, normalizePath, rateSale } from '@/lib/utils'
 import { BlogType } from '@/types/blogs.types'
 import { ProductType } from '@/types/products.types'
 
@@ -35,9 +37,28 @@ export async function generateMetadata({
       maxChildNodes: 1
     }
   })
+  const path = PATH.PRODUCTS_DETAIL({
+    name: product.name,
+    id: product._id
+  })
+  const url = `${ENV_CONFIG.NEXT_PUBLIC_BASE_URL}/${normalizePath(path)}`
   return {
     title: product.name,
-    description
+    description,
+    openGraph: {
+      ...baseOpenGraph,
+      title: product.name,
+      description,
+      url,
+      images: [
+        {
+          url: product.thumbnail.url
+        }
+      ]
+    },
+    alternates: {
+      canonical: path
+    }
   }
 }
 

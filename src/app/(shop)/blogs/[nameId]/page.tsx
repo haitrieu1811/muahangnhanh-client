@@ -7,13 +7,15 @@ import Link from 'next/link'
 import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
 import ProductItem from '@/app/(shop)/_components/product-item'
+import { baseOpenGraph } from '@/app/shared-metadata'
 import BlogItem from '@/components/blog-item'
 import Breadcrumb from '@/components/breadcrumb'
 import Prose from '@/components/prose'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ENV_CONFIG } from '@/constants/config'
 import PATH from '@/constants/path'
-import { getIdFromNameId } from '@/lib/utils'
+import { getIdFromNameId, normalizePath } from '@/lib/utils'
 import { BlogType } from '@/types/blogs.types'
 import { ProductType } from '@/types/products.types'
 
@@ -34,9 +36,28 @@ export async function generateMetadata({
       ellipsis: ''
     }
   })
+  const path = PATH.BLOGS_DETAIL({
+    name: blog.title,
+    id: blog._id
+  })
+  const url = `${ENV_CONFIG.NEXT_PUBLIC_BASE_URL}/${normalizePath(path)}`
   return {
     title: blog.title,
-    description
+    description,
+    openGraph: {
+      ...baseOpenGraph,
+      title: blog.title,
+      description,
+      url,
+      images: [
+        {
+          url: blog.thumbnail.url
+        }
+      ]
+    },
+    alternates: {
+      canonical: path
+    }
   }
 }
 
