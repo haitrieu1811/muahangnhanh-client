@@ -5,6 +5,8 @@ const PATH = {
   PRODUCTS: '/products',
   PRODUCTS_DETAIL: (data: { name: string; id: string }) => `/products/${generateNameId(data)}`,
   CART: '/cart',
+  BLOGS: '/blogs',
+  BLOGS_DETAIL: (data: { name: string; id: string }) => `/blogs/${generateNameId(data)}`,
 
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',

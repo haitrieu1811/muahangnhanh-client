@@ -4,12 +4,13 @@ import Link from 'next/link'
 import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
 import ProductItem from '@/app/(shop)/_components/product-item'
+import BlogItem from '@/components/blog-item'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import PATH from '@/constants/path'
 import { BlogType } from '@/types/blogs.types'
 import { ProductCategoryType, ProductType } from '@/types/products.types'
-import PATH from '@/constants/path'
 
 export default async function HomePage() {
   let productCategories: ProductCategoryType[] = []
@@ -23,7 +24,9 @@ export default async function HomePage() {
         isFlashSale: true,
         isActive: true
       }),
-      blogsApis.getBlogs()
+      blogsApis.getBlogs({
+        limit: 4
+      })
     ])
     productCategories = getProductCategoriesRes.payload.data.productCategories
     products = getProductsRes.payload.data.products
@@ -130,27 +133,16 @@ export default async function HomePage() {
         <CardHeader>
           <CardTitle className='text-xl'>Bài viết mới nhất</CardTitle>
           <CardAction>
-            <Button asChild variant='link' className='p-0'>
-              <Link href={'#'}>Xem thêm</Link>
+            <Button asChild variant='link' className='p-0 text-highlight'>
+              <Link href={PATH.BLOGS}>Xem thêm</Link>
             </Button>
           </CardAction>
         </CardHeader>
         <CardContent>
           <div className='grid grid-cols-12 gap-4'>
-            {blogs.slice(0, 4).map((blog) => (
+            {blogs.map((blog) => (
               <div key={blog._id} className='col-span-12 md:col-span-6 lg:col-span-3'>
-                <Link href={'#'} className='group relative block rounded-md overflow-hidden space-y-2'>
-                  <div className='rounded-md overflow-hidden'>
-                    <Image
-                      width={200}
-                      height={200}
-                      src={blog.thumbnail.url}
-                      alt={blog.title}
-                      className='w-full aspect-video object-cover group-hover:scale-105 duration-100'
-                    />
-                  </div>
-                  <h3 className='text-sm line-clamp-2 font-medium'>{blog.title}</h3>
-                </Link>
+                <BlogItem blog={blog} />
               </div>
             ))}
           </div>
