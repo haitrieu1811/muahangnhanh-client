@@ -25,8 +25,6 @@ import { jwtDecode } from '@/lib/utils'
 import { User } from '@/types/users.types'
 
 export default function HeaderAccount({ user, accessToken }: { user: User | null; accessToken: string }) {
-  const { userRole } = jwtDecode(accessToken)
-
   const { handleLogout } = useLogout()
   const { totalCartItems } = useAppContext()
 
@@ -86,7 +84,7 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT}>Tài khoản</Link>
               </DropdownMenuItem>
-              {userRole === UserRole.Admin && (
+              {jwtDecode(accessToken).userRole === UserRole.Admin && (
                 <DropdownMenuItem asChild>
                   <Link href={PATH.ADMIN}>Trang quản trị</Link>
                 </DropdownMenuItem>
