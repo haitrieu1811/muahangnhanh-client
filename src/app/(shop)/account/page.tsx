@@ -1,9 +1,14 @@
+import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 
 import usersApis from '@/apis/users.apis'
 import ProfileForm from '@/app/(admin)/admin/me/profile-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { User } from '@/types/users.types'
+
+export const metadata: Metadata = {
+  title: 'Hồ sơ của tôi'
+}
 
 export default async function AccountPage() {
   const cookieStore = await cookies()

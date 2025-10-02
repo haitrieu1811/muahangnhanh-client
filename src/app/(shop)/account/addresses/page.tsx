@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 
 import addressesApis from '@/apis/addresses.apis'
@@ -6,6 +7,10 @@ import CreateAddressButton from '@/app/(shop)/account/addresses/create-address-b
 import AddressItem from '@/components/address-item'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Address } from '@/types/addresses.types'
+
+export const metadata: Metadata = {
+  title: 'Địa chỉ của tôi'
+}
 
 export default async function AccountAddressesPage() {
   const cookieStore = await cookies()

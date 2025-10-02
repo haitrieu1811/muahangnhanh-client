@@ -99,7 +99,9 @@ export default function ProductsFilter({ productCategories }: { productCategorie
                   handleFilterByCategoryId({ checkedState, categoryId: productCategory._id })
                 }
               />
-              <Label htmlFor={productCategory._id}>{productCategory.name}</Label>
+              <Label htmlFor={productCategory._id} className='font-normal'>
+                {productCategory.name}
+              </Label>
             </div>
           ))}
         </div>

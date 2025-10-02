@@ -1,5 +1,6 @@
 import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
+import { Metadata } from 'next'
 
 import blogsApis from '@/apis/blogs.apis'
 import BlogItem from '@/components/blog-item'
@@ -7,6 +8,10 @@ import Breadcrumb from '@/components/breadcrumb'
 import CustomPagination from '@/components/custom-pagination'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BlogType } from '@/types/blogs.types'
+
+export const metadata: Metadata = {
+  title: 'Tất cả bài viết'
+}
 
 export default async function BlogsPage({
   searchParams

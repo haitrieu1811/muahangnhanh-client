@@ -1,4 +1,6 @@
 import { format } from 'date-fns'
+import { convert } from 'html-to-text'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -14,6 +16,29 @@ import PATH from '@/constants/path'
 import { getIdFromNameId } from '@/lib/utils'
 import { BlogType } from '@/types/blogs.types'
 import { ProductType } from '@/types/products.types'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{
+    nameId: string
+  }>
+}): Promise<Metadata> {
+  const { nameId } = await params
+  const blogId = getIdFromNameId(nameId)
+  const res = await blogsApis.getBlog(blogId)
+  const blog = res.payload.data.blog
+  const description = convert(blog.content, {
+    limits: {
+      maxChildNodes: 1,
+      ellipsis: ''
+    }
+  })
+  return {
+    title: blog.title,
+    description
+  }
+}
 
 export default async function BlogDetailPage({
   params

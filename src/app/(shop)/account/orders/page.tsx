@@ -1,11 +1,16 @@
 import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
+import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 
 import ordersApis from '@/apis/orders.apis'
 import OrdersList from '@/app/(shop)/account/orders/orders-list'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { OrderType } from '@/types/orders.types'
+
+export const metadata: Metadata = {
+  title: 'Đơn hàng của tôi'
+}
 
 export default async function AccountOrdersPage({
   searchParams

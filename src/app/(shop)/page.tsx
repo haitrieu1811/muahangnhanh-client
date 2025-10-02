@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -11,6 +12,10 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/componen
 import PATH from '@/constants/path'
 import { BlogType } from '@/types/blogs.types'
 import { ProductCategoryType, ProductType } from '@/types/products.types'
+
+export const metadata: Metadata = {
+  title: 'Trang chủ'
+}
 
 export default async function HomePage() {
   let productCategories: ProductCategoryType[] = []

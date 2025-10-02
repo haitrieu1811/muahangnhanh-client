@@ -1,3 +1,5 @@
+import { convert } from 'html-to-text'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -6,6 +8,7 @@ import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
 import ProductDetailActions from '@/app/(shop)/products/[nameId]/actions'
 import ProductDetailPhotos from '@/app/(shop)/products/[nameId]/photos'
+import Breadcrumb from '@/components/breadcrumb'
 import Prose from '@/components/prose'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,7 +17,29 @@ import PATH from '@/constants/path'
 import { formatCurrency, getIdFromNameId, rateSale } from '@/lib/utils'
 import { BlogType } from '@/types/blogs.types'
 import { ProductType } from '@/types/products.types'
-import Breadcrumb from '@/components/breadcrumb'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{
+    nameId: string
+  }>
+}): Promise<Metadata> {
+  const { nameId } = await params
+  const productId = getIdFromNameId(nameId)
+  const res = await productsApis.getProduct(productId)
+  const product = res.payload.data.product
+  const description = convert(product.description, {
+    limits: {
+      ellipsis: '',
+      maxChildNodes: 1
+    }
+  })
+  return {
+    title: product.name,
+    description
+  }
+}
 
 export default async function ProductDetailPage({
   params

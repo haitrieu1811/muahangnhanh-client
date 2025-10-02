@@ -1,5 +1,11 @@
+import { Metadata } from 'next'
+
 import Cart from '@/app/(shop)/cart'
 import { Card, CardContent } from '@/components/ui/card'
+
+export const metadata: Metadata = {
+  title: 'Giỏ hàng'
+}
 
 export default function CartPage() {
   return (

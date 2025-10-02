@@ -1,5 +1,11 @@
+import { Metadata } from 'next'
+
 import ChangePasswordForm from '@/app/(admin)/admin/me/change-password-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
+export const metadata: Metadata = {
+  title: 'Thay đổi mật khẩu'
+}
 
 export default function AccountChangePasswordPage() {
   return (

@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,12 +7,36 @@ import React from 'react'
 import ordersApis from '@/apis/orders.apis'
 import OrderDetailBackButton from '@/app/(shop)/account/orders/[id]/back-button'
 import ORDER_BADGES from '@/components/order-badges'
+import OrderEvents from '@/components/order-events'
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import PATH from '@/constants/path'
 import { dateDistance, formatAddress } from '@/lib/utils'
 import { Address } from '@/types/addresses.types'
 import { OrderEventType, OrderType } from '@/types/orders.types'
-import OrderEvents from '@/components/order-events'
+
+const fetchOrderDetail = async (orderId: string) => {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get('accessToken')?.value ?? ''
+  return ordersApis.getOrderfromNextServerToServer({
+    accessToken,
+    orderId
+  })
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{
+    id: string
+  }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const res = await fetchOrderDetail(id)
+  const order = res.payload.data.order
+  return {
+    title: `Chi tiết đơn hàng ${order.code}`
+  }
+}
 
 export default async function OrderDetailPage({
   params
@@ -20,20 +45,17 @@ export default async function OrderDetailPage({
     id: string
   }>
 }) {
-  const { id } = await params
-
   const cookieStore = await cookies()
   const accessToken = cookieStore.get('accessToken')?.value ?? ''
+
+  const { id } = await params
 
   let order: OrderType | null = null
   let orderEvents: OrderEventType[] = []
   let totalOrderEvents: number = 0
 
   try {
-    const res = await ordersApis.getOrderfromNextServerToServer({
-      accessToken,
-      orderId: id
-    })
+    const res = await fetchOrderDetail(id)
     order = res.payload.data.order
   } catch {}
 

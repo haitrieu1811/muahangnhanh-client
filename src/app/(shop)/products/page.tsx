@@ -1,6 +1,7 @@
 import isUndefined from 'lodash/isUndefined'
 import omitBy from 'lodash/omitBy'
 import { FileSearch, Filter } from 'lucide-react'
+import { Metadata } from 'next'
 
 import productsApis from '@/apis/products.apis'
 import ProductItem from '@/app/(shop)/_components/product-item'
@@ -12,6 +13,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { GetProductsReqQuery, ProductCategoryType, ProductType } from '@/types/products.types'
+
+export const metadata: Metadata = {
+  title: 'Tất cả sản phẩm'
+}
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<GetProductsReqQuery> }) {
   const { categoryIds: categoryIdsStr, sortBy, orderBy, page, limit, minPrice, maxPrice } = await searchParams
