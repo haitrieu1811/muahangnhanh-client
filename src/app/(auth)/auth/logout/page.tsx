@@ -1,13 +1,13 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { Suspense } from 'react'
 
+import PATH from '@/constants/path'
 import useLogout from '@/hooks/use-logout'
 import { getAccessTokenFromLS } from '@/lib/storage'
-import PATH from '@/constants/path'
 
-export default function LogoutPage() {
+function Logout() {
   const router = useRouter()
 
   const searchParams = useSearchParams()
@@ -24,4 +24,12 @@ export default function LogoutPage() {
   }, [accessToken, handleLogout, router])
 
   return null
+}
+
+export default function LogoutPage() {
+  return (
+    <Suspense>
+      <Logout />
+    </Suspense>
+  )
 }
