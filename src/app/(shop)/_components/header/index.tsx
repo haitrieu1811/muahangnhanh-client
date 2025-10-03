@@ -38,7 +38,7 @@ export default async function ShopHeader() {
     <React.Fragment>
       {/* PC */}
       <header className='hidden lg:block bg-card border-b sticky top-0 inset-x-0 z-10'>
-        <div className='container flex items-center justify-between space-x-10 h-14 px-4 lg:px-0'>
+        <div className='container flex items-center justify-between space-x-8 h-14 px-4 lg:px-0'>
           <div className='flex items-center space-x-8'>
             {/* Logo */}
             <Logo />

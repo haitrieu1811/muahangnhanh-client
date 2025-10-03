@@ -45,7 +45,7 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
       {/* Đã đăng nhập */}
       {user && (
         <div className='flex items-center space-x-4'>
-          <div className='flex space-x-1'>
+          <div className='flex space-x-2'>
             {/* Thông báo */}
             <HeaderNotificationsPopover>
               <Button variant='outline'>

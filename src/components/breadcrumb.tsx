@@ -19,7 +19,7 @@ type BreadcrumbType = {
 
 export default function Breadcrumb({ data = [], className }: { data?: BreadcrumbType[]; className?: string }) {
   return (
-    <ShadcnBreadcrumb className={cn('py-4', className)}>
+    <ShadcnBreadcrumb className={cn('py-4 px-4 lg:px-0', className)}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>

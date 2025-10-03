@@ -8,6 +8,7 @@ import { useDebounce } from 'use-debounce'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import PATH from '@/constants/path'
 import useProducts from '@/hooks/use-products'
 import { formatCurrency } from '@/lib/utils'
 
@@ -85,8 +86,8 @@ export default function HeaderSearch() {
               ))}
               {totalProducts > MAX_RESULTS && (
                 <div className='flex justify-center mt-2'>
-                  <Button variant='link' className='p-0'>
-                    Xem thêm các kết quả tìm kiếm
+                  <Button asChild variant='link' className='p-0 text-highlight'>
+                    <Link href={`${PATH.PRODUCTS}?name=${searchKeyword}`}>Xem thêm các kết quả tìm kiếm</Link>
                   </Button>
                 </div>
               )}

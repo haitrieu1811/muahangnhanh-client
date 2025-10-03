@@ -20,10 +20,20 @@ export default function ProductsFilter({ productCategories }: { productCategorie
 
   const params = new URLSearchParams(searchParams)
 
+  const name = searchParams.get('name') ?? ''
   const categoryIds = searchParams.get('categoryIds')
   const categoryIdsArr = categoryIds?.split('-') ?? []
   const minPrice = searchParams.get('minPrice')
   const maxPrice = searchParams.get('maxPrice')
+
+  const handleFilterByName = useDebouncedCallback((term: string) => {
+    if (term.trim().length > 0) {
+      params.set('name', term)
+    } else {
+      params.delete('name')
+    }
+    router.replace(`${pathname}?${params.toString()}`)
+  }, 500)
 
   const handleFilterByCategoryId = ({
     checkedState,
@@ -56,7 +66,7 @@ export default function ProductsFilter({ productCategories }: { productCategorie
       params.delete('minPrice')
     }
     router.replace(`${pathname}?${params.toString()}`)
-  }, 1000)
+  }, 500)
 
   const handleMaxPrice = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -66,7 +76,7 @@ export default function ProductsFilter({ productCategories }: { productCategorie
       params.delete('maxPrice')
     }
     router.replace(`${pathname}?${params.toString()}`)
-  }, 1000)
+  }, 500)
 
   const handleReset = (fields: string[]) => {
     fields.forEach((field) => {
@@ -76,7 +86,13 @@ export default function ProductsFilter({ productCategories }: { productCategorie
   }
 
   return (
-    <div className='grid gap-10'>
+    <div className='grid gap-8 mt-4'>
+      {/* Tên sản phẩm */}
+      <Input
+        defaultValue={name}
+        placeholder='Tìm theo tên sản phẩm'
+        onChange={(e) => handleFilterByName(e.target.value)}
+      />
       {/* Danh mục */}
       <div className='grid gap-4'>
         <div className='flex justify-between items-center space-x-4'>

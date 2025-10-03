@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<GetProductsReqQuery> }) {
-  const { categoryIds: categoryIdsStr, sortBy, orderBy, page, limit, minPrice, maxPrice } = await searchParams
+  const { name, categoryIds: categoryIdsStr, sortBy, orderBy, page, limit, minPrice, maxPrice } = await searchParams
 
   let products: ProductType[] = []
   let totalProducts: number = 0
@@ -32,6 +32,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       productsApis.getProducts(
         omitBy(
           {
+            name,
             isActive: true,
             categoryIds: categoryIdsStr,
             sortBy,
@@ -86,7 +87,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         </Card>
         <Card className='flex-1'>
           <CardHeader>
-            <CardTitle className='text-2xl'>Tất cả sản phẩm</CardTitle>
+            <CardTitle className='text-2xl'>Sản phẩm</CardTitle>
             <CardAction>
               <ProductsOrder />
             </CardAction>
