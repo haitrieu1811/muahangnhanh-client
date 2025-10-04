@@ -8,11 +8,11 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
+import useCartContext from '@/hooks/use-cart-context'
 import { formatCurrency } from '@/lib/utils'
 
 export default function HeaderCartPopover({ children }: { children: React.ReactNode }) {
-  const { extendedCartItems, totalCartItems, totalCartAmount } = useAppContext()
+  const { extendedCartItems, totalCartItems, totalCartAmount } = useCartContext()
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
@@ -76,6 +76,14 @@ export default function HeaderCartPopover({ children }: { children: React.ReactN
           <div className='flex flex-col justify-center items-center p-4 space-y-2'>
             <Handbag className='size-10 stroke-1 text-highlight' />
             <p className='text-center text-sm'>Chưa có sản phẩm nào trong giỏ hàng.</p>
+            <Button
+              asChild
+              size='sm'
+              variant='outline'
+              className='text-main dark:text-main-foreground border-main dark:border-main-foreground hover:text-main'
+            >
+              <Link href={PATH.PRODUCTS}>Mua hàng ngay</Link>
+            </Button>
           </div>
         )}
       </PopoverContent>

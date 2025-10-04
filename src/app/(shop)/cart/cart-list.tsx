@@ -14,10 +14,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
+import useCartContext from '@/hooks/use-cart-context'
 import useIsClient from '@/hooks/use-is-client'
 import { cn, formatCurrency } from '@/lib/utils'
-import { CartContext } from '@/app/(shop)/cart'
 
 export default function CartList() {
   const queryClient = useQueryClient()
@@ -30,9 +29,8 @@ export default function CartList() {
     isAllChecked,
     setExtendedCartItems,
     handleCheckAllCartItems
-  } = useAppContext()
+  } = useCartContext()
   const isClient = useIsClient()
-  const { setStep } = React.useContext(CartContext)
 
   // Xử lý chọn một sản phẩm trong giỏ hàng -> checkout
   const handleCheck = ({ isChecked, cartItemId }: { isChecked: boolean; cartItemId: string }) => {
@@ -205,14 +203,20 @@ export default function CartList() {
                 'cursor-not-allowed': totalCheckedCartAmount === 0
               })}
             >
-              <Button
-                size='lg'
-                disabled={totalCheckedCartAmount === 0}
-                className='w-full bg-highlight uppercase'
-                onClick={() => setStep('info')} // Chuyển sang bước nhập thông tin đặt hàng
+              <div
+                className={cn({
+                  'pointer-events-none': totalCheckedCartAmount === 0
+                })}
               >
-                Đặt hàng ngay
-              </Button>
+                <Button
+                  asChild
+                  disabled={totalCheckedCartAmount === 0}
+                  size='lg'
+                  className='w-full bg-highlight uppercase'
+                >
+                  <Link href={PATH.CART_ORDER_INFO}>Đặt hàng ngay</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

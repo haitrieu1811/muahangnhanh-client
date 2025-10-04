@@ -1,10 +1,12 @@
+'use client'
+
 import { CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
 
-export default function OrderSuccess() {
+export default function CartCheckoutSuccess() {
   return (
     <div className='flex flex-col items-center justify-center space-y-4 py-10 rounded-md'>
       <CheckCircle2 className='stroke-green-500 stroke-1 size-16' />

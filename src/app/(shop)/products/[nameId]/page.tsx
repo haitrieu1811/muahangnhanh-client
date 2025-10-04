@@ -119,7 +119,7 @@ export default async function ProductDetailPage({
                     </div>
                   )}
                 </div>
-                {product.isActive && <ProductDetailActions productId={product._id} />}
+                {product.isActive && <ProductDetailActions product={product} />}
                 {!product.isActive && (
                   <div className='border-2 rounded-md border-destructive text-destructive p-2 flex justify-center'>
                     Sản phẩm đã tạm ngừng hoạt động

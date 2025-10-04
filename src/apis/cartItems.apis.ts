@@ -1,10 +1,10 @@
 import http from '@/lib/http'
-import { GetMyCartResponse } from '@/types/cartItems.types'
+import { AddProductToCartResponse, GetMyCartResponse } from '@/types/cartItems.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 const cartItemsApis = {
   addToCart({ productId, quantity }: { productId: string; quantity: number }) {
-    return http.post<OnlyMessageResponse>(`/cart-items/add/product/${productId}`, { quantity })
+    return http.post<AddProductToCartResponse>(`/cart-items/add/product/${productId}`, { quantity })
   },
 
   getMyCart() {

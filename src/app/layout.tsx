@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Space_Grotesk } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { baseOpenGraph } from '@/app/shared-metadata'
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
+import CartProvider from '@/providers/cart.provider'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
 
-const fontSans = Inter({
-  subsets: ['vietnamese'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+const fontSans = Space_Grotesk({
+  subsets: ['vietnamese']
 })
 
 export const metadata: Metadata = {
@@ -35,9 +35,11 @@ export default function RootLayout({
         <TanstackQueryProvider>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
             <AppProvider>
-              {children}
-              <Toaster richColors position='top-center' />
-              <NextTopLoader showSpinner={false} shadow={false} />
+              <CartProvider>
+                {children}
+                <Toaster richColors position='top-center' />
+                <NextTopLoader showSpinner={false} shadow={false} />
+              </CartProvider>
             </AppProvider>
           </ThemeProvider>
         </TanstackQueryProvider>

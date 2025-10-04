@@ -1,26 +1,20 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 
 import addressesApis from '@/apis/addresses.apis'
-import CartList from '@/app/(shop)/cart/list'
-import OrderInfo from '@/app/(shop)/cart/order-info'
-import CartStep from '@/app/(shop)/cart/step'
 import { ShippingMethod } from '@/constants/enum'
+import PATH from '@/constants/path'
 import { Address } from '@/types/addresses.types'
-import OrderPreview from '@/app/(shop)/cart/order-preview'
-import OrderSuccess from '@/app/(shop)/cart/order-success'
 
 export type CartStepType = 'list' | 'info' | 'preview' | 'success'
 
-type CartContextType = {
-  step: CartStepType
-  setStep: React.Dispatch<React.SetStateAction<CartStepType>>
+type CheckoutContextType = {
   orderAddress: Address | null
   setOrderAddress?: React.Dispatch<React.SetStateAction<Address | null>>
-  handePrevStep: () => void
   handleSelectAddress: ({ address, onSuccess }: { address: Address; onSuccess?: () => void }) => void
   addresses: Address[]
   shippingMethod: ShippingMethod
@@ -30,10 +24,7 @@ type CartContextType = {
   shippingFee: number
 }
 
-const defaultCartContext: CartContextType = {
-  step: 'list',
-  setStep: () => {},
-  handePrevStep: () => {},
+const defaultCheckoutContext: CheckoutContextType = {
   orderAddress: null,
   setOrderAddress: () => {},
   handleSelectAddress: () => {},
@@ -45,29 +36,20 @@ const defaultCartContext: CartContextType = {
   shippingFee: 0
 }
 
-export const CartContext = React.createContext<CartContextType>(defaultCartContext)
+export const CheckoutContext = React.createContext<CheckoutContextType>(defaultCheckoutContext)
 
-export default function Cart() {
-  const [step, setStep] = React.useState<CartStepType>(defaultCartContext.step)
-  const [orderAddress, setOrderAddress] = React.useState<Address | null>(defaultCartContext.orderAddress)
-  const [shippingMethod, setShippingMethod] = React.useState<ShippingMethod>(ShippingMethod.Normal)
-  const [note, setNote] = React.useState<string>('')
+export default function CheckoutProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
 
-  // Hàm xử lý khi người dùng nhấn nút "Quay lại"
-  const handePrevStep = () => {
-    if (step === 'info') {
-      setStep('list')
-    } else if (step === 'preview') {
-      setStep('info')
-    }
-    // Không có bước lùi từ 'success'
-  }
+  const [orderAddress, setOrderAddress] = React.useState<Address | null>(defaultCheckoutContext.orderAddress) // Địa chỉ nhận hàng
+  const [shippingMethod, setShippingMethod] = React.useState<ShippingMethod>(ShippingMethod.Normal) // Phương thức vận chuyển
+  const [note, setNote] = React.useState<string>('') // Ghi chú đơn hàng
 
   // Lấy danh sách địa chỉ của người dùng
   const getMyAddressesQuery = useQuery({
     queryKey: ['get-my-addresses'],
     queryFn: () => addressesApis.getMyAddressesFromNextClientToServer(),
-    enabled: step === 'info' // Chỉ lấy địa chỉ khi ở bước 'info'
+    enabled: pathname === PATH.CART_ORDER_INFO // Chỉ lấy địa chỉ khi ở bước điền thông tin đặt hàng
   })
 
   // Danh sách địa chỉ của người dùng
@@ -106,11 +88,8 @@ export default function Cart() {
   }, [shippingMethod])
 
   return (
-    <CartContext.Provider
+    <CheckoutContext
       value={{
-        step,
-        setStep,
-        handePrevStep,
         orderAddress,
         setOrderAddress,
         handleSelectAddress,
@@ -122,13 +101,7 @@ export default function Cart() {
         shippingFee
       }}
     >
-      <div className='space-y-2'>
-        <CartStep />
-        {step === 'list' && <CartList />}
-        {step === 'info' && <OrderInfo />}
-        {step === 'preview' && <OrderPreview />}
-        {step === 'success' && <OrderSuccess />}
-      </div>
-    </CartContext.Provider>
+      {children}
+    </CheckoutContext>
   )
 }

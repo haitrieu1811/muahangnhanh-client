@@ -5,6 +5,9 @@ const PATH = {
   PRODUCTS: '/products',
   PRODUCTS_DETAIL: (data: { name: string; id: string }) => `/products/${generateNameId(data)}`,
   CART: '/cart',
+  CART_ORDER_INFO: '/cart/order-info',
+  CART_ORDER_PREVIEW: '/cart/order-preview',
+  CART_CHECKOUT_SUCCESS: '/cart/checkout-success',
   BLOGS: '/blogs',
   BLOGS_DETAIL: (data: { name: string; id: string }) => `/blogs/${generateNameId(data)}`,
 

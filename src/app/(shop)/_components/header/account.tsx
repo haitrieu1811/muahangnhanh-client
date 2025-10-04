@@ -19,14 +19,14 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
+import useCartContext from '@/hooks/use-cart-context'
 import useLogout from '@/hooks/use-logout'
 import { jwtDecode } from '@/lib/utils'
 import { User } from '@/types/users.types'
 
 export default function HeaderAccount({ user, accessToken }: { user: User | null; accessToken: string }) {
   const { handleLogout } = useLogout()
-  const { totalCartItems } = useAppContext()
+  const { totalCartItems } = useCartContext()
 
   return (
     <React.Fragment>

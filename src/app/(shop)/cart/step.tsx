@@ -1,54 +1,56 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 
 import { CheckCheck, Handbag, IdCard, LucideIcon, Search } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
-import { CartContext, CartStepType } from '@/app/(shop)/cart'
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
 import { cn } from '@/lib/utils'
+import { usePathname, useRouter } from 'next/navigation'
 
 const STEPS: {
   icon: LucideIcon
   name: string
-  value: CartStepType
+  value: string
 }[] = [
   {
     icon: Handbag,
     name: 'Giỏ hàng',
-    value: 'list'
+    value: PATH.CART
   },
   {
     icon: IdCard,
     name: 'Thông tin đặt hàng',
-    value: 'info'
+    value: PATH.CART_ORDER_INFO
   },
   {
     icon: Search,
     name: 'Xem lại đơn hàng',
-    value: 'preview'
+    value: PATH.CART_ORDER_PREVIEW
   },
   {
     icon: CheckCheck,
     name: 'Hoàn tất',
-    value: 'success'
+    value: PATH.CART_CHECKOUT_SUCCESS
   }
 ] as const
 
 export default function CartStep() {
-  const { step: cartStep, handePrevStep } = React.useContext(CartContext)
+  const router = useRouter()
+  const pathname = usePathname()
   return (
     <div className='space-y-2'>
       {/* Nếu đang ở bước giỏ hàng thì hiển thị nút "Mua thêm sản phẩm khác" */}
-      {cartStep === 'list' && (
+      {pathname === PATH.CART && (
         <Button asChild variant='link' className='text-main dark:text-main-foreground'>
           <Link href={PATH.PRODUCTS}>Mua thêm sản phẩm khác</Link>
         </Button>
       )}
       {/* Nếu không phải bước giỏ hàng thì hiển thị nút "Quay lại" */}
-      {cartStep !== 'list' && cartStep !== 'success' && (
-        <Button variant='link' className='text-main dark:text-main-foreground' onClick={handePrevStep}>
+      {[PATH.CART_ORDER_INFO, PATH.CART_ORDER_PREVIEW].includes(pathname as any) && (
+        <Button variant='link' className='text-main dark:text-main-foreground' onClick={() => router.back()}>
           Quay lại
         </Button>
       )}
@@ -56,7 +58,7 @@ export default function CartStep() {
       <div className='bg-main/10 dark:bg-main-foreground/10 rounded-md p-8'>
         <div className='grid grid-cols-12 gap-4'>
           {STEPS.map((step) => {
-            const isActiveStep = step.value === cartStep
+            const isActiveStep = step.value === pathname
             return (
               <div key={step.name} className='col-span-3 flex flex-col justify-start items-center space-y-2'>
                 <div

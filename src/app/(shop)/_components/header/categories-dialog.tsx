@@ -1,4 +1,4 @@
-import { Menu } from 'lucide-react'
+import { Grid2X2, Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -34,6 +34,13 @@ export default function CategoriesDialog({
         </DialogHeader>
         {categories.length > 0 && (
           <div className='grid grid-cols-12 md:grid-cols-10 gap-1 mt-4'>
+            <Link
+              href={PATH.PRODUCTS}
+              className='col-span-4 md:col-span-2 flex flex-col items-center space-y-4 p-2 rounded-md duration-100 hover:bg-muted'
+            >
+              <Grid2X2 className='size-[50px] stroke-1' />
+              <p className='text-center text-sm'>Tất cả sản phẩm</p>
+            </Link>
             {categories.map((category) => (
               <Link
                 key={category._id}

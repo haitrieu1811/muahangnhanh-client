@@ -1,4 +1,17 @@
+import { CartItemStatus } from '@/constants/enum'
 import { SuccessResponse } from '@/types/utils.types'
+
+export type OriginalCartItem = {
+  _id: string
+  userId: string
+  productId: string
+  unitPrice: number
+  unitPriceAfterDiscount: number
+  quantity: number
+  status: CartItemStatus
+  createdAt: string
+  updatedAt: string
+}
 
 export type CartItemType = {
   _id: string
@@ -24,4 +37,8 @@ export type GetMyCartResponse = SuccessResponse<{
   totalItems: number
   totalAmount: number
   cartItems: CartItemType[]
+}>
+
+export type AddProductToCartResponse = SuccessResponse<{
+  cartItem: OriginalCartItem
 }>
