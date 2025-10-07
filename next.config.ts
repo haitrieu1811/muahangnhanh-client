@@ -14,6 +14,16 @@ const nextConfig: NextConfig = {
         hostname: 'localhost',
         port: '4000',
         pathname: '/static/images/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'muahangnhanh-api.tranhaitrieu.com',
+        pathname: '/static/images/**'
+      },
+      {
+        protocol: 'http',
+        hostname: 'muahangnhanh-api.tranhaitrieu.com',
+        pathname: '/static/images/**'
       }
     ]
   }
