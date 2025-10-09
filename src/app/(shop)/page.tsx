@@ -5,7 +5,7 @@ import Link from 'next/link'
 import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
 import HomeCarousel from '@/app/(shop)/_components/home-carousel'
-import ProductItem from '@/app/(shop)/_components/product-item'
+import ProductsList from '@/app/(shop)/_components/products-list'
 import BlogItem from '@/components/blog-item'
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -81,13 +81,7 @@ export default async function HomePage() {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <div className='grid grid-cols-12 gap-4'>
-            {products.map((product) => (
-              <div key={product._id} className='col-span-6 md:col-span-3 lg:col-span-2'>
-                <ProductItem product={product} />
-              </div>
-            ))}
-          </div>
+          <ProductsList products={products} />
         </CardContent>
       </Card>
       {/* Bài viết */}

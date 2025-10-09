@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 import blogsApis from '@/apis/blogs.apis'
 import productsApis from '@/apis/products.apis'
-import ProductItem from '@/app/(shop)/_components/product-item'
+import ProductsList from '@/app/(shop)/_components/products-list'
 import { baseOpenGraph } from '@/app/shared-metadata'
 import BlogItem from '@/components/blog-item'
 import Breadcrumb from '@/components/breadcrumb'
@@ -128,13 +128,7 @@ export default async function BlogDetailPage({
             </CardAction>
           </CardHeader>
           <CardContent>
-            <div className='grid grid-cols-12 gap-4'>
-              {products.map((product) => (
-                <div key={product._id} className='col-span-6 md:col-span-3 lg:col-span-2'>
-                  <ProductItem product={product} />
-                </div>
-              ))}
-            </div>
+            <ProductsList products={products} />
           </CardContent>
         </Card>
         {/* Bài viết khác */}

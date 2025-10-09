@@ -4,7 +4,7 @@ import { FileSearch, Filter } from 'lucide-react'
 import { Metadata } from 'next'
 
 import productsApis from '@/apis/products.apis'
-import ProductItem from '@/app/(shop)/_components/product-item'
+import ProductsList from '@/app/(shop)/_components/products-list'
 import ProductsFilter from '@/app/(shop)/products/filter'
 import ProductsOrder from '@/app/(shop)/products/sort'
 import Breadcrumb from '@/components/breadcrumb'
@@ -96,13 +96,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             {/* Danh sách sản phẩm */}
             {totalProducts > 0 && (
               <div className='space-y-8'>
-                <div className='grid grid-cols-12 gap-4'>
-                  {products.map((product) => (
-                    <div key={product._id} className='col-span-6 md:col-span-4 lg:col-span-3'>
-                      <ProductItem product={product} />
-                    </div>
-                  ))}
-                </div>
+                <ProductsList products={products} itemClassName='col-span-6 md:col-span-3 lg:col-span-3' />
                 <CustomPagination totalPages={totalProductsPages} />
               </div>
             )}
