@@ -152,7 +152,7 @@ export default async function BlogDetailPage({
               {blogs
                 .filter((blog) => blog._id !== blogId)
                 .map((blog) => (
-                  <div key={blog._id} className='col-span-12 md:col-span-6 lg:col-span-3'>
+                  <div key={blog._id} className='col-span-6 lg:col-span-3'>
                     <BlogItem blog={blog} />
                   </div>
                 ))}

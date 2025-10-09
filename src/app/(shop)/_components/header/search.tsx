@@ -63,7 +63,10 @@ export default function HeaderSearch() {
               {products.slice(0, MAX_RESULTS).map((product) => (
                 <Link
                   key={product._id}
-                  href={'/'}
+                  href={PATH.PRODUCTS_DETAIL({
+                    name: product.name,
+                    id: product._id
+                  })}
                   className='p-2 duration-100 hover:bg-muted flex space-x-4 rounded-md'
                 >
                   <Image

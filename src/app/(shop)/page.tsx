@@ -103,7 +103,7 @@ export default async function HomePage() {
         <CardContent>
           <div className='grid grid-cols-12 gap-4'>
             {blogs.map((blog) => (
-              <div key={blog._id} className='col-span-12 md:col-span-6 lg:col-span-3'>
+              <div key={blog._id} className='col-span-6 lg:col-span-3'>
                 <BlogItem blog={blog} />
               </div>
             ))}
