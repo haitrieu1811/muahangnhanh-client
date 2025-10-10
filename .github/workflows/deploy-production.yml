@@ -64,7 +64,7 @@ jobs:
             docker pull haitrieu1811/muahangnhanh-client:v0
             docker container stop muahangnhanh-client
             docker container rm muahangnhanh-client
-            docker container run --name muahangnhanh-client -dp 3000:3000 haitrieu1811/muahangnhanh-client:v0
+            docker container run --restart unless-stopped --name muahangnhanh-client -dp 3000:3000 haitrieu1811/muahangnhanh-client:v0
             docker image prune -f
           # script: |
           #   export NVM_DIR=~/.nvm
