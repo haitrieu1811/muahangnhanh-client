@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import { Button } from '@/components/ui/button'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { ENV_CONFIG } from '@/constants/config'
 
 export default function HomeCarousel() {
   return (
@@ -34,7 +35,7 @@ export default function HomeCarousel() {
               <Image
                 width={500}
                 height={500}
-                src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c01.png'}
+                src={`${ENV_CONFIG.NEXT_PUBLIC_SERVER_BASE_URL}/static/images/20b7ff15e5e4097c5f50c0c01.png`}
                 alt=''
                 className='h-[240px] object-contain shrink-0 hidden lg:block'
               />
@@ -52,7 +53,7 @@ export default function HomeCarousel() {
               <Image
                 width={500}
                 height={500}
-                src={'http://localhost:4000/static/images/20b7ff15e5e4097c5f50c0c02.png'}
+                src={`${ENV_CONFIG.NEXT_PUBLIC_SERVER_BASE_URL}/static/images/20b7ff15e5e4097c5f50c0c02.png`}
                 alt=''
                 className='h-[240px] object-contain shrink-0 hidden lg:block'
               />

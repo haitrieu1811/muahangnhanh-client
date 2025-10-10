@@ -3,23 +3,27 @@ name: Deploy Production
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.20.0
-          cache: "npm"
+      # - name: Use Node.js ${{ matrix.node-version }}
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 22.20.0
+      #     cache: "npm"
+
       - name: Create .env file
-        run: echo "${{secrets.ENV_PRODUCTION}}" > .env
-      - run: npm i --force
-      - run: npm run build
+        run: echo "${{secrets.ENV_PRODUCTION}}" > .env.production
+      - name: Build Docker image
+        run: docker build -t haitrieu1811/muahangnhanh-client:v0 .
+      - name: Login to Dockerhub
+        run: docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_PASSWORD}}
+      - name: Push Docker image to Dockerhub
+        run: docker push haitrieu1811/muahangnhanh-client:v0
+      # - run: npm i --force
+      # - run: npm run build
       - name: Send telegram message after build success
         if: success()
         uses: appleboy/telegram-action@master
@@ -50,22 +54,28 @@ jobs:
     needs: build
     steps:
       - name: Execute remote SSH commands using password
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST_PRODUCTION }}
           username: ${{ secrets.USERNAME_PRODUCTION }}
           password: ${{ secrets.PASSWORD_PRODUCTION }}
           port: ${{ secrets.PORT_PRODUCTION }}
           script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            cd ~/muahangnhanh-client
-            git fetch --all
-            git reset --hard origin/main
-            echo "${{secrets.ENV_PRODUCTION}}" > .env
-            npm i --force
-            npm run build
-            pm2 restart MuaHangNhanhClient
+            docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_PASSWORD}}
+            docker pull haitrieu1811/muahangnhanh-client:v0
+            docker container stop muahangnhanh-client
+            docker container rm muahangnhanh-client
+            docker container run --name muahangnhanh-client -dp 3000:3000 haitrieu1811/muahangnhanh-client:v0
+          # script: |
+          #   export NVM_DIR=~/.nvm
+          #   source ~/.nvm/nvm.sh
+          #   cd ~/muahangnhanh-client
+          #   git fetch --all
+          #   git reset --hard origin/main
+          #   echo "${{secrets.ENV_PRODUCTION}}" > .env
+          #   npm i --force
+          #   npm run build
+          #   pm2 restart MuaHangNhanhClient
       - name: Send telegram message after deploy success
         if: success()
         uses: appleboy/telegram-action@master
