@@ -13,7 +13,6 @@ jobs:
       #   with:
       #     node-version: 22.20.0
       #     cache: "npm"
-
       - name: Create .env file
         run: echo "${{secrets.ENV_PRODUCTION}}" > .env.production
       - name: Build Docker image
@@ -24,26 +23,26 @@ jobs:
         run: docker push haitrieu1811/muahangnhanh-client:v0
       # - run: npm i --force
       # - run: npm run build
-      - name: Send telegram message after build success
+      - name: Send telegram message after build Docker image success
         if: success()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ Successfully built the project
+            ✅ Build Docker image successfully
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-      - name: Send telegram message after build fail
+      - name: Send telegram message after build Docker image fail
         if: failure()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌ Built a failed project
+            ❌ Build Docker image failed
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}
@@ -66,6 +65,7 @@ jobs:
             docker container stop muahangnhanh-client
             docker container rm muahangnhanh-client
             docker container run --name muahangnhanh-client -dp 3000:3000 haitrieu1811/muahangnhanh-client:v0
+            docker image prune -f
           # script: |
           #   export NVM_DIR=~/.nvm
           #   source ~/.nvm/nvm.sh
@@ -76,26 +76,26 @@ jobs:
           #   npm i --force
           #   npm run build
           #   pm2 restart MuaHangNhanhClient
-      - name: Send telegram message after deploy success
+      - name: Send telegram message after deploy Docker image success
         if: success()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ Successfully deploy the project
+            ✅ Docker image deployed successfully
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-      - name: Send telegram message after deploy fail
+      - name: Send telegram message after deploy Docker image fail
         if: failure()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌ Deploy a failed project
+            ❌ Docker image deployment failed
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}

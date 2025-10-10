@@ -1,9 +1,10 @@
 'use client'
 
+import React from 'react'
+
 import Prose from '@/components/prose'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import React from 'react'
 
 const MAX_HEIGHT = 400 // px
 

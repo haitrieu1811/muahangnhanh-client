@@ -19,7 +19,7 @@ const PAGES = [
     name: 'Sản phẩm'
   },
   {
-    path: PATH.ADMIN,
+    path: PATH.BLOGS,
     icon: Newspaper,
     name: 'Bài viết'
   },
