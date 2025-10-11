@@ -31,8 +31,8 @@ export default function ProductDetailDescription({ descHtml }: { descHtml: strin
       <Prose html={descHtml} />
       {isOverflow && (
         <div
-          className={cn('flex justify-center bg-background', {
-            'absolute bottom-0 inset-x-0 before:absolute before:bottom-full before:inset-x-0 before:h-[200%] before:bg-linear-to-b before:from-background/0 before:via-background/40 before:to-background':
+          className={cn('flex justify-center bg-card', {
+            'absolute bottom-0 inset-x-0 before:absolute before:bottom-full before:inset-x-0 before:h-[200%] before:bg-linear-to-b before:from-card/0 before:via-card/40 before:to-card':
               !isReadMore,
             relative: isReadMore
           })}
