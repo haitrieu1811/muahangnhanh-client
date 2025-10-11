@@ -83,9 +83,13 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
                       <FormItem>
                         <div className='flex items-center'>
                           <FormLabel>Mật khẩu</FormLabel>
-                          <a href='#' className='ml-auto text-sm underline-offset-4 hover:underline'>
+                          <Link
+                            href={PATH.FORGOT_PASSWORD}
+                            tabIndex={-1}
+                            className='ml-auto text-sm underline-offset-4 hover:underline'
+                          >
                             Quên mật khẩu?
-                          </a>
+                          </Link>
                         </div>
                         <FormControl>
                           <InputPassword {...field} />

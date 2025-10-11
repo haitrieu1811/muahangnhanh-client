@@ -5,7 +5,8 @@ import {
   GetMeResponse,
   LoginResponse,
   RegisterReqBody,
-  RegisterResponse
+  RegisterResponse,
+  ResetPasswordReqBody
 } from '@/types/users.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
@@ -13,6 +14,7 @@ export const LOGIN_API_ENDPOINT = '/users/login'
 export const REGISTER_API_ENDPOINT = '/users/register'
 export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
+export const RESET_PASSWORD_API_ENDPOINT = '/users/reset-password'
 
 const usersApis = {
   login(body: LoginSchema) {
@@ -66,6 +68,14 @@ const usersApis = {
 
   changePassword(body: ChangePasswordReqBody) {
     return http.post<GetMeResponse>('/users/change-password', body)
+  },
+
+  forgotPassword(email: string) {
+    return http.post<OnlyMessageResponse>('/users/forgot-password', { email })
+  },
+
+  resetPassword(body: ResetPasswordReqBody) {
+    return http.post<LoginResponse>(RESET_PASSWORD_API_ENDPOINT, body)
   }
 } as const
 

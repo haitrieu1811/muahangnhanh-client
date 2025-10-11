@@ -6,6 +6,7 @@ import {
   LOGIN_API_ENDPOINT,
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
   REGISTER_API_ENDPOINT,
+  RESET_PASSWORD_API_ENDPOINT,
   UPDATE_ME_API_ENDPOINT
 } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
@@ -69,19 +70,13 @@ export class UnauthorizedError extends HttpError {
   status: typeof UNAUTHORIZED_ERROR_STATUS_CODE
   payload: UnauthorizedErrorPayload
 
-  constructor({
-    status,
-    payload
-  }: {
-    status: typeof UNAUTHORIZED_ERROR_STATUS_CODE
-    payload: UnauthorizedErrorPayload
-  }) {
+  constructor({ payload, message = 'Unauthorized Error' }: { payload: UnauthorizedErrorPayload; message?: string }) {
     super({
-      status,
+      status: UNAUTHORIZED_ERROR_STATUS_CODE,
       payload,
-      message: 'Unauthorized Error'
+      message
     })
-    this.status = status
+    this.status = UNAUTHORIZED_ERROR_STATUS_CODE
     this.payload = payload
   }
 }
@@ -148,13 +143,27 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
     else if (res.status === UNAUTHORIZED_ERROR_STATUS_CODE) {
       // Xử lý ở client
       if (isClient()) {
-        try {
-          await fetch('/api/auth/logout', {
-            method: 'POST'
+        /**
+         * Không đăng xuất khi hết hạn token reset mật khẩu
+         * mà thông báo lỗi hết hạn cho người dùng biết và
+         * gửi lại yêu cầu khác
+         */
+        if (normalizePath(path) !== normalizePath(RESET_PASSWORD_API_ENDPOINT)) {
+          try {
+            await fetch('/api/auth/logout', {
+              method: 'POST'
+            })
+            clearAuthLS()
+            location.href = PATH.LOGIN
+          } catch {}
+        }
+        // Xư lý khi hết hạn token reset mật khẩu
+        else if (normalizePath(path) === normalizePath(RESET_PASSWORD_API_ENDPOINT)) {
+          throw new UnauthorizedError({
+            payload: payload as EntityErrorPayload,
+            message: 'Yêu cầu đặt lại mật khẩu đã hết hạn hoặc không hợp lệ.'
           })
-          clearAuthLS()
-          location.href = PATH.LOGIN
-        } catch {}
+        }
       }
       // Xử lý ở Next server
       else {
@@ -183,8 +192,12 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
 
   // Xử lý khi request thành công (ở client)
   if (isClient()) {
-    // Đăng nhập - Đăng ký
-    if ([LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT].map((item) => normalizePath(item)).includes(normalizePath(path))) {
+    // Set accessToken, refreshToken vào localStorage khi Đăng nhập - Đăng ký - Reset mật khẩu thành công
+    if (
+      [LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT, RESET_PASSWORD_API_ENDPOINT]
+        .map((item) => normalizePath(item))
+        .includes(normalizePath(path))
+    ) {
       const { accessToken, refreshToken, user } = (payload as LoginResponse).data
       const decodedAccessToken = jwtDecode(accessToken)
       const decodedRefreshToken = jwtDecode(refreshToken)

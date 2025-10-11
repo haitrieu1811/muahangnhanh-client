@@ -45,3 +45,9 @@ export type ChangePasswordResponse = SuccessResponse<{
     updatedAt: string
   }
 }>
+
+export type ResetPasswordReqBody = {
+  forgotPasswordToken: string
+  password: string
+  confirmPassword: string
+}

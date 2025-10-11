@@ -14,6 +14,7 @@ const PATH = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   LOGOUT: '/auth/logout',
+  FORGOT_PASSWORD: '/auth/forgot-password',
 
   ACCOUNT: '/account',
   ACCOUNT_ADDRESSES: '/account/addresses',
