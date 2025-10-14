@@ -8,6 +8,7 @@ import {
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
   REGISTER_ROUTE_HANDLER,
   RESET_PASSWORD_API_ENDPOINT,
+  RESET_PASSWORD_ROUTE_HANDLER,
   UPDATE_ME_API_ENDPOINT
 } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
@@ -140,7 +141,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
          * mà thông báo lỗi hết hạn cho người dùng biết và
          * gửi lại yêu cầu khác
          */
-        if (normalizePath(path) !== normalizePath(RESET_PASSWORD_API_ENDPOINT)) {
+        if (normalizePath(path) !== normalizePath(RESET_PASSWORD_ROUTE_HANDLER)) {
           try {
             await fetch('/api/auth/logout', {
               method: 'POST'
@@ -149,16 +150,16 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
             location.href = PATH.LOGIN
           } catch {}
         }
-        // Xư lý khi hết hạn token reset mật khẩu
-        else if (normalizePath(path) === normalizePath(RESET_PASSWORD_API_ENDPOINT)) {
-          throw new UnauthorizedError({
-            payload: payload as EntityErrorPayload,
-            message: 'Yêu cầu đặt lại mật khẩu đã hết hạn hoặc không hợp lệ.'
-          })
-        }
       }
       // Xử lý ở Next server
       else {
+        // Xư lý khi hết hạn token reset mật khẩu
+        if (normalizePath(path) === normalizePath(RESET_PASSWORD_API_ENDPOINT)) {
+          throw new UnauthorizedError({
+            payload: payload as UnauthorizedErrorPayload,
+            message: 'Yêu cầu đặt lại mật khẩu đã hết hạn hoặc không hợp lệ.'
+          })
+        }
         const accessToken = (
           options?.headers as {
             Authorization: string
@@ -186,7 +187,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   if (isClient()) {
     // Set accessToken, refreshToken vào localStorage khi Đăng nhập - Đăng ký - Reset mật khẩu thành công
     if (
-      [LOGIN_ROUTE_HANDLER, REGISTER_ROUTE_HANDLER, RESET_PASSWORD_API_ENDPOINT]
+      [LOGIN_ROUTE_HANDLER, REGISTER_ROUTE_HANDLER, RESET_PASSWORD_ROUTE_HANDLER]
         .map((item) => normalizePath(item))
         .includes(normalizePath(path))
     ) {
