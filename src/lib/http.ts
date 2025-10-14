@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { redirect } from 'next/navigation'
+import { toast } from 'sonner'
 
 import {
-  LOGIN_API_ENDPOINT,
+  LOGIN_ROUTE_HANDLER,
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
   REGISTER_API_ENDPOINT,
   RESET_PASSWORD_API_ENDPOINT,
@@ -11,18 +12,9 @@ import {
 } from '@/apis/users.apis'
 import { ENV_CONFIG } from '@/constants/config'
 import PATH from '@/constants/path'
-import {
-  clearAuthLS,
-  getAccessTokenFromLS,
-  setAccessTokenExpiresAtToLS,
-  setAccessTokenToLS,
-  setRefreshTokenExpiresAtToLS,
-  setRefreshTokenToLS,
-  setUserToLS
-} from '@/lib/storage'
-import { jwtDecode, normalizePath } from '@/lib/utils'
+import { clearAuthLS, getAccessTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserToLS } from '@/lib/storage'
+import { normalizePath } from '@/lib/utils'
 import { GetMeResponse, LoginResponse } from '@/types/users.types'
-import { toast } from 'sonner'
 
 export const isClient = () => typeof window !== 'undefined'
 
@@ -194,17 +186,13 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   if (isClient()) {
     // Set accessToken, refreshToken vào localStorage khi Đăng nhập - Đăng ký - Reset mật khẩu thành công
     if (
-      [LOGIN_API_ENDPOINT, REGISTER_API_ENDPOINT, RESET_PASSWORD_API_ENDPOINT]
+      [LOGIN_ROUTE_HANDLER, REGISTER_API_ENDPOINT, RESET_PASSWORD_API_ENDPOINT]
         .map((item) => normalizePath(item))
         .includes(normalizePath(path))
     ) {
       const { accessToken, refreshToken, user } = (payload as LoginResponse).data
-      const decodedAccessToken = jwtDecode(accessToken)
-      const decodedRefreshToken = jwtDecode(refreshToken)
       setAccessTokenToLS(accessToken)
       setRefreshTokenToLS(refreshToken)
-      setAccessTokenExpiresAtToLS(new Date(decodedAccessToken.exp * 1000).toISOString())
-      setRefreshTokenExpiresAtToLS(new Date(decodedRefreshToken.exp * 1000).toISOString())
       setUserToLS(user)
     }
     // Cập nhật tài khoản
