@@ -36,10 +36,9 @@ export default function ResetPasswordForm({ className, ...props }: React.Compone
 
   const resetPasswordMutation = useMutation({
     mutationKey: ['reset-password'],
-    mutationFn: usersApis.resetPassword,
+    mutationFn: usersApis.resetPasswordFromNextClientToNextServer,
     onSuccess: async (data) => {
-      const { accessToken, refreshToken, user } = data.payload.data
-      await usersApis.setTokens({ accessToken, refreshToken })
+      const { user } = data.payload.data
       setUser(user)
       setIsAuthenticated(true)
       form.reset()

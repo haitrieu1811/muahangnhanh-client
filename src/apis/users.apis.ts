@@ -14,6 +14,7 @@ export const LOGIN_ROUTE_HANDLER = '/api/auth/login'
 export const REGISTER_ROUTE_HANDLER = '/api/auth/register'
 export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
+export const RESET_PASSWORD_ROUTE_HANDLER = '/api/auth/reset-password'
 export const RESET_PASSWORD_API_ENDPOINT = '/users/reset-password'
 
 const usersApis = {
@@ -90,8 +91,14 @@ const usersApis = {
     return http.post<OnlyMessageResponse>('/users/forgot-password', { email })
   },
 
-  resetPassword(body: ResetPasswordReqBody) {
+  resetPasswordFromNextServerToServer(body: ResetPasswordReqBody) {
     return http.post<LoginResponse>(RESET_PASSWORD_API_ENDPOINT, body)
+  },
+
+  resetPasswordFromNextClientToNextServer(body: ResetPasswordReqBody) {
+    return http.post<LoginResponse>(RESET_PASSWORD_ROUTE_HANDLER, body, {
+      baseUrl: ''
+    })
   }
 } as const
 
