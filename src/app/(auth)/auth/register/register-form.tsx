@@ -35,11 +35,10 @@ export default function RegisterForm({ className, ...props }: React.ComponentPro
 
   const registerMutation = useMutation({
     mutationKey: ['register'],
-    mutationFn: usersApis.register,
+    mutationFn: usersApis.registerFromNextClientToNextServer,
     onSuccess: async (data) => {
       // Đăng nhập ngay sau khi đăng ký thành công
-      const { accessToken, refreshToken, user } = data.payload.data
-      await usersApis.setTokens({ accessToken, refreshToken })
+      const { user } = data.payload.data
       router.push(PATH.HOME)
       setIsAuthenticated(true)
       setUser(user)

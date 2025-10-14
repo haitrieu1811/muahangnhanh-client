@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import {
   LOGIN_ROUTE_HANDLER,
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
-  REGISTER_API_ENDPOINT,
+  REGISTER_ROUTE_HANDLER,
   RESET_PASSWORD_API_ENDPOINT,
   UPDATE_ME_API_ENDPOINT
 } from '@/apis/users.apis'
@@ -186,7 +186,7 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
   if (isClient()) {
     // Set accessToken, refreshToken vào localStorage khi Đăng nhập - Đăng ký - Reset mật khẩu thành công
     if (
-      [LOGIN_ROUTE_HANDLER, REGISTER_API_ENDPOINT, RESET_PASSWORD_API_ENDPOINT]
+      [LOGIN_ROUTE_HANDLER, REGISTER_ROUTE_HANDLER, RESET_PASSWORD_API_ENDPOINT]
         .map((item) => normalizePath(item))
         .includes(normalizePath(path))
     ) {
