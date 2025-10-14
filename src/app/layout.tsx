@@ -3,6 +3,7 @@ import { Space_Grotesk } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
 import { baseOpenGraph } from '@/app/shared-metadata'
+import RefreshToken from '@/components/refresh-token'
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
 import CartProvider from '@/providers/cart.provider'
@@ -37,6 +38,7 @@ export default function RootLayout({
             <AppProvider>
               <CartProvider>
                 {children}
+                <RefreshToken />
                 <Toaster richColors position='top-center' />
                 <NextTopLoader showSpinner={false} shadow={false} />
               </CartProvider>

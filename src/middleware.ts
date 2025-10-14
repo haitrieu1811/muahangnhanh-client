@@ -34,14 +34,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // Trang authenticate - đăng nhập rồi thì không vào được
-  if (authPaths.map((item) => normalizePath(item)).some((path) => normalizePath(pathname).startsWith(path))) {
-    if (accessToken) {
-      if (decodedAccessToken.userRole === UserRole.Admin) {
-        return NextResponse.redirect(new URL(PATH.ADMIN, request.url))
-      } else {
-        return NextResponse.redirect(new URL(PATH.HOME, request.url))
-      }
-    }
+  if (
+    authPaths.map((item) => normalizePath(item)).some((path) => normalizePath(pathname).startsWith(path)) &&
+    accessToken
+  ) {
+    return NextResponse.redirect(new URL(PATH.HOME, request.url))
   }
 
   return NextResponse.next()

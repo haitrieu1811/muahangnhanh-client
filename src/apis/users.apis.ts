@@ -1,4 +1,4 @@
-import http from '@/lib/http'
+import http, { HttpResponse } from '@/lib/http'
 import { LoginSchema } from '@/rules/users.rules'
 import {
   ChangePasswordReqBody,
@@ -8,51 +8,37 @@ import {
   RegisterResponse,
   ResetPasswordReqBody
 } from '@/types/users.types'
-import { OnlyMessageResponse } from '@/types/utils.types'
+import { OnlyMessageResponse, RefreshTokenResponse } from '@/types/utils.types'
 
 export const LOGIN_ROUTE_HANDLER = '/api/auth/login'
 export const REGISTER_ROUTE_HANDLER = '/api/auth/register'
 export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
+export const REFRESH_TOKEN_ROUTE_HANDLER = '/api/auth/refresh-token'
 export const RESET_PASSWORD_ROUTE_HANDLER = '/api/auth/reset-password'
 export const RESET_PASSWORD_API_ENDPOINT = '/users/reset-password'
 
+let refreshTokenRouteHandlerRequest: null | Promise<HttpResponse<RefreshTokenResponse>> = null
+
 const usersApis = {
-  // Đăng nhập từ NextJS server tới server backend
   loginFromNextServerToServer(body: LoginSchema) {
     return http.post<LoginResponse>('/users/login', body)
   },
 
-  // Đăng nhập từ NextJS client tới NextJS server
   loginFromNextClientToNextServer(body: LoginSchema) {
     return http.post<LoginResponse>(LOGIN_ROUTE_HANDLER, body, {
       baseUrl: ''
     })
   },
 
-  // Đăng ký từ NextJS server tới Server backend
   registerFromNextServerToServer(body: RegisterReqBody) {
     return http.post<RegisterResponse>('/users/register', body)
   },
 
-  // Đăng ký từ NextJS client tới NextJS server
   registerFromNextClientToNextServer(body: RegisterReqBody) {
     return http.post<RegisterResponse>(REGISTER_ROUTE_HANDLER, body, {
       baseUrl: ''
     })
-  },
-
-  setTokens({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) {
-    return http.post<OnlyMessageResponse>(
-      '/api/auth/set-tokens',
-      {
-        accessToken,
-        refreshToken
-      },
-      {
-        baseUrl: ''
-      }
-    )
   },
 
   logoutFromNextClientToNextServer() {
@@ -69,6 +55,28 @@ const usersApis = {
     return http.post<OnlyMessageResponse>('/users/logout', {
       refreshToken
     })
+  },
+
+  refreshTokenFromNextServerToServer(refreshToken: string) {
+    return http.post<RefreshTokenResponse>('/users/refresh-token', {
+      refreshToken
+    })
+  },
+
+  async refreshTokenFromNextClientToNextServer() {
+    if (refreshTokenRouteHandlerRequest) {
+      return refreshTokenRouteHandlerRequest
+    }
+    refreshTokenRouteHandlerRequest = http.post<RefreshTokenResponse>(
+      REFRESH_TOKEN_ROUTE_HANDLER,
+      {},
+      {
+        baseUrl: ''
+      }
+    )
+    const result = await refreshTokenRouteHandlerRequest
+    refreshTokenRouteHandlerRequest = null
+    return result
   },
 
   getMe(accessToken: string) {
