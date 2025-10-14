@@ -10,15 +10,23 @@ import {
 } from '@/types/users.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
-export const LOGIN_API_ENDPOINT = '/users/login'
+export const LOGIN_ROUTE_HANDLER = '/api/auth/login'
 export const REGISTER_API_ENDPOINT = '/users/register'
 export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
 export const RESET_PASSWORD_API_ENDPOINT = '/users/reset-password'
 
 const usersApis = {
-  login(body: LoginSchema) {
-    return http.post<LoginResponse>(LOGIN_API_ENDPOINT, body)
+  // Đăng nhập từ NextJS server tới server backend
+  loginFromNextServerToServer(body: LoginSchema) {
+    return http.post<LoginResponse>('/users/login', body)
+  },
+
+  // Đăng nhập từ NextJS client tới NextJS server
+  loginFromNextClientToNextServer(body: LoginSchema) {
+    return http.post<LoginResponse>(LOGIN_ROUTE_HANDLER, body, {
+      baseUrl: ''
+    })
   },
 
   register(body: RegisterReqBody) {

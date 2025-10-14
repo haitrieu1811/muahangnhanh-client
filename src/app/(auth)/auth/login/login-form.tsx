@@ -33,10 +33,9 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
 
   const loginMutation = useMutation({
     mutationKey: ['login'],
-    mutationFn: usersApis.login,
+    mutationFn: usersApis.loginFromNextClientToNextServer,
     onSuccess: async (data) => {
-      const { accessToken, refreshToken, user } = data.payload.data
-      await usersApis.setTokens({ accessToken, refreshToken })
+      const { user } = data.payload.data
       router.push(PATH.HOME)
       setIsAuthenticated(true)
       setUser(user)
