@@ -11,7 +11,7 @@ import {
 import { OnlyMessageResponse } from '@/types/utils.types'
 
 export const LOGIN_ROUTE_HANDLER = '/api/auth/login'
-export const REGISTER_API_ENDPOINT = '/users/register'
+export const REGISTER_ROUTE_HANDLER = '/api/auth/register'
 export const UPDATE_ME_API_ENDPOINT = '/users/me'
 export const LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT = '/api/auth/logout'
 export const RESET_PASSWORD_API_ENDPOINT = '/users/reset-password'
@@ -29,8 +29,16 @@ const usersApis = {
     })
   },
 
-  register(body: RegisterReqBody) {
-    return http.post<RegisterResponse>(REGISTER_API_ENDPOINT, body)
+  // Đăng ký từ NextJS server tới Server backend
+  registerFromNextServerToServer(body: RegisterReqBody) {
+    return http.post<RegisterResponse>('/users/register', body)
+  },
+
+  // Đăng ký từ NextJS client tới NextJS server
+  registerFromNextClientToNextServer(body: RegisterReqBody) {
+    return http.post<RegisterResponse>(REGISTER_ROUTE_HANDLER, body, {
+      baseUrl: ''
+    })
   },
 
   setTokens({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) {
