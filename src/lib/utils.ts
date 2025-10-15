@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge'
 
 import usersApis from '@/apis/users.apis'
 import { EntityError } from '@/lib/http'
-import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/storage'
+import { clearAuthLS, getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/storage'
 import { Address } from '@/types/addresses.types'
 import { TokenPayload } from '@/types/utils.types'
 
@@ -107,8 +107,12 @@ export const handleCheckAndRefreshToken = async (params?: { onError?: () => void
    */
   const now = new Date().getTime() / 1000 - 1
 
-  // Nếu refresh token hết hạn (hết phiên đăng nhập thì dừng lại)
-  if (decodedRefreshToken.exp <= now) return
+  // Nếu refresh token hết hạn (hết phiên đăng nhập thì dừng lại và cho đăng xuất)
+  if (decodedRefreshToken.exp <= now) {
+    clearAuthLS()
+    params?.onError?.()
+    return
+  }
 
   /**
    * Thời gian còn lại của AT (access token) = decodedAccessToken.exp - now

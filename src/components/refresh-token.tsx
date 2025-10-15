@@ -2,11 +2,12 @@
 
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 import PATH from '@/constants/path'
 import { handleCheckAndRefreshToken } from '@/lib/utils'
+import useAppContext from '@/hooks/use-app-context'
 
 const SKIP_PATHS = [
   PATH.LOGIN,
@@ -20,7 +21,10 @@ const SKIP_PATHS = [
 const TIMEOUT = 1000
 
 export default function RefreshToken() {
+  const router = useRouter()
   const pathname = usePathname()
+
+  const { setIsAuthenticated, setUser } = useAppContext()
 
   React.useEffect(() => {
     // Bỏ qua các trang không cần refresh token
@@ -31,6 +35,9 @@ export default function RefreshToken() {
     // Khởi tạo chạy lần đầu
     handleCheckAndRefreshToken({
       onError: () => {
+        setIsAuthenticated(false)
+        setUser(null)
+        router.push(PATH.LOGIN)
         clearInterval(interval)
       }
     })
@@ -39,6 +46,9 @@ export default function RefreshToken() {
       () =>
         handleCheckAndRefreshToken({
           onError: () => {
+            setUser(null)
+            setIsAuthenticated(false)
+            router.push(PATH.LOGIN)
             clearInterval(interval)
           }
         }),
@@ -48,7 +58,7 @@ export default function RefreshToken() {
     return () => {
       clearInterval(interval)
     }
-  }, [pathname])
+  }, [pathname, router, setIsAuthenticated, setUser])
 
   return null
 }
