@@ -1,9 +1,7 @@
 import { Bell, Handbag, Search } from 'lucide-react'
-import { cookies } from 'next/headers'
 import React from 'react'
 
 import productsApis from '@/apis/products.apis'
-import usersApis from '@/apis/users.apis'
 import HeaderAccount from '@/app/(shop)/_components/header/account'
 import HeaderCartPopover from '@/app/(shop)/_components/header/cart-popover'
 import CategoriesDialog from '@/app/(shop)/_components/header/categories-dialog'
@@ -15,19 +13,9 @@ import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ProductCategoryType } from '@/types/products.types'
-import { User } from '@/types/users.types'
 
 export default async function ShopHeader() {
-  const cookieStore = await cookies()
-  const accessToken = cookieStore.get('accessToken')?.value ?? ''
-
-  let user: User | null = null
   let productCategories: ProductCategoryType[] = []
-
-  try {
-    const getMeRes = await usersApis.getMe(accessToken)
-    user = getMeRes.payload.data.user
-  } catch {}
 
   try {
     const getProductCategoriesRes = await productsApis.getProductCategories()
@@ -51,7 +39,7 @@ export default async function ShopHeader() {
           </div>
           {/* Giỏ hàng - thông báo - tài khoản */}
           <div className='flex items-center space-x-4'>
-            <HeaderAccount user={user} accessToken={accessToken} />
+            <HeaderAccount />
             <ModeToggle />
           </div>
         </div>

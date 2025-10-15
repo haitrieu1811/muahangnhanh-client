@@ -7,7 +7,9 @@ import { UseFormSetError } from 'react-hook-form'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 
+import usersApis from '@/apis/users.apis'
 import { EntityError } from '@/lib/http'
+import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/storage'
 import { Address } from '@/types/addresses.types'
 import { TokenPayload } from '@/types/utils.types'
 
@@ -86,4 +88,41 @@ export const getIdFromNameId = (nameId: string) => {
 
 export const formatAddress = (address: Address) => {
   return `${address.detail}, ${address.commune.prefix} ${address.commune.name}, ${address.province.prefix} ${address.province.name}`
+}
+
+export const handleCheckAndRefreshToken = async (params?: { onError?: () => void; onSuccess?: () => void }) => {
+  const myAccessToken = getAccessTokenFromLS()
+  const myRefreshToken = getRefreshTokenFromLS()
+
+  // Chưa đăng nhập thì không cần refresh token
+  if (!myAccessToken || !myRefreshToken) return
+
+  const decodedAccessToken = jwtDecode(myAccessToken)
+  const decodedRefreshToken = jwtDecode(myRefreshToken)
+
+  /**
+   * Lấy ra thời điểm hiện tại theo định dạng epochtime (ms),
+   * do access token expires tính theo epochtime giây (s) nên phải chuyển đổi sang giây
+   * bằng cách chia cho 1000
+   */
+  const now = new Date().getTime() / 1000 - 1
+
+  // Nếu refresh token hết hạn (hết phiên đăng nhập thì dừng lại)
+  if (decodedRefreshToken.exp <= now) return
+
+  /**
+   * Thời gian còn lại của AT (access token) = decodedAccessToken.exp - now
+   * Thời hạn sử dụng của AT = decodedAccessToken.exp - decodedAccessToken.iat
+   * Nếu thời gian còn lại của AT nhỏ hơn 1/3 thời gian sử dụng của AT (với điều kiện refresh
+   * token phải còn hạn) thì cho tiến hành refresh token
+   * Ví dụ: nếu một AT có hạn sử dụng 30s khi hạn sử dụng 10s thì cho refresh token
+   */
+  if (decodedAccessToken.exp - now < (decodedAccessToken.exp - decodedAccessToken.iat) / 3) {
+    try {
+      await usersApis.refreshTokenFromNextClientToNextServer()
+      params?.onSuccess?.()
+    } catch {
+      params?.onError?.()
+    }
+  }
 }

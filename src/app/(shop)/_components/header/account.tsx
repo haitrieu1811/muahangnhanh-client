@@ -19,19 +19,26 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
+import useAppContext from '@/hooks/use-app-context'
 import useCartContext from '@/hooks/use-cart-context'
+import useIsClient from '@/hooks/use-is-client'
 import useLogout from '@/hooks/use-logout'
+import { getAccessTokenFromLS } from '@/lib/storage'
 import { jwtDecode } from '@/lib/utils'
-import { User } from '@/types/users.types'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export default function HeaderAccount({ user, accessToken }: { user: User | null; accessToken: string }) {
+export default function HeaderAccount() {
+  const accessToken = getAccessTokenFromLS()
+
+  const isClient = useIsClient()
   const { handleLogout } = useLogout()
   const { totalCartItems } = useCartContext()
+  const { isAuthenticated, user } = useAppContext()
 
   return (
     <React.Fragment>
       {/* Chưa đăng nhập */}
-      {!user && (
+      {!isAuthenticated && isClient && (
         <div className='flex items-center space-x-4'>
           <Button asChild variant='link' className='p-0'>
             <Link href={PATH.REGISTER}>Đăng ký</Link>
@@ -41,9 +48,8 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
           </Button>
         </div>
       )}
-
       {/* Đã đăng nhập */}
-      {user && (
+      {isAuthenticated && isClient && user && (
         <div className='flex items-center space-x-4'>
           <div className='flex space-x-2'>
             {/* Thông báo */}
@@ -84,7 +90,7 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
               <DropdownMenuItem asChild>
                 <Link href={PATH.ACCOUNT}>Tài khoản</Link>
               </DropdownMenuItem>
-              {jwtDecode(accessToken).userRole === UserRole.Admin && (
+              {accessToken && jwtDecode(accessToken)?.userRole === UserRole.Admin && (
                 <DropdownMenuItem asChild>
                   <Link href={PATH.ADMIN}>Trang quản trị</Link>
                 </DropdownMenuItem>
@@ -97,6 +103,7 @@ export default function HeaderAccount({ user, accessToken }: { user: User | null
           </DropdownMenu>
         </div>
       )}
+      {!isClient && <Skeleton className='w-[200px] h-9' />}
     </React.Fragment>
   )
 }

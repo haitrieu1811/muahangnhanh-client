@@ -17,6 +17,8 @@ const PATH = {
   FORGOT_PASSWORD: '/auth/forgot-password',
   FORGOT_RESET_PASSWORD: '/auth/reset-password',
 
+  REFRESH_TOKEN: '/redirect/refresh-token',
+
   ACCOUNT: '/account',
   ACCOUNT_ADDRESSES: '/account/addresses',
   ACCOUNT_ORDERS: '/account/orders',
