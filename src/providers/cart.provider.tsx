@@ -11,7 +11,6 @@ type ExtendedCartItem = CartItemType & {
 }
 
 type CartContext = {
-  setEnabled: React.Dispatch<React.SetStateAction<boolean>>
   extendedCartItems: ExtendedCartItem[]
   setExtendedCartItems: React.Dispatch<React.SetStateAction<ExtendedCartItem[]>>
   totalCartItems: number
@@ -25,7 +24,6 @@ type CartContext = {
 }
 
 const initialCartContext: CartContext = {
-  setEnabled: () => null,
   extendedCartItems: [],
   setExtendedCartItems: () => null,
   totalCartItems: 0,
@@ -41,13 +39,12 @@ const initialCartContext: CartContext = {
 export const CartContext = React.createContext<CartContext>(initialCartContext)
 
 export default function CartProvider({ children }: { children: React.ReactNode }) {
-  const [enabled, setEnabled] = React.useState(false)
   const [extendedCartItems, setExtendedCartItems] = React.useState(initialCartContext.extendedCartItems)
 
   const getMyCartQuery = useQuery({
-    queryKey: ['get-my-cart', enabled],
+    queryKey: ['get-my-cart'],
     queryFn: () => cartItemsApis.getMyCart(),
-    enabled
+    enabled: false
   })
 
   const cartItems = React.useMemo(
@@ -107,7 +104,6 @@ export default function CartProvider({ children }: { children: React.ReactNode }
   return (
     <CartContext
       value={{
-        setEnabled,
         extendedCartItems,
         setExtendedCartItems,
         totalCartItems,

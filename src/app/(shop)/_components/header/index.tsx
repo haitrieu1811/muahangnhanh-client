@@ -1,7 +1,6 @@
 import { Bell, Handbag, Search } from 'lucide-react'
 import React from 'react'
 
-import productsApis from '@/apis/products.apis'
 import HeaderAccount from '@/app/(shop)/_components/header/account'
 import HeaderCartPopover from '@/app/(shop)/_components/header/cart-popover'
 import CategoriesDialog from '@/app/(shop)/_components/header/categories-dialog'
@@ -12,16 +11,8 @@ import Logo from '@/components/logo'
 import ModeToggle from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ProductCategoryType } from '@/types/products.types'
 
 export default async function ShopHeader() {
-  let productCategories: ProductCategoryType[] = []
-
-  try {
-    const getProductCategoriesRes = await productsApis.getProductCategories()
-    productCategories = getProductCategoriesRes.payload.data.productCategories
-  } catch {}
-
   return (
     <React.Fragment>
       {/* PC */}
@@ -31,7 +22,7 @@ export default async function ShopHeader() {
             {/* Logo */}
             <Logo />
             {/* Danh mục */}
-            <CategoriesDialog categories={productCategories} />
+            <CategoriesDialog />
           </div>
           {/* Tìm kiếm */}
           <div className='flex-1'>
@@ -62,7 +53,7 @@ export default async function ShopHeader() {
               </PopoverContent>
             </Popover>
             {/* Danh mục sản phẩm */}
-            <CategoriesDialog smallTrigger categories={productCategories} />
+            <CategoriesDialog smallTrigger />
             {/* Thông báo */}
             <HeaderNotificationsPopover>
               <Button size='icon' variant='outline'>
