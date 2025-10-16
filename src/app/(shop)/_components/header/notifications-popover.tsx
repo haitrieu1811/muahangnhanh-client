@@ -1,3 +1,5 @@
+'use client'
+
 import { Bell } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,11 +8,32 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import PATH from '@/constants/path'
+import { socket } from '@/lib/socket'
 import { cn } from '@/lib/utils'
 
 const totalNotifications = Object.keys(PATH).length
 
 export default function HeaderNotificationsPopover({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    if (socket.connected) {
+      onConnect()
+    }
+
+    function onConnect() {
+      console.log(socket.id)
+    }
+
+    function onDisconnect() {}
+
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+
+    return () => {
+      socket.off('connect', onConnect)
+      socket.off('disconnect', onDisconnect)
+    }
+  }, [])
+
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
