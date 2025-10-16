@@ -14,6 +14,8 @@ export type OnlyMessageResponse = {
   message: string
 }
 
+export type RefreshTokenResponse = SuccessResponse<TokensResponse>
+
 export type TokensResponse = {
   accessToken: string
   refreshToken: string

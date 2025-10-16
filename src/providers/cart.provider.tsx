@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 import cartItemsApis from '@/apis/cartItems.apis'
-import { getAccessTokenFromLS } from '@/lib/storage'
 import { CartItemType } from '@/types/cartItems.types'
 
 type ExtendedCartItem = CartItemType & {
@@ -12,6 +11,7 @@ type ExtendedCartItem = CartItemType & {
 }
 
 type CartContext = {
+  setEnableFetchMyCart: React.Dispatch<React.SetStateAction<boolean>>
   extendedCartItems: ExtendedCartItem[]
   setExtendedCartItems: React.Dispatch<React.SetStateAction<ExtendedCartItem[]>>
   totalCartItems: number
@@ -25,6 +25,7 @@ type CartContext = {
 }
 
 const initialCartContext: CartContext = {
+  setEnableFetchMyCart: () => null,
   extendedCartItems: [],
   setExtendedCartItems: () => null,
   totalCartItems: 0,
@@ -40,14 +41,14 @@ const initialCartContext: CartContext = {
 export const CartContext = React.createContext<CartContext>(initialCartContext)
 
 export default function CartProvider({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = !!getAccessTokenFromLS()
+  const [enabled, setEnabled] = React.useState<boolean>(false)
 
   const [extendedCartItems, setExtendedCartItems] = React.useState(initialCartContext.extendedCartItems)
 
   const getMyCartQuery = useQuery({
-    queryKey: ['get-my-cart', isAuthenticated],
+    queryKey: ['get-my-cart'],
     queryFn: () => cartItemsApis.getMyCart(),
-    enabled: isAuthenticated
+    enabled
   })
 
   const cartItems = React.useMemo(
@@ -107,6 +108,7 @@ export default function CartProvider({ children }: { children: React.ReactNode }
   return (
     <CartContext
       value={{
+        setEnableFetchMyCart: setEnabled,
         extendedCartItems,
         setExtendedCartItems,
         totalCartItems,

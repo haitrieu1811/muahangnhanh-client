@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import {
   LOGIN_ROUTE_HANDLER,
   LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT,
+  REFRESH_TOKEN_ROUTE_HANDLER,
   REGISTER_ROUTE_HANDLER,
   RESET_PASSWORD_API_ENDPOINT,
   RESET_PASSWORD_ROUTE_HANDLER,
@@ -16,6 +17,7 @@ import PATH from '@/constants/path'
 import { clearAuthLS, getAccessTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserToLS } from '@/lib/storage'
 import { normalizePath } from '@/lib/utils'
 import { GetMeResponse, LoginResponse } from '@/types/users.types'
+import { RefreshTokenResponse } from '@/types/utils.types'
 
 export const isClient = () => typeof window !== 'undefined'
 
@@ -185,7 +187,10 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
 
   // Xử lý khi request thành công (ở client)
   if (isClient()) {
-    // Set accessToken, refreshToken vào localStorage khi Đăng nhập - Đăng ký - Reset mật khẩu thành công
+    /**
+     * Set accessToken, refreshToken, user vào localStorage khi Đăng
+     * nhập - Đăng ký - Reset mật khẩu thành công
+     */
     if (
       [LOGIN_ROUTE_HANDLER, REGISTER_ROUTE_HANDLER, RESET_PASSWORD_ROUTE_HANDLER]
         .map((item) => normalizePath(item))
@@ -196,12 +201,18 @@ const request = async <Response>(path: string, method: 'GET' | 'POST' | 'PUT' | 
       setRefreshTokenToLS(refreshToken)
       setUserToLS(user)
     }
-    // Cập nhật tài khoản
+    // Set accessToken, refreshToken vào localStorage khi refresh token thành công
+    else if (normalizePath(REFRESH_TOKEN_ROUTE_HANDLER) === normalizePath(path)) {
+      const { accessToken, refreshToken } = (payload as RefreshTokenResponse).data
+      setAccessTokenToLS(accessToken)
+      setRefreshTokenToLS(refreshToken)
+    }
+    // Set user vào localStorage khi cập nhật tài khoản thành công
     else if (normalizePath(UPDATE_ME_API_ENDPOINT) === normalizePath(path) && method === 'PUT') {
       const { user } = (payload as GetMeResponse).data
       setUserToLS(user)
     }
-    // Đăng xuất
+    // Xóa access token, refresh token, user khỏi localStorage sau khi đăng xuất thành công
     else if (normalizePath(LOGOUT_FROM_NEXT_CLIENT_TO_NEXT_SERVER_API_ENDPOINT) === normalizePath(path)) {
       clearAuthLS()
     }
