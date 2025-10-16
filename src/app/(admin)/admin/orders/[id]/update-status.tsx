@@ -8,16 +8,47 @@ import ordersApis from '@/apis/orders.apis'
 import { ORDER_STATUSES } from '@/components/order-badges'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { OrderStatus } from '@/constants/enum'
+import React from 'react'
+import useAppContext from '@/hooks/use-app-context'
+import { socket } from '@/lib/socket'
 
 export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: OrderStatus; orderId: string }) {
   const router = useRouter()
+
+  const { user } = useAppContext()
+
+  React.useEffect(() => {
+    if (!user) return
+
+    socket.auth = {
+      userId: user._id
+    }
+
+    if (!socket.connected) {
+      socket.connect()
+    }
+
+    socket.on('connect', () => {
+      console.log(socket.id)
+    })
+
+    return () => {
+      socket.off('connect')
+      socket.disconnect()
+    }
+  }, [user])
 
   const updateOrderMutation = useMutation({
     mutationKey: ['update-order'],
     mutationFn: ordersApis.updateOrder,
     onSuccess: (data) => {
+      const { order } = data.payload.data
       toast.success(data.payload.message)
       router.refresh()
+      socket.emit('send_notification', {
+        message: `Đơn hàng ${order._id} của bạn đã được cập nhật`,
+        to: order.userId
+      })
     }
   })
 

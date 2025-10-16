@@ -7,6 +7,7 @@ import RefreshToken from '@/components/refresh-token'
 import { Toaster } from '@/components/ui/sonner'
 import AppProvider from '@/providers/app.provider'
 import CartProvider from '@/providers/cart.provider'
+import SocketProvider from '@/providers/socket.provider'
 import TanstackQueryProvider from '@/providers/tanstack-query.provider'
 import ThemeProvider from '@/providers/theme.provider'
 import './globals.css'
@@ -37,10 +38,12 @@ export default function RootLayout({
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
             <AppProvider>
               <CartProvider>
-                {children}
-                <RefreshToken />
-                <Toaster richColors position='top-center' />
-                <NextTopLoader showSpinner={false} shadow={false} />
+                <SocketProvider>
+                  {children}
+                  <RefreshToken />
+                  <Toaster richColors position='top-center' />
+                  <NextTopLoader showSpinner={false} shadow={false} />
+                </SocketProvider>
               </CartProvider>
             </AppProvider>
           </ThemeProvider>
