@@ -26,7 +26,9 @@ function RefreshTokenLogic() {
           router.push(redirectPath ?? PATH.HOME)
         }
       })
+      return
     }
+    router.push(PATH.HOME)
   }, [refreshToken, redirectPath, router])
 
   return null

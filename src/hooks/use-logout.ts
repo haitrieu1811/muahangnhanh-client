@@ -7,10 +7,12 @@ import usersApis from '@/apis/users.apis'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import { clearAuthLS } from '@/lib/storage'
+import useCartContext from '@/hooks/use-cart-context'
 
 export default function useLogout() {
   const router = useRouter()
 
+  const { setEnableFetchMyCart } = useCartContext()
   const { setIsAuthenticated, setUser } = useAppContext()
 
   const logoutFromNextClientToNextServer = useMutation({
@@ -19,8 +21,9 @@ export default function useLogout() {
     onSuccess: () => {
       clearAuthLS()
       router.push(PATH.LOGIN)
-      setIsAuthenticated(false)
       setUser(null)
+      setIsAuthenticated(false)
+      setEnableFetchMyCart(false)
       router.refresh()
     }
   })
