@@ -4,7 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 
 import usersApis from '@/apis/users.apis'
@@ -15,11 +16,24 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
+import { clearAuthLS } from '@/lib/storage'
 import { cn, handleErrorsFromServer } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const clearTokens = searchParams.get('clearTokens')
+
+  /**
+   * Xử lý trường hợp lâu ngày không vào web mà refresh
+   * token bị hết hạn
+   */
+  React.useEffect(() => {
+    if (!clearTokens) return
+    clearAuthLS()
+  }, [clearTokens])
 
   const { setIsAuthenticated, setUser } = useAppContext()
 

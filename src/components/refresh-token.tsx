@@ -28,6 +28,17 @@ export default function RefreshToken() {
   const { setEnableFetchMyCart } = useCartContext()
   const { setIsAuthenticated, setUser } = useAppContext()
 
+  const onError = React.useCallback(
+    (interval: NodeJS.Timeout) => {
+      setUser(null)
+      setIsAuthenticated(false)
+      setEnableFetchMyCart(false)
+      router.push(PATH.LOGIN)
+      clearInterval(interval)
+    },
+    [router, setIsAuthenticated, setUser, setEnableFetchMyCart]
+  )
+
   React.useEffect(() => {
     // Bỏ qua các trang không cần refresh token
     if (SKIP_PATHS.includes(pathname)) return
@@ -39,12 +50,7 @@ export default function RefreshToken() {
       onSuccess: () => {
         setEnableFetchMyCart(true)
       },
-      onError: () => {
-        setIsAuthenticated(false)
-        setUser(null)
-        router.push(PATH.LOGIN)
-        clearInterval(interval)
-      },
+      onError: () => onError(interval),
       onValidToken: () => {
         setEnableFetchMyCart(true)
       }
@@ -53,12 +59,7 @@ export default function RefreshToken() {
     interval = setInterval(
       () =>
         handleCheckAndRefreshToken({
-          onError: () => {
-            setUser(null)
-            setIsAuthenticated(false)
-            router.push(PATH.LOGIN)
-            clearInterval(interval)
-          }
+          onError: () => onError(interval)
         }),
       TIMEOUT
     )
@@ -66,7 +67,7 @@ export default function RefreshToken() {
     return () => {
       clearInterval(interval)
     }
-  }, [pathname, router, setIsAuthenticated, setUser, setEnableFetchMyCart])
+  }, [pathname, onError, setEnableFetchMyCart])
 
   return null
 }

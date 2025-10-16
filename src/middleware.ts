@@ -31,7 +31,9 @@ export async function middleware(request: NextRequest) {
    */
   if (isPathMatched(adminPaths, pathname)) {
     if (!refreshToken) {
-      return NextResponse.redirect(new URL(PATH.LOGIN, request.url))
+      const url = new URL(PATH.LOGIN, request.url)
+      url.searchParams.set('clearTokens', 'true')
+      return NextResponse.redirect(url)
     }
     if (refreshToken && accessToken && decodedAccessToken?.userRole !== UserRole.Admin) {
       return NextResponse.redirect(new URL(PATH.HOME, request.url))
@@ -43,7 +45,9 @@ export async function middleware(request: NextRequest) {
    * Phải đăng nhập mới vào được
    */
   if (isPathMatched(privatePaths, pathname) && !refreshToken) {
-    return NextResponse.redirect(new URL(PATH.LOGIN, request.url))
+    const url = new URL(PATH.LOGIN, request.url)
+    url.searchParams.set('clearTokens', 'true')
+    return NextResponse.redirect(url)
   }
 
   /**
