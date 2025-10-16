@@ -120,3 +120,22 @@ export type GetOrderEventsResponse = SuccessResponse<{
   totalOrderEvents: number
   orderEvents: OrderEventType[]
 }>
+
+export type UpdateOrderResponse = SuccessResponse<{
+  order: {
+    _id: string
+    userId: string
+    items: string[]
+    addressId: string
+    code: string
+    shippingMethod: ShippingMethod
+    shippingFee: number
+    totalItems: number
+    totalAmount: number
+    totalDiscount: number
+    note: string
+    status: OrderStatus
+    createdAt: string
+    updatedAt: string
+  }
+}>

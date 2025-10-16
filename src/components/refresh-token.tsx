@@ -19,7 +19,7 @@ const SKIP_PATHS = [
   PATH.REFRESH_TOKEN
 ] as string[]
 
-const TIMEOUT = 1000
+const TIMEOUT = 1000 * 30 // 30s
 
 export default function RefreshToken() {
   const router = useRouter()

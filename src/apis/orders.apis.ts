@@ -6,7 +6,8 @@ import {
   GetOrderEventsResponse,
   GetOrderResponse,
   GetOrdersReqQuery,
-  GetOrdersResponse
+  GetOrdersResponse,
+  UpdateOrderResponse
 } from '@/types/orders.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
@@ -68,7 +69,7 @@ const ordersApis = {
   },
 
   updateOrder({ orderId, status }: { orderId: string; status: OrderStatus }) {
-    return http.put<OnlyMessageResponse>(`/orders/${orderId}`, { status })
+    return http.put<UpdateOrderResponse>(`/orders/${orderId}`, { status })
   }
 } as const
 
