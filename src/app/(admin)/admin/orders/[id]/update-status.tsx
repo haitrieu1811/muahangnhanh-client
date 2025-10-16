@@ -2,15 +2,17 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import React from 'react'
 import { toast } from 'sonner'
 
 import ordersApis from '@/apis/orders.apis'
 import { ORDER_STATUSES } from '@/components/order-badges'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { OrderStatus } from '@/constants/enum'
-import React from 'react'
+import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
 import { socket } from '@/lib/socket'
+import { NotificationPayloadData } from '@/types/notifications.types'
 
 export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: OrderStatus; orderId: string }) {
   const router = useRouter()
@@ -45,9 +47,14 @@ export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: 
       const { order } = data.payload.data
       toast.success(data.payload.message)
       router.refresh()
+      const notificationData: NotificationPayloadData = {
+        userId: order.userId,
+        content: `Đơn hàng có mã đơn #${order.code} của bạn đã được cập nhật.`,
+        url: `${PATH.ACCOUNT_ORDERS_DETAIL(order._id)}`
+      }
       socket.emit('send_notification', {
-        message: `Đơn hàng ${order._id} của bạn đã được cập nhật`,
-        to: order.userId
+        to: order.userId,
+        data: notificationData
       })
     }
   })

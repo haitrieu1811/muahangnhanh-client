@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Handbag } from 'lucide-react'
+import { Handbag } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { Skeleton } from '@/components/ui/skeleton'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
@@ -25,7 +26,6 @@ import useIsClient from '@/hooks/use-is-client'
 import useLogout from '@/hooks/use-logout'
 import { getAccessTokenFromLS } from '@/lib/storage'
 import { jwtDecode } from '@/lib/utils'
-import { Skeleton } from '@/components/ui/skeleton'
 
 export default function HeaderAccount() {
   const accessToken = getAccessTokenFromLS()
@@ -53,13 +53,7 @@ export default function HeaderAccount() {
         <div className='flex items-center space-x-4'>
           <div className='flex space-x-2'>
             {/* Thông báo */}
-            <HeaderNotificationsPopover>
-              <Button variant='outline'>
-                <Bell />
-                Thông báo
-                <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>99</Badge>
-              </Button>
-            </HeaderNotificationsPopover>
+            <HeaderNotificationsPopover />
             {/* Giỏ hàng */}
             <HeaderCartPopover>
               <Button variant='outline'>
