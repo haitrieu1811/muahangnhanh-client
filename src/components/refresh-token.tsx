@@ -6,8 +6,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 import PATH from '@/constants/path'
-import { handleCheckAndRefreshToken } from '@/lib/utils'
 import useAppContext from '@/hooks/use-app-context'
+import useCartContext from '@/hooks/use-cart-context'
+import { handleCheckAndRefreshToken } from '@/lib/utils'
 
 const SKIP_PATHS = [
   PATH.LOGIN,
@@ -24,6 +25,7 @@ export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
 
+  const { setEnableFetchMyCart } = useCartContext()
   const { setIsAuthenticated, setUser } = useAppContext()
 
   React.useEffect(() => {
@@ -34,11 +36,17 @@ export default function RefreshToken() {
 
     // Khởi tạo chạy lần đầu
     handleCheckAndRefreshToken({
+      onSuccess: () => {
+        setEnableFetchMyCart(true)
+      },
       onError: () => {
         setIsAuthenticated(false)
         setUser(null)
         router.push(PATH.LOGIN)
         clearInterval(interval)
+      },
+      onValidToken: () => {
+        setEnableFetchMyCart(true)
       }
     })
 
@@ -58,7 +66,7 @@ export default function RefreshToken() {
     return () => {
       clearInterval(interval)
     }
-  }, [pathname, router, setIsAuthenticated, setUser])
+  }, [pathname, router, setIsAuthenticated, setUser, setEnableFetchMyCart])
 
   return null
 }

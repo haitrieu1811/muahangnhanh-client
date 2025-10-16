@@ -90,7 +90,11 @@ export const formatAddress = (address: Address) => {
   return `${address.detail}, ${address.commune.prefix} ${address.commune.name}, ${address.province.prefix} ${address.province.name}`
 }
 
-export const handleCheckAndRefreshToken = async (params?: { onError?: () => void; onSuccess?: () => void }) => {
+export const handleCheckAndRefreshToken = async (params?: {
+  onError?: () => void
+  onSuccess?: () => void
+  onValidToken?: () => void
+}) => {
   const myAccessToken = getAccessTokenFromLS()
   const myRefreshToken = getRefreshTokenFromLS()
 
@@ -128,5 +132,7 @@ export const handleCheckAndRefreshToken = async (params?: { onError?: () => void
     } catch {
       params?.onError?.()
     }
+  } else {
+    params?.onValidToken?.()
   }
 }
