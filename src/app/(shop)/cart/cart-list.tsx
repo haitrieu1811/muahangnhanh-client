@@ -14,9 +14,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import PATH from '@/constants/path'
-import useCartContext from '@/hooks/use-cart-context'
 import useIsClient from '@/hooks/use-is-client'
 import { cn, formatCurrency } from '@/lib/utils'
+import { useCartStore } from '@/providers/app.provider'
 
 export default function CartList() {
   const queryClient = useQueryClient()
@@ -29,13 +29,13 @@ export default function CartList() {
     isAllChecked,
     setExtendedCartItems,
     handleCheckAllCartItems
-  } = useCartContext()
+  } = useCartStore()
   const isClient = useIsClient()
 
   // Xử lý chọn một sản phẩm trong giỏ hàng -> checkout
   const handleCheck = ({ isChecked, cartItemId }: { isChecked: boolean; cartItemId: string }) => {
-    setExtendedCartItems((cartItems) =>
-      cartItems.map((cartItem) => {
+    setExtendedCartItems(
+      extendedCartItems.map((cartItem) => {
         if (cartItem._id === cartItemId) {
           return {
             ...cartItem,

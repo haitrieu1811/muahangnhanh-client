@@ -15,14 +15,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { ShippingMethod } from '@/constants/enum'
 import PATH from '@/constants/path'
-import useCartContext from '@/hooks/use-cart-context'
 import useCheckoutContext from '@/hooks/use-checkout-context'
 import { cn, formatCurrency } from '@/lib/utils'
+import { useCartStore } from '@/providers/app.provider'
 
 export default function OrderInfo() {
   const queryClient = useQueryClient()
 
-  const { totalCheckedCartAmount } = useCartContext()
+  const { totalCheckedCartAmount } = useCartStore()
   const {
     orderAddress,
     handleSelectAddress,

@@ -10,13 +10,13 @@ import { toast } from 'sonner'
 
 import usersApis from '@/apis/users.apis'
 import SelectImages from '@/components/select-images'
-import UploadImages from '@/components/upload-images'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import useAppContext from '@/hooks/use-app-context'
+import UploadImages from '@/components/upload-images'
+import { useAuthStore } from '@/providers/app.provider'
 import { updateMeRules, UpdateMeSchema } from '@/rules/users.rules'
 import { User } from '@/types/users.types'
 
@@ -37,7 +37,7 @@ export default function ProfileForm({ user }: { user: User }) {
     }
   }, [user])
 
-  const { setUser } = useAppContext()
+  const { setUser } = useAuthStore()
 
   const form = useForm<UpdateMeSchema>({
     resolver: zodResolver(updateMeRules),

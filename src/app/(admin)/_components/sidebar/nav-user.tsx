@@ -15,14 +15,14 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
 import useIsClient from '@/hooks/use-is-client'
 import useLogout from '@/hooks/use-logout'
+import { useAuthStore } from '@/providers/app.provider'
 
 export default function NavUser() {
   const isClient = useIsClient()
   const { isMobile } = useSidebar()
-  const { user: loggedUser } = useAppContext()
+  const { user: loggedUser } = useAuthStore()
   const { handleLogout } = useLogout()
 
   if (!loggedUser || !isClient) return null

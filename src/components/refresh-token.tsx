@@ -6,8 +6,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
 import { handleCheckAndRefreshToken } from '@/lib/utils'
+import { useAuthStore } from '@/providers/app.provider'
 
 const SKIP_PATHS = [
   PATH.LOGIN,
@@ -24,7 +24,7 @@ export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const { setIsAuthenticated, setUser, setIsHasAccessTokenInCookie } = useAppContext()
+  const { setIsAuthenticated, setUser, setIsHasAccessTokenInCookie } = useAuthStore()
 
   const onError = React.useCallback(
     (interval: NodeJS.Timeout) => {

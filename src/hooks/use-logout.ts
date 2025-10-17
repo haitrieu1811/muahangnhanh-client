@@ -5,15 +5,14 @@ import { useRouter } from 'next/navigation'
 
 import usersApis from '@/apis/users.apis'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
 import { clearAuthLS } from '@/lib/storage'
-import { useSocket } from '@/providers/socket.provider'
+import { useAuthStore, useSocket } from '@/providers/app.provider'
 
 export default function useLogout() {
   const router = useRouter()
 
   const socket = useSocket()
-  const { setIsAuthenticated, setUser, setIsHasAccessTokenInCookie } = useAppContext()
+  const { setIsAuthenticated, setUser, setIsHasAccessTokenInCookie } = useAuthStore()
 
   const logoutFromNextClientToNextServer = useMutation({
     mutationKey: ['logout-from-next-client-to-next-server'],

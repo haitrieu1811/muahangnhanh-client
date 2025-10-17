@@ -10,10 +10,10 @@ import OrderEvents from '@/components/order-events'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import PATH from '@/constants/path'
+import { useSocket } from '@/providers/app.provider'
 import { NotificationPayloadData } from '@/types/notifications.types'
 import { OrderType } from '@/types/orders.types'
-import PATH from '@/constants/path'
-import { useSocket } from '@/providers/socket.provider'
 
 const SAMPLE_EVENTS = [
   'Đơn hàng đã được đặt',

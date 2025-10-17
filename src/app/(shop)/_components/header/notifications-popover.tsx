@@ -9,14 +9,13 @@ import notificationsApis from '@/apis/notifications.apis'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import useAppContext from '@/hooks/use-app-context'
 import { cn, dateDistance } from '@/lib/utils'
-import { useSocket } from '@/providers/socket.provider'
+import { useAuthStore, useSocket } from '@/providers/app.provider'
 import { NotificationType } from '@/types/notifications.types'
 
 export default function HeaderNotificationsPopover({ smallTrigger = false }: { smallTrigger?: boolean }) {
   const socket = useSocket()
-  const { isHasAccessTokenInCookie } = useAppContext()
+  const { isHasAccessTokenInCookie } = useAuthStore()
 
   const [totalUnReadNotifications, setTotalUnReadNotifications] = React.useState<number>(0)
   const [notifications, setNotifications] = React.useState<NotificationType[]>([])

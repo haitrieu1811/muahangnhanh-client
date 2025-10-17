@@ -8,11 +8,11 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import PATH from '@/constants/path'
-import useCartContext from '@/hooks/use-cart-context'
 import { formatCurrency } from '@/lib/utils'
+import { useCartStore } from '@/providers/app.provider'
 
 export default function HeaderCartPopover({ children }: { children: React.ReactNode }) {
-  const { extendedCartItems, totalCartItems, totalCartAmount } = useCartContext()
+  const { extendedCartItems, totalCartItems, totalCartAmount } = useCartStore()
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>

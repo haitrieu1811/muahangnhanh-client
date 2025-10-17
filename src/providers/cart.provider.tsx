@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 import cartItemsApis from '@/apis/cartItems.apis'
+import { useAuthStore } from '@/providers/app.provider'
 import { CartItemType } from '@/types/cartItems.types'
-import useAppContext from '@/hooks/use-app-context'
 
 type ExtendedCartItem = CartItemType & {
   isChecked: boolean
@@ -42,7 +42,7 @@ export const CartContext = React.createContext<CartContext>(initialCartContext)
 export default function CartProvider({ children }: { children: React.ReactNode }) {
   const [extendedCartItems, setExtendedCartItems] = React.useState(initialCartContext.extendedCartItems)
 
-  const { isHasAccessTokenInCookie } = useAppContext()
+  const { isHasAccessTokenInCookie } = useAuthStore()
 
   const getMyCartQuery = useQuery({
     queryKey: ['get-my-cart'],

@@ -14,8 +14,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
 import { cn, handleErrorsFromServer } from '@/lib/utils'
+import { useAuthStore } from '@/providers/app.provider'
 import { resetPasswordRules, ResetPasswordSchema } from '@/rules/users.rules'
 
 export default function ResetPasswordForm({ className, ...props }: React.ComponentProps<'div'>) {
@@ -24,7 +24,7 @@ export default function ResetPasswordForm({ className, ...props }: React.Compone
   const searchParams = useSearchParams()
   const forgotPasswordToken = searchParams.get('token')
 
-  const { setIsAuthenticated, setUser } = useAppContext()
+  const { setIsAuthenticated, setUser } = useAuthStore()
 
   const form = useForm<ResetPasswordSchema>({
     resolver: zodResolver(resetPasswordRules),
