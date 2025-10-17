@@ -10,7 +10,7 @@ import cartItemsApis from '@/apis/cartItems.apis'
 import QuantityController from '@/components/quantity-controller'
 import { Button } from '@/components/ui/button'
 import PATH from '@/constants/path'
-import useCartContext from '@/hooks/use-cart-context'
+import { useCartStore } from '@/providers/app.provider'
 import { ProductType } from '@/types/products.types'
 
 export default function ProductDetailActions({ product }: { product: ProductType }) {
@@ -18,7 +18,7 @@ export default function ProductDetailActions({ product }: { product: ProductType
 
   const queryClient = useQueryClient()
 
-  const { extendedCartItems, setExtendedCartItems } = useCartContext()
+  const { extendedCartItems, setExtendedCartItems } = useCartStore()
 
   const [quantity, setQuantity] = React.useState<number>(1)
 
@@ -82,8 +82,8 @@ export default function ProductDetailActions({ product }: { product: ProductType
            * nếu chưa thì đơn giản thêm một cartItem mới vào.
            */
           if (isExistedBefore) {
-            setExtendedCartItems((prevState) =>
-              prevState.map((item) => {
+            setExtendedCartItems(
+              extendedCartItems.map((item) => {
                 if (item._id === resCartItem._id) return buyNowCartItem
                 return {
                   ...item,
@@ -92,9 +92,9 @@ export default function ProductDetailActions({ product }: { product: ProductType
               })
             )
           } else {
-            setExtendedCartItems((prevState) => [
+            setExtendedCartItems([
               buyNowCartItem,
-              ...prevState.map((item) => ({
+              ...extendedCartItems.map((item) => ({
                 ...item,
                 isChecked: false
               }))

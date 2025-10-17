@@ -20,20 +20,19 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserRole } from '@/constants/enum'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
-import useCartContext from '@/hooks/use-cart-context'
 import useIsClient from '@/hooks/use-is-client'
 import useLogout from '@/hooks/use-logout'
 import { getAccessTokenFromLS } from '@/lib/storage'
 import { jwtDecode } from '@/lib/utils'
+import { useAuthStore, useCartStore } from '@/providers/app.provider'
 
 export default function HeaderAccount() {
   const accessToken = getAccessTokenFromLS()
 
   const isClient = useIsClient()
   const { handleLogout } = useLogout()
-  const { totalCartItems } = useCartContext()
-  const { isAuthenticated, user } = useAppContext()
+  const { totalCartItems } = useCartStore()
+  const { isAuthenticated, user } = useAuthStore()
 
   return (
     <React.Fragment>

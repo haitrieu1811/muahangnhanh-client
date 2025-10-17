@@ -16,9 +16,9 @@ import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ShippingMethod } from '@/constants/enum'
 import PATH from '@/constants/path'
-import useCartContext from '@/hooks/use-cart-context'
 import useCheckoutContext from '@/hooks/use-checkout-context'
 import { cn, formatAddress } from '@/lib/utils'
+import { useCartStore } from '@/providers/app.provider'
 
 export default function OrderPreview() {
   const router = useRouter()
@@ -26,7 +26,7 @@ export default function OrderPreview() {
   const queryClient = useQueryClient()
 
   const { orderAddress, note, shippingMethod, shippingFee } = useCheckoutContext()
-  const { checkedCartItems, totalCheckedCartAmount, totalCheckedCartItems } = useCartContext()
+  const { checkedCartItems, totalCheckedCartAmount, totalCheckedCartItems } = useCartStore()
 
   const [isConfirmed, setIsConfirmed] = React.useState<CheckedState>(false)
 

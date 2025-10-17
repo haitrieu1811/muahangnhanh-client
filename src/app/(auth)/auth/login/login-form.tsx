@@ -15,11 +15,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
 import { clearAuthLS } from '@/lib/storage'
 import { cn, handleErrorsFromServer } from '@/lib/utils'
+import { useAuthStore, useSocket } from '@/providers/app.provider'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
-import { useSocket } from '@/providers/socket.provider'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
@@ -38,7 +37,7 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
     clearAuthLS()
   }, [clearTokens])
 
-  const { setIsAuthenticated, setUser } = useAppContext()
+  const { setIsAuthenticated, setUser } = useAuthStore()
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginRules),

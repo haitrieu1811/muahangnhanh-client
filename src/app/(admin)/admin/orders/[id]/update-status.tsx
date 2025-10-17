@@ -10,14 +10,14 @@ import { ORDER_STATUSES } from '@/components/order-badges'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { OrderStatus } from '@/constants/enum'
 import PATH from '@/constants/path'
-import useAppContext from '@/hooks/use-app-context'
-import { socket } from '@/lib/socket'
+import { useAuthStore, useSocket } from '@/providers/app.provider'
 import { NotificationPayloadData } from '@/types/notifications.types'
 
 export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: OrderStatus; orderId: string }) {
   const router = useRouter()
 
-  const { user } = useAppContext()
+  const socket = useSocket()
+  const { user } = useAuthStore()
 
   React.useEffect(() => {
     if (!user) return
@@ -38,7 +38,7 @@ export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: 
       socket.off('connect')
       socket.disconnect()
     }
-  }, [user])
+  }, [socket, user])
 
   const updateOrderMutation = useMutation({
     mutationKey: ['update-order'],
