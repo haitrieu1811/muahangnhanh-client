@@ -1,6 +1,7 @@
 import { OrderStatus } from '@/constants/enum'
 import http from '@/lib/http'
 import {
+  CreateOrderEventResponse,
   CreateOrderReqBody,
   CreateOrderResponse,
   GetOrderEventsResponse,
@@ -49,7 +50,7 @@ const ordersApis = {
   },
 
   createOrderEvent({ orderId, content }: { orderId: string; content: string }) {
-    return http.post<OnlyMessageResponse>(`/orders/${orderId}/events`, { content })
+    return http.post<CreateOrderEventResponse>(`/orders/${orderId}/events`, { content })
   },
 
   getOrderEventsFromNextClientToServer(orderId: string) {
