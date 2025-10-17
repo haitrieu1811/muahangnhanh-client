@@ -1,12 +1,14 @@
 import { OrderStatus } from '@/constants/enum'
 import http from '@/lib/http'
 import {
+  CreateOrderEventResponse,
   CreateOrderReqBody,
   CreateOrderResponse,
   GetOrderEventsResponse,
   GetOrderResponse,
   GetOrdersReqQuery,
-  GetOrdersResponse
+  GetOrdersResponse,
+  UpdateOrderResponse
 } from '@/types/orders.types'
 import { OnlyMessageResponse } from '@/types/utils.types'
 
@@ -48,7 +50,7 @@ const ordersApis = {
   },
 
   createOrderEvent({ orderId, content }: { orderId: string; content: string }) {
-    return http.post<OnlyMessageResponse>(`/orders/${orderId}/events`, { content })
+    return http.post<CreateOrderEventResponse>(`/orders/${orderId}/events`, { content })
   },
 
   getOrderEventsFromNextClientToServer(orderId: string) {
@@ -68,7 +70,7 @@ const ordersApis = {
   },
 
   updateOrder({ orderId, status }: { orderId: string; status: OrderStatus }) {
-    return http.put<OnlyMessageResponse>(`/orders/${orderId}`, { status })
+    return http.put<UpdateOrderResponse>(`/orders/${orderId}`, { status })
   }
 } as const
 

@@ -1,56 +1,131 @@
-import { Bell } from 'lucide-react'
-import Image from 'next/image'
+'use client'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Bell, BellRing } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
+import notificationsApis from '@/apis/notifications.apis'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import PATH from '@/constants/path'
-import { cn } from '@/lib/utils'
+import useAppContext from '@/hooks/use-app-context'
+import { cn, dateDistance } from '@/lib/utils'
+import { useSocket } from '@/providers/socket.provider'
+import { NotificationType } from '@/types/notifications.types'
 
-const totalNotifications = Object.keys(PATH).length
+export default function HeaderNotificationsPopover({ smallTrigger = false }: { smallTrigger?: boolean }) {
+  const socket = useSocket()
+  const { isHasAccessTokenInCookie } = useAppContext()
 
-export default function HeaderNotificationsPopover({ children }: { children: React.ReactNode }) {
+  const [totalUnReadNotifications, setTotalUnReadNotifications] = React.useState<number>(0)
+  const [notifications, setNotifications] = React.useState<NotificationType[]>([])
+
+  const getNotificationsQuery = useQuery({
+    queryKey: ['get-notifications'],
+    queryFn: () => notificationsApis.getNotifications(),
+    enabled: isHasAccessTokenInCookie
+  })
+
+  const totalNotifications = getNotificationsQuery.data?.payload.data.pagination.totalRows ?? 0
+
+  React.useEffect(() => {
+    if (!getNotificationsQuery.data) return
+    setNotifications(getNotificationsQuery.data?.payload.data.notifications)
+    setTotalUnReadNotifications(getNotificationsQuery.data.payload.data.totalUnRead)
+  }, [getNotificationsQuery.data])
+
+  React.useEffect(() => {
+    socket.on('receive_notification', (payload: { data: NotificationType; from: string }) => {
+      setTotalUnReadNotifications((prevState) => (prevState += 1))
+      setNotifications((prevState) => [payload.data, ...prevState])
+    })
+
+    return () => {
+      socket.off('receive_notification')
+    }
+  }, [socket])
+
+  const markAsReadMutation = useMutation({
+    mutationKey: ['mark-as-read-notification'],
+    mutationFn: notificationsApis.markAsReadNotification
+  })
+
+  const markAsReadAllMutation = useMutation({
+    mutationKey: ['mark-as-read-all-notifications'],
+    mutationFn: notificationsApis.markAsReadAllNotifications
+  })
+
+  const handleMarkAsRead = (notificationId: string) => {
+    const isRead = !!notifications.find((notification) => notification._id === notificationId)?.isRead
+    if (isRead) return
+    markAsReadMutation.mutate(notificationId)
+    setTotalUnReadNotifications((prevState) => (prevState -= 1))
+    setNotifications((prevState) =>
+      prevState.map((notification) => {
+        if (notification._id === notificationId) {
+          return {
+            ...notification,
+            isRead: true
+          }
+        }
+        return notification
+      })
+    )
+  }
+
+  const handleMarkAsReadAll = () => {
+    markAsReadAllMutation.mutate()
+    setTotalUnReadNotifications(0)
+    setNotifications((prevState) =>
+      prevState.map((notification) => ({
+        ...notification,
+        isRead: true
+      }))
+    )
+  }
+
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger asChild>
+        <Button variant='outline' size={smallTrigger ? 'icon' : 'default'}>
+          <Bell />
+          {!smallTrigger && 'Thông báo'}
+          {!smallTrigger && totalUnReadNotifications > 0 && (
+            <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
+              {totalUnReadNotifications}
+            </Badge>
+          )}
+        </Button>
+      </PopoverTrigger>
       <PopoverContent align='end' className='w-[400px] max-w-screen p-0'>
         {totalNotifications > 0 && (
           <React.Fragment>
             <div className='flex justify-between items-center space-x-10 px-4 py-2'>
               <h3 className='tracking-tight'>Thông báo</h3>
-              <Button variant='link' className='text-highlight p-0'>
+              <Button variant='link' className='text-highlight p-0' onClick={handleMarkAsReadAll}>
                 Đánh dấu tất cả đã đọc
               </Button>
             </div>
-            <div className='max-h-[400px] overflow-y-auto'>
-              {Array(10)
-                .fill(0)
-                .map((_, index) => (
-                  <Link
-                    key={index}
-                    href={'/'}
-                    className={cn('flex items-center space-x-4 p-4 rounded-md duration-100', {
-                      'hover:bg-muted': index % 2 === 0,
-                      'bg-main/10 dark:bg-main-foreground/10': index % 2 !== 0
-                    })}
-                  >
-                    <Image
-                      width={50}
-                      height={50}
-                      src={'http://localhost:4000/static/images/39300f796a7d8f3b26e17c308.png'}
-                      alt=''
-                      className='size-[50px] rounded-md aspect-square object-cover shrink-0'
-                    />
-                    <div className='flex-1'>
-                      <h3 className='font-normal text-sm line-clamp-2'>
-                        Đơn hàng của bạn đã được xác nhận thành công.
-                      </h3>
-                      <p className='text-sm text-muted-foreground'>1 giờ trước.</p>
-                    </div>
-                    {index % 2 !== 0 && <div className='size-2 rounded-full bg-highlight' />}
-                  </Link>
-                ))}
+            <div className='max-h-[400px] overflow-y-auto px-2 grid gap-2'>
+              {notifications.map((notification) => (
+                <Link
+                  key={notification._id}
+                  href={notification.url}
+                  className={cn('flex items-center space-x-4 p-4 rounded-md duration-100', {
+                    'hover:bg-muted': notification.isRead,
+                    'bg-main/10 dark:bg-main-foreground/10': !notification.isRead
+                  })}
+                  onClick={() => handleMarkAsRead(notification._id)}
+                >
+                  <BellRing className='stroke-1' />
+                  <div className='flex-1'>
+                    <h3 className='font-normal text-sm line-clamp-2'>{notification.content}</h3>
+                    <p className='text-sm text-muted-foreground'>{dateDistance(notification.createdAt)}</p>
+                  </div>
+                  {!notification.isRead && <div className='size-2 rounded-full bg-highlight' />}
+                </Link>
+              ))}
             </div>
             <div className='flex justify-center px-4 py-2'>
               <Button variant='link' className='p-0 text-highlight'>

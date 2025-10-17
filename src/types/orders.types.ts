@@ -41,6 +41,7 @@ export type CreateOrderResponse = SuccessResponse<{
 
 export type OrderType = {
   _id: string
+  userId: string
   address: {
     _id: string
     fullName: string
@@ -111,6 +112,7 @@ export type GetOrderResponse = SuccessResponse<{
 
 export type OrderEventType = {
   _id: string
+  orderId: string
   content: string
   createdAt: string
   updatedAt: string
@@ -119,4 +121,27 @@ export type OrderEventType = {
 export type GetOrderEventsResponse = SuccessResponse<{
   totalOrderEvents: number
   orderEvents: OrderEventType[]
+}>
+
+export type UpdateOrderResponse = SuccessResponse<{
+  order: {
+    _id: string
+    userId: string
+    items: string[]
+    addressId: string
+    code: string
+    shippingMethod: ShippingMethod
+    shippingFee: number
+    totalItems: number
+    totalAmount: number
+    totalDiscount: number
+    note: string
+    status: OrderStatus
+    createdAt: string
+    updatedAt: string
+  }
+}>
+
+export type CreateOrderEventResponse = SuccessResponse<{
+  orderEvent: OrderEventType
 }>

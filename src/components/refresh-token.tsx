@@ -7,7 +7,6 @@ import React from 'react'
 
 import PATH from '@/constants/path'
 import useAppContext from '@/hooks/use-app-context'
-import useCartContext from '@/hooks/use-cart-context'
 import { handleCheckAndRefreshToken } from '@/lib/utils'
 
 const SKIP_PATHS = [
@@ -19,24 +18,23 @@ const SKIP_PATHS = [
   PATH.REFRESH_TOKEN
 ] as string[]
 
-const TIMEOUT = 1000
+const TIMEOUT = 1000 * 30 // 30s
 
 export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const { setEnableFetchMyCart } = useCartContext()
-  const { setIsAuthenticated, setUser } = useAppContext()
+  const { setIsAuthenticated, setUser, setIsHasAccessTokenInCookie } = useAppContext()
 
   const onError = React.useCallback(
     (interval: NodeJS.Timeout) => {
       setUser(null)
       setIsAuthenticated(false)
-      setEnableFetchMyCart(false)
+      setIsHasAccessTokenInCookie(false)
       router.push(PATH.LOGIN)
       clearInterval(interval)
     },
-    [router, setIsAuthenticated, setUser, setEnableFetchMyCart]
+    [router, setIsAuthenticated, setUser, setIsHasAccessTokenInCookie]
   )
 
   React.useEffect(() => {
@@ -48,11 +46,11 @@ export default function RefreshToken() {
     // Khởi tạo chạy lần đầu
     handleCheckAndRefreshToken({
       onSuccess: () => {
-        setEnableFetchMyCart(true)
+        setIsHasAccessTokenInCookie(true)
       },
       onError: () => onError(interval),
       onValidToken: () => {
-        setEnableFetchMyCart(true)
+        setIsHasAccessTokenInCookie(true)
       }
     })
 
@@ -67,7 +65,7 @@ export default function RefreshToken() {
     return () => {
       clearInterval(interval)
     }
-  }, [pathname, onError, setEnableFetchMyCart])
+  }, [pathname, onError, setIsHasAccessTokenInCookie])
 
   return null
 }

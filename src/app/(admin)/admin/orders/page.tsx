@@ -43,22 +43,23 @@ export default async function AdminOrdersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order._id}>
-                  <TableCell>{order.address.fullName}</TableCell>
-                  <TableCell>{order.address.phoneNumber}</TableCell>
-                  <TableCell>{order.address.province.name}</TableCell>
-                  <TableCell>{ORDER_BADGES[order.status]}</TableCell>
-                  <TableCell>{dateDistance(order.createdAt)}</TableCell>
-                  <TableCell>{order.totalItems}</TableCell>
-                  <TableCell className='font-semibold'>
-                    {(order.totalAmount + order.shippingFee - order.totalDiscount).toLocaleString()}&#8363;
-                  </TableCell>
-                  <TableCell className='text-right'>
-                    <OrderActions orderId={order._id} />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {totalOrders > 0 &&
+                orders.map((order) => (
+                  <TableRow key={order._id}>
+                    <TableCell>{order.address.fullName}</TableCell>
+                    <TableCell>{order.address.phoneNumber}</TableCell>
+                    <TableCell>{order.address.province.name}</TableCell>
+                    <TableCell>{ORDER_BADGES[order.status]}</TableCell>
+                    <TableCell>{dateDistance(order.createdAt)}</TableCell>
+                    <TableCell>{order.totalItems}</TableCell>
+                    <TableCell className='font-semibold'>
+                      {(order.totalAmount + order.shippingFee - order.totalDiscount).toLocaleString()}&#8363;
+                    </TableCell>
+                    <TableCell className='text-right'>
+                      <OrderActions orderId={order._id} />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </CardContent>

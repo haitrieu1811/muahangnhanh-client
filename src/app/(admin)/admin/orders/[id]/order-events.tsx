@@ -10,6 +10,10 @@ import OrderEvents from '@/components/order-events'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import { NotificationPayloadData } from '@/types/notifications.types'
+import { OrderType } from '@/types/orders.types'
+import PATH from '@/constants/path'
+import { useSocket } from '@/providers/socket.provider'
 
 const SAMPLE_EVENTS = [
   'Đơn hàng đã được đặt',
@@ -19,14 +23,16 @@ const SAMPLE_EVENTS = [
   'Đơn hàng đã bị hủy'
 ] as const
 
-export default function AdminOrderEvents({ orderId }: { orderId: string }) {
+export default function AdminOrderEvents({ order }: { order: OrderType }) {
   const [content, setContent] = React.useState<string>('')
 
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
 
+  const socket = useSocket()
+
   const getOrderEventsQuery = useQuery({
-    queryKey: ['get-order-events', orderId],
-    queryFn: () => ordersApis.getOrderEventsFromNextClientToServer(orderId)
+    queryKey: ['get-order-events', order._id],
+    queryFn: () => ordersApis.getOrderEventsFromNextClientToServer(order._id)
   })
 
   const orderEvents = React.useMemo(
@@ -43,6 +49,15 @@ export default function AdminOrderEvents({ orderId }: { orderId: string }) {
       setContent('')
       getOrderEventsQuery.refetch()
       toast.success(data.payload.message)
+      const notificationData: NotificationPayloadData = {
+        userId: order.userId,
+        content: data.payload.data.orderEvent.content,
+        url: `${PATH.ACCOUNT_ORDERS_DETAIL(order._id)}`
+      }
+      socket.emit('send_notification', {
+        to: order.userId,
+        data: notificationData
+      })
     }
   })
 
@@ -52,7 +67,7 @@ export default function AdminOrderEvents({ orderId }: { orderId: string }) {
   }
 
   const handleCreateOrderEvent = () => {
-    createOrderEventMutation.mutate({ content, orderId })
+    createOrderEventMutation.mutate({ content, orderId: order._id })
     inputRef.current?.focus()
   }
 

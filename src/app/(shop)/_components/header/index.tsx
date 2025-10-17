@@ -1,4 +1,4 @@
-import { Bell, Handbag, Search } from 'lucide-react'
+import { Handbag, Search } from 'lucide-react'
 import React from 'react'
 
 import HeaderAccount from '@/app/(shop)/_components/header/account'
@@ -55,11 +55,7 @@ export default async function ShopHeader() {
             {/* Danh mục sản phẩm */}
             <CategoriesDialog smallTrigger />
             {/* Thông báo */}
-            <HeaderNotificationsPopover>
-              <Button size='icon' variant='outline'>
-                <Bell />
-              </Button>
-            </HeaderNotificationsPopover>
+            <HeaderNotificationsPopover smallTrigger />
             {/* Giỏ hàng */}
             <HeaderCartPopover>
               <Button size='icon' variant='outline'>

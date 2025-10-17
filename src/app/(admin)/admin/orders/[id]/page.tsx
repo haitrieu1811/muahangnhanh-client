@@ -83,7 +83,7 @@ export default async function AdminOrderDetailPage({
           </Card>
           {/* Dòng thời gian */}
           <div className='basis-1/2'>
-            <CreateEvent orderId={order._id} />
+            <CreateEvent order={order} />
           </div>
         </div>
         {/* Sản phẩm đặt mua */}

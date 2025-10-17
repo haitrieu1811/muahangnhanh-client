@@ -19,12 +19,15 @@ import useAppContext from '@/hooks/use-app-context'
 import { clearAuthLS } from '@/lib/storage'
 import { cn, handleErrorsFromServer } from '@/lib/utils'
 import { loginRules, LoginSchema } from '@/rules/users.rules'
+import { useSocket } from '@/providers/socket.provider'
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const clearTokens = searchParams.get('clearTokens')
+
+  const socket = useSocket()
 
   /**
    * Xử lý trường hợp lâu ngày không vào web mà refresh
@@ -53,6 +56,7 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
       router.push(PATH.HOME)
       setIsAuthenticated(true)
       setUser(user)
+      socket.connect()
       router.refresh()
     },
     onError: (error) => {

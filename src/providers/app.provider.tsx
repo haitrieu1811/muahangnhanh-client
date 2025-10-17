@@ -10,13 +10,17 @@ type AppContext = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   user: User | null
   setUser: React.Dispatch<React.SetStateAction<User | null>>
+  isHasAccessTokenInCookie: boolean
+  setIsHasAccessTokenInCookie: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const initialAppContext: AppContext = {
   isAuthenticated: !!getAccessTokenFromLS(),
   setIsAuthenticated: () => null,
   user: getUserFromLS(),
-  setUser: () => null
+  setUser: () => null,
+  isHasAccessTokenInCookie: false,
+  setIsHasAccessTokenInCookie: () => null
 }
 
 export const AppContext = React.createContext<AppContext>(initialAppContext)
@@ -24,6 +28,9 @@ export const AppContext = React.createContext<AppContext>(initialAppContext)
 export default function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(initialAppContext.isAuthenticated)
   const [user, setUser] = React.useState<User | null>(initialAppContext.user)
+  const [isHasAccessTokenInCookie, setIsHasAccessTokenInCookie] = React.useState<boolean>(
+    initialAppContext.isHasAccessTokenInCookie
+  )
 
   return (
     <AppContext
@@ -31,7 +38,9 @@ export default function AppProvider({ children }: { children: React.ReactNode })
         isAuthenticated,
         setIsAuthenticated,
         user,
-        setUser
+        setUser,
+        isHasAccessTokenInCookie,
+        setIsHasAccessTokenInCookie
       }}
     >
       {children}
