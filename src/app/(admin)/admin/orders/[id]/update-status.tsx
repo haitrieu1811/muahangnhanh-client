@@ -49,7 +49,7 @@ export default function UpdateStatus({ defaultValue, orderId }: { defaultValue: 
       router.refresh()
       const notificationData: NotificationPayloadData = {
         userId: order.userId,
-        content: `Đơn hàng có mã đơn #${order.code} của bạn đã được cập nhật.`,
+        content: `Đơn hàng có mã đơn #${order.code} của bạn đã được cập nhật trạng thái.`,
         url: `${PATH.ACCOUNT_ORDERS_DETAIL(order._id)}`
       }
       socket.emit('send_notification', {

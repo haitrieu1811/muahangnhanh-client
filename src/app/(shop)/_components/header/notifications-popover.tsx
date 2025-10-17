@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Bell, BellRing } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -18,7 +18,7 @@ export default function HeaderNotificationsPopover({ smallTrigger = false }: { s
   const socket = useSocket()
   const { isHasAccessTokenInCookie } = useAppContext()
 
-  const [totalNotifications, setTotalNotifications] = React.useState<number>(0)
+  const [totalUnReadNotifications, setTotalUnReadNotifications] = React.useState<number>(0)
   const [notifications, setNotifications] = React.useState<NotificationType[]>([])
 
   const getNotificationsQuery = useQuery({
@@ -27,15 +27,17 @@ export default function HeaderNotificationsPopover({ smallTrigger = false }: { s
     enabled: isHasAccessTokenInCookie
   })
 
+  const totalNotifications = getNotificationsQuery.data?.payload.data.pagination.totalRows ?? 0
+
   React.useEffect(() => {
     if (!getNotificationsQuery.data) return
     setNotifications(getNotificationsQuery.data?.payload.data.notifications)
-    setTotalNotifications(getNotificationsQuery.data.payload.data.pagination.totalRows)
+    setTotalUnReadNotifications(getNotificationsQuery.data.payload.data.totalUnRead)
   }, [getNotificationsQuery.data])
 
   React.useEffect(() => {
     socket.on('receive_notification', (payload: { data: NotificationType; from: string }) => {
-      setTotalNotifications((prevState) => (prevState += 1))
+      setTotalUnReadNotifications((prevState) => (prevState += 1))
       setNotifications((prevState) => [payload.data, ...prevState])
     })
 
@@ -44,15 +46,54 @@ export default function HeaderNotificationsPopover({ smallTrigger = false }: { s
     }
   }, [socket])
 
+  const markAsReadMutation = useMutation({
+    mutationKey: ['mark-as-read-notification'],
+    mutationFn: notificationsApis.markAsReadNotification
+  })
+
+  const markAsReadAllMutation = useMutation({
+    mutationKey: ['mark-as-read-all-notifications'],
+    mutationFn: notificationsApis.markAsReadAllNotifications
+  })
+
+  const handleMarkAsRead = (notificationId: string) => {
+    const isRead = !!notifications.find((notification) => notification._id === notificationId)?.isRead
+    if (isRead) return
+    markAsReadMutation.mutate(notificationId)
+    setTotalUnReadNotifications((prevState) => (prevState -= 1))
+    setNotifications((prevState) =>
+      prevState.map((notification) => {
+        if (notification._id === notificationId) {
+          return {
+            ...notification,
+            isRead: true
+          }
+        }
+        return notification
+      })
+    )
+  }
+
+  const handleMarkAsReadAll = () => {
+    markAsReadAllMutation.mutate()
+    setTotalUnReadNotifications(0)
+    setNotifications((prevState) =>
+      prevState.map((notification) => ({
+        ...notification,
+        isRead: true
+      }))
+    )
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant='outline' size={smallTrigger ? 'icon' : 'default'}>
           <Bell />
           {!smallTrigger && 'Thông báo'}
-          {!smallTrigger && totalNotifications > 0 && (
+          {!smallTrigger && totalUnReadNotifications > 0 && (
             <Badge className='h-5 min-w-5 rounded-full px-1 tabular-nums bg-main dark:bg-main-foreground'>
-              {totalNotifications}
+              {totalUnReadNotifications}
             </Badge>
           )}
         </Button>
@@ -62,7 +103,7 @@ export default function HeaderNotificationsPopover({ smallTrigger = false }: { s
           <React.Fragment>
             <div className='flex justify-between items-center space-x-10 px-4 py-2'>
               <h3 className='tracking-tight'>Thông báo</h3>
-              <Button variant='link' className='text-highlight p-0'>
+              <Button variant='link' className='text-highlight p-0' onClick={handleMarkAsReadAll}>
                 Đánh dấu tất cả đã đọc
               </Button>
             </div>
@@ -75,6 +116,7 @@ export default function HeaderNotificationsPopover({ smallTrigger = false }: { s
                     'hover:bg-muted': notification.isRead,
                     'bg-main/10 dark:bg-main-foreground/10': !notification.isRead
                   })}
+                  onClick={() => handleMarkAsRead(notification._id)}
                 >
                   <BellRing className='stroke-1' />
                   <div className='flex-1'>

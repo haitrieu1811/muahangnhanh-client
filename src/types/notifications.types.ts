@@ -13,6 +13,7 @@ export type NotificationType = {
 }
 
 export type GetNotificationsResponse = SuccessResponse<{
+  totalUnRead: number
   notifications: NotificationType[]
   pagination: PaginationType
 }>
@@ -20,3 +21,7 @@ export type GetNotificationsResponse = SuccessResponse<{
 export type GetNotificationsReqQuery = PaginationReqQuery & {
   isRead?: string
 }
+
+export type MarkAsReadNotificationsResponse = SuccessResponse<{
+  modifiedCount: number
+}>

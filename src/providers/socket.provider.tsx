@@ -49,6 +49,7 @@ export default function SocketProvider({ children }: { children: React.ReactNode
     return () => {
       socket.off('connect', onConnect)
       socket.off('disconnect', onDisconnect)
+      socket.off('connect_error')
     }
   }, [isAuthenticated])
 
